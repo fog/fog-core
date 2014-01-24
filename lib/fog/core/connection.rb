@@ -29,6 +29,7 @@ module Fog
           params[:debug_response] = true
         end
         params[:headers] ||= {}
+        params[:headers]['User-Agent'] ||= "fog/#{Fog::VERSION}"
         params.merge!(:persistent => params.fetch(:persistent, persistent))
         @excon = Excon.new(url, params)
       end
