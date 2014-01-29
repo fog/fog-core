@@ -1,5 +1,6 @@
 # So downstream users can use the test_helpers
 
+require 'fog/test_helpers/helper'
 require 'fog/test_helpers/collection_helper'
 require 'fog/test_helpers/formats_helper'
 require 'fog/test_helpers/mock_helper'
