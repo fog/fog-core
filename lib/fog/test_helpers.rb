@@ -1,6 +1,11 @@
 # So downstream users can use the test_helpers
 
-helpers = Dir.glob(File.join('test_helpers', '*helper.rb')).sort_by {|helper| helper.count(File::SEPARATOR)}
-helpers.each do |h|
-  load(h)
-end
+require 'fog/test_helpers/collection_helper'
+require 'fog/test_helpers/formats_helper'
+require 'fog/test_helpers/mock_helper'
+require 'fog/test_helpers/model_helper'
+require 'fog/test_helpers/responds_to_helper'
+require 'fog/test_helpers/succeeds_helper'
+require 'fog/test_helpers/compute/flavors_helper'
+require 'fog/test_helpers/compute/server_helper'
+require 'fog/test_helpers/compute/servers_helper'
