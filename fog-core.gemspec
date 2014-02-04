@@ -31,17 +31,8 @@ Gem::Specification.new do |spec|
   ## those that are only needed during development
   spec.add_development_dependency('jekyll') unless RUBY_PLATFORM == 'java'
   spec.add_development_dependency('rake')
-  spec.add_development_dependency('rbvmomi')
   spec.add_development_dependency('yard')
   spec.add_development_dependency('thor')
-  spec.add_development_dependency('rbovirt', '>=0.0.11')
   spec.add_development_dependency('shindo', '~>0.3.4')
-  spec.add_development_dependency('fission')
   spec.add_development_dependency('pry')
-  spec.add_development_dependency('google-api-client', '~>0.6.2')
-  spec.add_development_dependency('unf')
-  if ENV["FOG_USE_LIBVIRT"] && RUBY_PLATFORM != 'java'
-    spec.add_development_dependency('ruby-libvirt','~>0.4.0')
-  end
-
 end
