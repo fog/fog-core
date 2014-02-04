@@ -1,6 +1,6 @@
 # Fog::Core
 
-TODO: Write a gem description
+Shared classes and tests for fog providers and services.
 
 ## Installation
 
