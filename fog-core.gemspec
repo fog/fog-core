@@ -21,11 +21,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency('builder')
   spec.add_dependency('excon', '~>0.31.0')
   spec.add_dependency('formatador', '~>0.2.0')
-  spec.add_dependency('multi_json', '~>1.0')
   spec.add_dependency('mime-types')
   spec.add_dependency('net-scp', '~>1.1')
   spec.add_dependency('net-ssh', '>=2.1.3')
-  spec.add_dependency('nokogiri', '>=1.5.11')
 
   ## List your development dependencies here. Development dependencies are
   ## those that are only needed during development
