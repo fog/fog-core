@@ -29,7 +29,6 @@ Gem::Specification.new do |spec|
 
   ## List your development dependencies here. Development dependencies are
   ## those that are only needed during development
-  spec.add_development_dependency('jekyll') unless RUBY_PLATFORM == 'java'
   spec.add_development_dependency('rake')
   spec.add_development_dependency('yard')
   spec.add_development_dependency('thor')
