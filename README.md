@@ -2,6 +2,8 @@
 
 Shared classes and tests for fog providers and services.
 
+[![Build Status](https://secure.travis-ci.org/fog/fog-core.png?branch=master)](http://travis-ci.org/fog/fog-core)
+
 ## Installation
 
 Add this line to your application's Gemfile:
