@@ -33,13 +33,6 @@ require 'fog/core/wait_for_defaults'
 require 'fog/core/class_from_string'
 require 'fog/core/uuid'
 
-# data exchange specific (to be extracted and used on a per provider basis)
-require 'fog/xml'
-require 'fog/json'
-
-# deprecation wrappers
-require 'fog/core/deprecated/connection'
-
 # service wrappers
 require 'fog/compute'
 require 'fog/identity'
