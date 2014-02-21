@@ -4,7 +4,7 @@ Shindo.tests('Fog#wait_for', 'core') do
       Fog.wait_for(1) { true }
     end
 
-    tests('Fog#wait_for with callback').formats(:duration => Integer) do
+    tests('Fog#wait_for with callback') do
       exponential_callback = lambda { |times| [2 ** (times - 1), 3].min }
       times = 0
       ret = Fog.wait_for(5, exponential_callback) { (times += 1) > 2 }
