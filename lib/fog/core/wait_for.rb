@@ -1,8 +1,10 @@
 module Fog
-  def self.wait_for(timeout=Fog.timeout, interval=Fog.interval, &block)
+  def self.wait_for(timeout=Fog.timeout, sleeper=Fog.interval, &block)
     duration = 0
     start = Time.now
+    times = 0
     until yield || duration > timeout
+      interval = sleeper.respond_to?(:call) ? sleeper.call(times += 1) : sleeper
       sleep(interval.to_f)
       duration = Time.now - start
     end
