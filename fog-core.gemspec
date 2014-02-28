@@ -31,6 +31,10 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('yard')
   spec.add_development_dependency('thor')
   spec.add_development_dependency('shindo', '~>0.3.4')
+  spec.add_development_dependency('faraday')
+  spec.add_development_dependency('vcr')
+  spec.add_development_dependency('minitest-vcr')
+  spec.add_development_dependency('webmock')
   spec.add_development_dependency('pry')
   spec.add_development_dependency('coveralls')
 end
