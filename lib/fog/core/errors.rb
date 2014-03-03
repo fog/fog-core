@@ -22,6 +22,19 @@ module Fog
 
     class NotImplemented < Fog::Errors::Error; end
 
+    class HTTPError < StandardError
+
+      attr_reader :wrapped_exception 
+      
+      def initialize(e = nil)
+        super e
+        if e
+          set_backtrace e.backtrace
+          wrapped_exception = e
+        end
+      end
+    end
+
     # @return [String] The error message that will be raised, if credentials cannot be found
     def self.missing_credentials
       missing_credentials_message = <<-YML
@@ -113,6 +126,8 @@ An alternate file may be used by placing its path in the FOG_RC environment vari
     YML
       raise(Fog::Errors::LoadError.new(missing_credentials_message))
     end
+
+
 
   end
 end
