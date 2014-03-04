@@ -1,5 +1,6 @@
 require "rake"
 require "rake/tasklib"
+require "fog/core"
 
 module Fog
   module Rake
