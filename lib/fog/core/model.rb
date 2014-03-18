@@ -12,12 +12,13 @@ module Fog
 
     def initialize(new_attributes = {})
       # TODO Remove compatibility with old connection option
-      @service = new_attributes.delete(:service)
-      if @service.nil? && new_attributes[:connection]
+      attribs = new_attributes.clone
+      @service = attribs.delete(:service)
+      if @service.nil? && attribs[:connection]
         Fog::Logger.deprecation("Passing :connection option is deprecated, use :service instead [light_black](#{caller.first})[/]")
-        @service = new_attributes[:connection]
+        @service = attribs[:connection]
       end
-      merge_attributes(new_attributes)
+      merge_attributes(attribs)
     end
 
     def inspect
