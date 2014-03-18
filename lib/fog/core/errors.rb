@@ -19,6 +19,7 @@ module Fog
     class LoadError < LoadError; end
 
     class TimeoutError< Fog::Errors::Error; end
+    class RetryTimesExceeded< Fog::Errors::Error; end
 
     class NotImplemented < Fog::Errors::Error; end
 
