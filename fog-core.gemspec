@@ -24,13 +24,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency('mime-types')
   spec.add_dependency('net-scp', '~>1.1')
   spec.add_dependency('net-ssh', '>=2.1.3')
-
-  ## List your development dependencies here. Development dependencies are
-  ## those that are only needed during development
-  spec.add_development_dependency('rake')
-  spec.add_development_dependency('yard')
-  spec.add_development_dependency('thor')
-  spec.add_development_dependency('shindo', '~>0.3.4')
-  spec.add_development_dependency('pry')
-  spec.add_development_dependency('coveralls')
 end

@@ -1,4 +1,8 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in fog-core.gemspec
-gemspec
+gem 'rake'
+gem 'yard'
+gem 'thor'
+gem 'minitest'
+gem 'pry'
+gem 'coveralls'
