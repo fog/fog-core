@@ -1,17 +1,21 @@
 require 'bundler/setup'
 
 task :travis  => ['test:travis', 'coveralls_push_workaround']
+task :default => [:test]
+
+require "rake/testtask"
 
 
-require "tasks/test_task"
-Fog::Rake::TestTask.new
+Rake::TestTask.new do |t|
+  t.pattern = "spec/*_spec.rb"
+end
 
 namespace :test do
   mock = 'true' || ENV['FOG_MOCK']
   task :travis do
     # jruby coveralls causes an OOM in travis
     ENV['COVERAGE'] = 'false' if RUBY_PLATFORM == 'java'
-    sh("export FOG_MOCK=#{mock} && bundle exec shindont")
+    sh("export FOG_MOCK=#{mock} && rake")
   end
 end
 
