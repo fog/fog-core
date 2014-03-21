@@ -18,16 +18,16 @@ describe Fog::CurrentMachine do
   end
 
   describe "ip_address" do
-    it 'should be thread safe' do
-      Excon.stub({:method => :get, :path => '/'}, {:body => ''})
+    it "should be thread safe" do
+      Excon.stub({:method => :get, :path => "/"}, {:body => ""})
 
       (1..10).map {
         Thread.new { Fog::CurrentMachine.ip_address }
       }.each{ |t| t.join }
     end
 
-    it 'should remove trailing endline characters' do
-      Excon.stub({:method => :get,  :path => '/'}, {:body => "192.168.0.1\n"})
+    it "should remove trailing endline characters" do
+      Excon.stub({:method => :get,  :path => "/"}, {:body => "192.168.0.1\n"})
       assert_equal "192.168.0.1", Fog::CurrentMachine.ip_address
     end
   end  

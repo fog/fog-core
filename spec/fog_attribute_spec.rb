@@ -1,12 +1,12 @@
 require_relative 'spec_helper'
 
 class FogAttributeTestModel < Fog::Model
-  attribute :key, :aliases => 'keys', :squash => "id"
+  attribute :key, :aliases => "keys", :squash => "id"
   attribute :time, :type => :time
   attribute :bool, :type => :boolean
 end
 
-describe 'Fog::Attributes' do
+describe "Fog::Attributes" do
   
   let(:model) { FogAttributeTestModel.new }
 
@@ -17,7 +17,7 @@ describe 'Fog::Attributes' do
     end
       
     it "squashes if the key is a Symbol" do
-      model.merge_attributes("keys" => {'id' => "value"})
+      model.merge_attributes("keys" => {"id" => "value"})
       assert_equal "value", model.key
     end
   end
@@ -29,8 +29,8 @@ describe 'Fog::Attributes' do
     end
 
     it "returns '' when provided ''" do
-      model.merge_attributes(:time => '')
-      assert_equal '',  model.time
+      model.merge_attributes(:time => "")
+      assert_equal "",  model.time
     end
 
     it "returns a Time object when passed a Time object" do
@@ -40,9 +40,9 @@ describe 'Fog::Attributes' do
     end
   end
 
-  describe ':type => :boolean' do
+  describe ":type => :boolean" do
     it "returns the String 'true' as a boolean" do
-      model.merge_attributes(:bool => 'true')
+      model.merge_attributes(:bool => "true")
       assert_equal true, model.bool
     end
 
@@ -52,7 +52,7 @@ describe 'Fog::Attributes' do
     end
 
     it "returns the String 'false' as a boolean" do
-      model.merge_attributes(:bool => 'false')
+      model.merge_attributes(:bool => "false")
       assert_equal false, model.bool
     end
 
