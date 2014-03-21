@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require 'spec_helper'
 
 class FogAttributeTestModel < Fog::Model
   attribute :key, :aliases => "keys", :squash => "id"

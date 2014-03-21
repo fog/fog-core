@@ -1,4 +1,4 @@
-require_relative "spec_helper"
+require 'spec_helper'
 
 describe "Fog#wait_for" do
   it "returns a Hash indicating the wait duration if successful" do

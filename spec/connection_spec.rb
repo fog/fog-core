@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require 'spec_helper'
 
 describe Fog::Core::Connection do 
   it "raises ArgumentError when no arguments given" do
