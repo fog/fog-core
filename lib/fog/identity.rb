@@ -13,12 +13,10 @@ module Fog
         raise ArgumentError.new("#{provider} has no identity service")
       end
 
-
+      require "fog/#{provider}/identity"
       begin
-        require "fog/#{provider}/identity"
         Fog::Identity.const_get(Fog.providers[provider]).new(attributes)
       rescue
-        require "fog/identity/#{provider}"
         Fog::const_get(Fog.providers[provider]).const_get("Identity").new(attributes)
       end
     end
