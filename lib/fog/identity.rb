@@ -8,21 +8,23 @@ module Fog
     def self.new(attributes)
       attributes = attributes.dup # Prevent delete from having side effects
       provider = attributes.delete(:provider).to_s.downcase.to_sym
-      if self.providers.include?(provider)
-        begin
-          require "fog/#{provider}/identity"
-          return Fog::Identity.const_get(Fog.providers[provider]).new(attributes)
-        rescue
-          require "fog/identity/#{provider}"
-          return Fog::const_get(Fog.providers[provider]).const_get("Identity").new(attributes)
-        end
+
+      unless providers.include?(provider)
+        raise ArgumentError.new("#{provider} has no identity service")
       end
-      raise ArgumentError.new("#{provider} has no identity service")
+
+
+      begin
+        require "fog/#{provider}/identity"
+        Fog::Identity.const_get(Fog.providers[provider]).new(attributes)
+      rescue
+        require "fog/identity/#{provider}"
+        Fog::const_get(Fog.providers[provider]).const_get("Identity").new(attributes)
+      end
     end
 
     def self.providers
       Fog.services[:identity]
     end
-
   end
 end
