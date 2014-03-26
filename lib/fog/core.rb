@@ -30,7 +30,6 @@ require 'fog/core/scp'
 require 'fog/core/time'
 require 'fog/core/wait_for'
 require 'fog/core/wait_for_defaults'
-require 'fog/core/class_from_string'
 require 'fog/core/uuid'
 
 # service wrappers
