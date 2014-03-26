@@ -13,7 +13,6 @@ module Fog
         Fog::Rackspace::Identity.new(attributes)
       else
         if self.providers.include?(provider)
-          require "fog/#{provider}/identity"
           return Fog::Identity.const_get(Fog.providers[provider]).new(attributes)
         end
         raise ArgumentError.new("#{provider} has no identity service")
