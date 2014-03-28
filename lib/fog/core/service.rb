@@ -52,20 +52,35 @@ module Fog
         EOS
       end
 
-      def new(options={})
-        options = Fog.symbolize_credentials(options)
-        options = fetch_credentials(options).merge(options)
-        validate_options(options)
-        coerce_options(options)
+      # {Fog::Service} is (unfortunately) both a builder class and the subclass for any fog service.
+      #
+      # Creating a {new} instance using the builder will return either an instance of
+      # +Fog::<Service>::<Provider>::Real+ or +Fog::<Service>::<Provider>::Mock+ based on the value
+      # of {Fog.mock?} when the builder is used.
+      #
+      # Each provider can require or recognize different settings (often prefixed with the providers
+      # name). These settings map to keys in the +~/.fog+ file.
+      #
+      # @abstract Subclass and implement real or mock code
+      # @param [Hash] settings used to build an instance of a service
+      # @return [Fog::Service::Provider::Real] if created while mocking is disabled
+      # @return [Fog::Service::Provider::Mock] if created while mocking is enabled
+      # @raise [ArgumentError] if a setting required by the provider was not passed in
+      #
+      def new(settings = {})
+        settings = Fog.symbolize_credentials(settings)
+        settings = fetch_credentials(settings).merge(settings)
+        validate_options(settings)
+        coerce_options(settings)
         setup_requirements
 
         if Fog.mocking?
           service::Mock.send(:include, service::Collections)
-          service::Mock.new(options)
+          service::Mock.new(settings)
         else
           service::Real.send(:include, service::Collections)
           service::Real.send(:include, service::NoLeakInspector)
-          service::Real.new(options)
+          service::Real.new(settings)
         end
       end
 
