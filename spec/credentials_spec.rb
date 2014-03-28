@@ -27,7 +27,7 @@ describe "credentials" do
       assert_equal :foo, Fog.credential
     end
 
-    it "can set credentials throught he FOG_CREDENTIAL env va" do
+    it "can set credentials throught the FOG_CREDENTIAL env va" do
       ENV["FOG_CREDENTIAL"] = "bar"
       assert_equal :bar, Fog.credential
     end
@@ -41,13 +41,12 @@ describe "credentials" do
       assert_equal '/rc/path', Fog.credentials_path
     end
 
-    it "properly expends paths" do
+    it "properly expands paths" do
       ENV['FOG_RC'] = '/expanded/subdirectory/../path'
       assert_equal '/expanded/path', Fog.credentials_path
     end
 
-    
-    it "alls back to home path if FOG_RC not set" do
+    it "falls back to home path if FOG_RC not set" do
       ENV.delete('FOG_RC')
       assert_equal File.join(ENV['HOME'], '.fog'), Fog.credentials_path
     end
@@ -65,7 +64,7 @@ describe "credentials" do
       if RUBY_PLATFORM == 'java'
         Fog::Logger.warning("Stubbing out non-absolute path credentials test due to JRuby bug: https://github.com/jruby/jruby/issues/1163")
       else
-        assert_equal nil, Fog.credentials_path
+        assert_nil Fog.credentials_path
       end
     end
 
@@ -81,7 +80,7 @@ describe "credentials" do
       refute Fog.symbolize_credential?(:headers)
     end
 
-    it "retursns true if the alue is not :headers" do
+    it "returns true if the value is not :headers" do
       assert Fog.symbolize_credential?(:foo)
       assert Fog.symbolize_credential?(:liberate_me_ex_inheris)
     end
