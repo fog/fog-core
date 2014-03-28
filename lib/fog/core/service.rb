@@ -1,11 +1,11 @@
-module Fog
+require "fog/core/utils"
 
+module Fog
   def self.services
     @services ||= {}
   end
 
   class Service
-
     class Error < Fog::Errors::Error; end
     class NotFound < Fog::Errors::NotFound; end
 
@@ -16,7 +16,6 @@ module Fog
     end
 
     module Collections
-
       def collections
         service.collections
       end
@@ -28,11 +27,9 @@ module Fog
       def requests
         service.requests
       end
-
     end
 
     class << self
-
       def inherited(child)
         child.class_eval <<-EOS, __FILE__, __LINE__
           class Error < Fog::Service::Error; end
@@ -63,12 +60,13 @@ module Fog
       #
       # @abstract Subclass and implement real or mock code
       # @param [Hash] settings used to build an instance of a service
+      # @option settings [Hash] :headers Passed to the underlying {Fog::Core::Connection} unchanged
       # @return [Fog::Service::Provider::Real] if created while mocking is disabled
       # @return [Fog::Service::Provider::Mock] if created while mocking is enabled
       # @raise [ArgumentError] if a setting required by the provider was not passed in
       #
       def new(settings = {})
-        settings = Fog.symbolize_credentials(settings)
+        settings = Fog::Core::Utils.prepare_service_settings(settings)
         settings = fetch_credentials(settings).merge(settings)
         validate_options(settings)
         coerce_options(settings)
@@ -230,9 +228,6 @@ module Fog
           end
         end
       end
-
     end
-
   end
 end
-

@@ -85,24 +85,4 @@ describe "credentials" do
       assert Fog.symbolize_credential?(:liberate_me_ex_inheris)
     end
   end
-
-  describe "symbolize_credentials" do
-    it "converts all of the keys to symbols based on symbolize_credential?" do
-      h = {
-        "a" => 3,
-        :something => 2,
-        "connection_options" => {"val" => 5},
-        :headers => { 'User-Agent' => "my user agent" }
-      }
-
-      expected = {
-        :a => 3,
-        :something => 2,
-        :connection_options => {:val => 5},
-        :headers => { 'User-Agent' => "my user agent" }
-      }
-
-      assert_equal expected, Fog.symbolize_credentials(h)
-    end
-  end
 end
