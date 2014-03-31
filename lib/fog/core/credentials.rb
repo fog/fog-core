@@ -3,19 +3,49 @@ require 'yaml'
 module Fog
   require 'fog/core/deprecation'
 
+  # Sets the global configuration up from a Hash rather than using background loading from a file
+  #
+  # @example
+  #   Fog.credentials = {
+  #     :default => {
+  #       :example_url => "https://example.com/"
+  #       :example_username => "bob",
+  #       :example_password => "obo"
+  #     },
+  #     :production => {
+  #       :example_username => "bob",
+  #       :example_password => "obo"
+  #     }
+  #   }
+  #
+  # @return [Hash] The newly assigned credentials
+  def self.credentials=(new_credentials)
+    @credentials = new_credentials
+  end
+
   # Assign a new credential to use from configuration file
-  #   @param [String, Symbol] new_credential name of new credential to use
-  #   @ return [Symbol] name of the new credential
+  #
+  # @param [String, Symbol] new_credential name of new credential to use
+  # @return [Symbol] name of the new credential
   def self.credential=(new_credential)
     @credentials = nil
     @credential = new_credential && new_credential.to_sym
   end
 
-  # @return [String, Symbol] The credential to use in Fog
+  # This is the named credential from amongst the configuration file being used or +:default+
+  #
+  # @note This can be set using the +FOG_CREDENTIAL+ environment variable
+  #
+  # @return [Symbol] The credential to use in Fog
   def self.credential
     @credential ||= ( ENV["FOG_CREDENTIAL"] && ENV["FOG_CREDENTIAL"].to_sym ) || :default
   end
 
+  # This returns the path to the configuration file being used globally to look for sets of
+  # credentials
+  #
+  # @note This can be set using the +FOG_RC+ environment variable or defaults to +$HOME/.fog+
+  #
   # @return [String] The path for configuration_file
   def self.credentials_path
     @credential_path ||= begin
@@ -35,7 +65,7 @@ module Fog
   # @return [Hash] The credentials pulled from the configuration file
   # @raise [LoadError] Configuration unavailable in configuration file
   def self.credentials
-    @credentials  ||= begin
+    @credentials ||= begin
       if credentials_path && File.exists?(credentials_path)
         credentials = self.symbolize_credentials(YAML.load_file(credentials_path))
         (credentials && credentials[credential]) || Fog::Errors.missing_credentials
@@ -43,11 +73,6 @@ module Fog
         {}
       end
     end
-  end
-
-  # @return [Hash] The newly assigned credentials
-  def self.credentials=(new_credentials)
-    @credentials = new_credentials
   end
 
   def self.symbolize_credential?(key)
@@ -66,5 +91,4 @@ module Fog
       args
     end
   end
-
 end
