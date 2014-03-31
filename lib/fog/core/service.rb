@@ -66,26 +66,24 @@ module Fog
       # @raise [ArgumentError] if a setting required by the provider was not passed in
       #
       def new(settings = {})
-        settings = Fog::Core::Utils.prepare_service_settings(settings)
-        settings = fetch_credentials(settings).merge(settings)
-        validate_options(settings)
-        coerce_options(settings)
+        cleaned_settings = handle_settings(settings)
         setup_requirements
 
         if Fog.mocking?
           service::Mock.send(:include, service::Collections)
-          service::Mock.new(settings)
+          service::Mock.new(cleaned_settings)
         else
           service::Real.send(:include, service::Collections)
           service::Real.send(:include, service::NoLeakInspector)
-          service::Real.new(settings)
+          service::Real.new(cleaned_settings)
         end
       end
 
+      # @deprecated
       def fetch_credentials(options)
         # attempt to load credentials from config file
         begin
-          Fog.credentials.reject {|key, value| !(recognized | requirements).include?(key)}
+          Fog.credentials.reject { |key, value| !(recognized | requirements).include?(key) }
         rescue LoadError
           # if there are no configured credentials, do nothing
           {}
@@ -217,6 +215,7 @@ module Fog
           end
         end
         missing = requirements - keys
+
         unless missing.empty?
           raise ArgumentError, "Missing required arguments: #{missing.join(', ')}"
         end
@@ -227,6 +226,23 @@ module Fog
             Fog::Logger.warning("Unrecognized arguments: #{unrecognized.join(', ')}")
           end
         end
+      end
+
+      private
+
+      # This is the original way service settings were handled. Settings from +~/.fog+ were merged
+      # together with the passed options, keys are turned to symbols and coerced into Boolean or
+      # Fixnums.
+      #
+      # If the class has declared any required settings then {ArgumentError} will be raised.
+      #
+      # Any setting that is not whitelisted will cause a warning to be output.
+      #
+      def handle_settings(settings)
+        combined_settings = fetch_credentials(settings).merge(settings)
+        prepared_settings = Fog::Core::Utils.prepare_service_settings(combined_settings)
+        validate_options(prepared_settings)
+        coerce_options(prepared_settings)
       end
     end
   end
