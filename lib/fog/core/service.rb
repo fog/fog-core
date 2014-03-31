@@ -97,34 +97,14 @@ module Fog
 
         @required ||= false
         unless @required
-          for collection in collections
-            require [@model_path, collection].join('/')
-            constant = collection.to_s.split('_').map {|characters| characters[0...1].upcase << characters[1..-1]}.join('')
-            service::Collections.module_eval <<-EOS, __FILE__, __LINE__
-              def #{collection}(attributes = {})
-                #{service}::#{constant}.new({:service => self}.merge(attributes))
-              end
-            EOS
-          end
-          for model in models
-            require [@model_path, model].join('/')
-          end
-          for request in requests
-            require [@request_path, request].join('/')
-            if service::Mock.method_defined?(request)
-              mocked_requests << request
-            else
-              service::Mock.module_eval <<-EOS, __FILE__, __LINE__
-                def #{request}(*args)
-                  Fog::Mock.not_implemented
-                end
-              EOS
-            end
-          end
+          require_models
+          require_collections_and_define
+          require_requests_and_mock
           @required = true
         end
       end
 
+      # @note This path is used to require model and collection files
       def model_path(new_path)
         @model_path = new_path
       end
@@ -243,6 +223,41 @@ module Fog
         prepared_settings = Fog::Core::Utils.prepare_service_settings(combined_settings)
         validate_options(prepared_settings)
         coerce_options(prepared_settings)
+      end
+
+      # This will attempt to require all model files declared by the service using fog's DSL
+      def require_models
+        models.each do |model|
+          require File.join(@model_path, model.to_s)
+        end
+      end
+
+      def require_collections_and_define
+        collections.each do |collection|
+          require File.join(@model_path, collection.to_s)
+          constant = collection.to_s.split('_').map { |characters| characters[0...1].upcase << characters[1..-1] }.join('')
+          service::Collections.module_eval <<-EOS, __FILE__, __LINE__
+            def #{collection}(attributes = {})
+              #{service}::#{constant}.new({ :service => self }.merge(attributes))
+            end
+          EOS
+        end
+      end
+
+      # This will attempt to require all request files declared in the service using fog's DSL
+      def require_requests_and_mock
+        requests.each do |request|
+          require File.join(@request_path, request.to_s)
+          if service::Mock.method_defined?(request)
+            mocked_requests << request
+          else
+            service::Mock.module_eval <<-EOS, __FILE__, __LINE__
+              def #{request}(*args)
+                Fog::Mock.not_implemented
+              end
+            EOS
+          end
+        end
       end
     end
   end
