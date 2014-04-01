@@ -235,13 +235,22 @@ module Fog
       def require_collections_and_define
         collections.each do |collection|
           require File.join(@model_path, collection.to_s)
-          constant = collection.to_s.split('_').map { |characters| characters[0...1].upcase << characters[1..-1] }.join('')
+          constant = camel_case_collection_name(collection)
           service::Collections.module_eval <<-EOS, __FILE__, __LINE__
             def #{collection}(attributes = {})
               #{service}::#{constant}.new({ :service => self }.merge(attributes))
             end
           EOS
         end
+      end
+
+      # This converts names of collections from Symbols as defined in the DSL (+:database_server+)
+      # into CamelCase version (+DatabaseServer+) for metaprogramming skulduggery.
+      #
+      # @param [String,Symbol] collection The name of the collection broken with underscores
+      # @return [String] in camel case
+      def camel_case_collection_name(collection)
+        collection.to_s.split('_').map(&:capitalize).join
       end
 
       # This will attempt to require all request files declared in the service using fog's DSL
