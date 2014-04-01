@@ -10,7 +10,11 @@ module Fog
       provider = attributes.delete(:provider).to_s.downcase.to_sym
 
       if self.providers.include?(provider)
-        require "fog/#{provider}/network"
+        begin
+          require "fog/#{provider}/network"
+        rescue LoadError
+          # is there a reason for this being automatic?
+        end
         return Fog::Orchestration.const_get(Fog.providers[provider]).new(attributes)
       end
 
