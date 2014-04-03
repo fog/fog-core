@@ -35,32 +35,32 @@ describe Fog::Service do
 
   describe "when created with a Hash" do
     it "raises for required argument that are missing" do
-      proc { TestService.new({}) }.must_raise ArgumentError
+      assert_raises(ArgumentError) { TestService.new({}) }
     end
 
     it "converts String keys to be Symbols" do
       service = TestService.new "generic_api_key" => "abc"
-      service.options.keys.must_include :generic_api_key
+      assert_includes service.options.keys, :generic_api_key
     end
 
     it "removes keys with `nil` values" do
       service = TestService.new :generic_api_key => "abc", :generic_user => nil
-      service.options.keys.wont_include :generic_user
+      refute_includes service.options.keys, :generic_user
     end
 
     it "converts number String values with to_i" do
       service = TestService.new :generic_api_key => "3421"
-      service.options[:generic_api_key].must_equal 3421
+      assert_equal 3421, service.options[:generic_api_key]
     end
 
     it "converts 'true' String values to TrueClass" do
       service = TestService.new :generic_api_key => "true"
-      service.options[:generic_api_key].must_equal true
+      assert_equal true, service.options[:generic_api_key]
     end
 
     it "converts 'false' String values to FalseClass" do
       service = TestService.new :generic_api_key => "false"
-      service.options[:generic_api_key].must_equal false
+      assert_equal false, service.options[:generic_api_key]
     end
 
     it "warns for unrecognised options" do
