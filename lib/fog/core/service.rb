@@ -76,6 +76,10 @@ module Fog
       # @example Minimal options (dependent on ~/.fog)
       #   @service = Fog::Compute::Example.new # => <#Fog::Compute::Example::Real>
       #
+      # @example Mocked service
+      #   Fog.mock!
+      #   @service = Fog::Compute::Example.new # => <#Fog::Compute::Example::Mock>
+      #
       # @example Configured using many options (options merged into ~/.fog)
       #   @options = {
       #     :example_username => "fog",
