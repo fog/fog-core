@@ -58,6 +58,10 @@ module Fog
       # Each provider can require or recognize different settings (often prefixed with the providers
       # name). These settings map to keys in the +~/.fog+ file.
       #
+      # Settings can be passed as either a Hash or an object that responds to +config_service?+ with
+      # +true+. This object will be passed through unchanged to the +Real+ or +Mock+ service that is
+      # created. It is up to providers to adapt services to use these config objects.
+      #
       # @abstract Subclass and implement real or mock code
       #
       # @param [Hash,#config_service?] config
