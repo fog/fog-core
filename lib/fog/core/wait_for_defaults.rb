@@ -6,7 +6,7 @@ module Fog
 
   def self.interval=(interval)
     if interval.kind_of?(Proc)
-      raise ArgumentError, "interval proc must return a possitive" unless interval.call(1) >= 0
+      raise ArgumentError, "interval proc must return a positive" unless interval.call(1) >= 0
     else
       raise ArgumentError, "interval must be non-negative" unless interval >= 0
     end
