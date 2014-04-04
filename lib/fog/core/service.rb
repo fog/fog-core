@@ -59,28 +59,29 @@ module Fog
       # name). These settings map to keys in the +~/.fog+ file.
       #
       # @abstract Subclass and implement real or mock code
-      # @param [Hash,#config_service?] config Settings or an object used to build a service instance
-      # @option config [Hash] :headers Passed to the underlying {Fog::Core::Connection} unchanged
-      # @option config [Hash] :provider A String version of the provider's name
+      #
+      # @param [Hash,#config_service?] config
+      #   Settings or an object used to build a service instance
+      # @option config [Hash] :headers
+      #   Passed to the underlying {Fog::Core::Connection} unchanged
+      #
       # @return [Fog::Service::Provider::Real] if created while mocking is disabled
       # @return [Fog::Service::Provider::Mock] if created while mocking is enabled
       # @raise [ArgumentError] if a setting required by the provider was not passed in
       #
-      #
       # @example Minimal options (dependent on ~/.fog)
-      #   @service = Fog::Compute.new(:provider => "Example") # => <#Fog::Compute::Example::Real>
+      #   @service = Fog::Compute::Example.new # => <#Fog::Compute::Example::Real>
       #
       # @example Configured using many options (options merged into ~/.fog)
       #   @options = {
-      #     :provider => "Example",
       #     :example_username => "fog",
       #     :example_password => "fog"
       #   }
-      #   @service = Fog::Compute.new(@options)
+      #   @service = Fog::Compute::Example.new(@options)
       #
       # @example Configured using external config object (~/.fog ignored completely)
       #   @config = Fog::Example::Config.new(...)
-      #   @service = Fog::Compute.new(@config)
+      #   @service = Fog::Compute::Example.new(@config)
       #
       def new(config = {})
         if config.respond_to?(:config_service?) && config.config_service?
