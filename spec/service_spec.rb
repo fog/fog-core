@@ -130,7 +130,8 @@ describe Fog::Service do
       def @config.config_service?;  true; end
       def @config.==(other); object_id == other.object_id; end
 
-      Fog.stub :credentials, lambda { raise "Accessing global!" } do
+      unexpected_usage = lambda { raise "Accessing global!" }
+      Fog.stub :credentials, unexpected_usage do
         @service = TestService.new(@config)
         assert_equal @config, @service.options
       end
