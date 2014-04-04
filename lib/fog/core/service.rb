@@ -1,11 +1,11 @@
-module Fog
+require "fog/core/utils"
 
+module Fog
   def self.services
     @services ||= {}
   end
 
   class Service
-
     class Error < Fog::Errors::Error; end
     class NotFound < Fog::Errors::NotFound; end
 
@@ -16,7 +16,6 @@ module Fog
     end
 
     module Collections
-
       def collections
         service.collections
       end
@@ -28,11 +27,9 @@ module Fog
       def requests
         service.requests
       end
-
     end
 
     class << self
-
       def inherited(child)
         child.class_eval <<-EOS, __FILE__, __LINE__
           class Error < Fog::Service::Error; end
@@ -52,27 +49,41 @@ module Fog
         EOS
       end
 
-      def new(options={})
-        options = Fog.symbolize_credentials(options)
-        options = fetch_credentials(options).merge(options)
-        validate_options(options)
-        coerce_options(options)
+      # {Fog::Service} is (unfortunately) both a builder class and the subclass for any fog service.
+      #
+      # Creating a {new} instance using the builder will return either an instance of
+      # +Fog::<Service>::<Provider>::Real+ or +Fog::<Service>::<Provider>::Mock+ based on the value
+      # of {Fog.mock?} when the builder is used.
+      #
+      # Each provider can require or recognize different settings (often prefixed with the providers
+      # name). These settings map to keys in the +~/.fog+ file.
+      #
+      # @abstract Subclass and implement real or mock code
+      # @param [Hash] settings used to build an instance of a service
+      # @option settings [Hash] :headers Passed to the underlying {Fog::Core::Connection} unchanged
+      # @return [Fog::Service::Provider::Real] if created while mocking is disabled
+      # @return [Fog::Service::Provider::Mock] if created while mocking is enabled
+      # @raise [ArgumentError] if a setting required by the provider was not passed in
+      #
+      def new(settings = {})
+        cleaned_settings = handle_settings(settings)
         setup_requirements
 
         if Fog.mocking?
           service::Mock.send(:include, service::Collections)
-          service::Mock.new(options)
+          service::Mock.new(cleaned_settings)
         else
           service::Real.send(:include, service::Collections)
           service::Real.send(:include, service::NoLeakInspector)
-          service::Real.new(options)
+          service::Real.new(cleaned_settings)
         end
       end
 
+      # @deprecated
       def fetch_credentials(options)
         # attempt to load credentials from config file
         begin
-          Fog.credentials.reject {|key, value| !(recognized | requirements).include?(key)}
+          Fog.credentials.reject { |key, value| !(recognized | requirements).include?(key) }
         rescue LoadError
           # if there are no configured credentials, do nothing
           {}
@@ -86,34 +97,14 @@ module Fog
 
         @required ||= false
         unless @required
-          for collection in collections
-            require [@model_path, collection].join('/')
-            constant = collection.to_s.split('_').map {|characters| characters[0...1].upcase << characters[1..-1]}.join('')
-            service::Collections.module_eval <<-EOS, __FILE__, __LINE__
-              def #{collection}(attributes = {})
-                #{service}::#{constant}.new({:service => self}.merge(attributes))
-              end
-            EOS
-          end
-          for model in models
-            require [@model_path, model].join('/')
-          end
-          for request in requests
-            require [@request_path, request].join('/')
-            if service::Mock.method_defined?(request)
-              mocked_requests << request
-            else
-              service::Mock.module_eval <<-EOS, __FILE__, __LINE__
-                def #{request}(*args)
-                  Fog::Mock.not_implemented
-                end
-              EOS
-            end
-          end
+          require_models
+          require_collections_and_define
+          require_requests_and_mock
           @required = true
         end
       end
 
+      # @note This path is used to require model and collection files
       def model_path(new_path)
         @model_path = new_path
       end
@@ -204,6 +195,7 @@ module Fog
           end
         end
         missing = requirements - keys
+
         unless missing.empty?
           raise ArgumentError, "Missing required arguments: #{missing.join(', ')}"
         end
@@ -216,8 +208,66 @@ module Fog
         end
       end
 
-    end
+      private
 
+      # This is the original way service settings were handled. Settings from +~/.fog+ were merged
+      # together with the passed options, keys are turned to symbols and coerced into Boolean or
+      # Fixnums.
+      #
+      # If the class has declared any required settings then {ArgumentError} will be raised.
+      #
+      # Any setting that is not whitelisted will cause a warning to be output.
+      #
+      def handle_settings(settings)
+        combined_settings = fetch_credentials(settings).merge(settings)
+        prepared_settings = Fog::Core::Utils.prepare_service_settings(combined_settings)
+        validate_options(prepared_settings)
+        coerce_options(prepared_settings)
+      end
+
+      # This will attempt to require all model files declared by the service using fog's DSL
+      def require_models
+        models.each do |model|
+          require File.join(@model_path, model.to_s)
+        end
+      end
+
+      def require_collections_and_define
+        collections.each do |collection|
+          require File.join(@model_path, collection.to_s)
+          constant = camel_case_collection_name(collection)
+          service::Collections.module_eval <<-EOS, __FILE__, __LINE__
+            def #{collection}(attributes = {})
+              #{service}::#{constant}.new({ :service => self }.merge(attributes))
+            end
+          EOS
+        end
+      end
+
+      # This converts names of collections from Symbols as defined in the DSL (+:database_server+)
+      # into CamelCase version (+DatabaseServer+) for metaprogramming skulduggery.
+      #
+      # @param [String,Symbol] collection The name of the collection broken with underscores
+      # @return [String] in camel case
+      def camel_case_collection_name(collection)
+        collection.to_s.split('_').map(&:capitalize).join
+      end
+
+      # This will attempt to require all request files declared in the service using fog's DSL
+      def require_requests_and_mock
+        requests.each do |request|
+          require File.join(@request_path, request.to_s)
+          if service::Mock.method_defined?(request)
+            mocked_requests << request
+          else
+            service::Mock.module_eval <<-EOS, __FILE__, __LINE__
+              def #{request}(*args)
+                Fog::Mock.not_implemented
+              end
+            EOS
+          end
+        end
+      end
+    end
   end
 end
-

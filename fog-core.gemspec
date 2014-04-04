@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('yard')
   spec.add_development_dependency('thor')
   spec.add_development_dependency('minitest')
+  spec.add_development_dependency('minitest-stub-const')
   spec.add_development_dependency('pry')
   spec.add_development_dependency('coveralls')
 
