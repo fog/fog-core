@@ -58,15 +58,45 @@ module Fog
       # Each provider can require or recognize different settings (often prefixed with the providers
       # name). These settings map to keys in the +~/.fog+ file.
       #
+      # Settings can be passed as either a Hash or an object that responds to +config_service?+ with
+      # +true+. This object will be passed through unchanged to the +Real+ or +Mock+ service that is
+      # created. It is up to providers to adapt services to use these config objects.
+      #
       # @abstract Subclass and implement real or mock code
-      # @param [Hash] settings used to build an instance of a service
-      # @option settings [Hash] :headers Passed to the underlying {Fog::Core::Connection} unchanged
+      #
+      # @param [Hash,#config_service?] config
+      #   Settings or an object used to build a service instance
+      # @option config [Hash] :headers
+      #   Passed to the underlying {Fog::Core::Connection} unchanged
+      #
       # @return [Fog::Service::Provider::Real] if created while mocking is disabled
       # @return [Fog::Service::Provider::Mock] if created while mocking is enabled
       # @raise [ArgumentError] if a setting required by the provider was not passed in
       #
-      def new(settings = {})
-        cleaned_settings = handle_settings(settings)
+      # @example Minimal options (dependent on ~/.fog)
+      #   @service = Fog::Compute::Example.new # => <#Fog::Compute::Example::Real>
+      #
+      # @example Mocked service
+      #   Fog.mock!
+      #   @service = Fog::Compute::Example.new # => <#Fog::Compute::Example::Mock>
+      #
+      # @example Configured using many options (options merged into ~/.fog)
+      #   @options = {
+      #     :example_username => "fog",
+      #     :example_password => "fog"
+      #   }
+      #   @service = Fog::Compute::Example.new(@options)
+      #
+      # @example Configured using external config object (~/.fog ignored completely)
+      #   @config = Fog::Example::Config.new(...)
+      #   @service = Fog::Compute::Example.new(@config)
+      #
+      def new(config = {})
+        if config.respond_to?(:config_service?) && config.config_service?
+          cleaned_settings = config
+        else
+          cleaned_settings = handle_settings(config)
+        end
         setup_requirements
 
         if Fog.mocking?

@@ -91,4 +91,50 @@ describe Fog::Service do
       end
     end
   end
+
+  describe "when no credentials are provided" do
+    it "uses the global values" do
+      @global_credentials = {
+        :generic_user => "fog",
+        :generic_api_key => "fog"
+      }
+
+      Fog.stub :credentials, @global_credentials do
+        @service = TestService.new
+        assert_equal @service.options, @global_credentials
+      end
+    end
+  end
+
+  describe "when credentials are provided as settings" do
+    it "merges the global values into settings" do
+      @settings = {
+        :generic_user => "fog"
+      }
+      @global_credentials = {
+        :generic_user => "bob",
+        :generic_api_key => "fog"
+      }
+
+      Fog.stub :credentials, @global_credentials do
+        @service = TestService.new(@settings)
+        assert_equal @service.options[:generic_user], "fog"
+        assert_equal @service.options[:generic_api_key], "fog"
+      end
+    end
+  end
+
+  describe "when config object can configure the service itself" do
+    it "ignores the global and it's values" do
+      @config = MiniTest::Mock.new
+      def @config.config_service?;  true; end
+      def @config.==(other); object_id == other.object_id; end
+
+      unexpected_usage = lambda { raise "Accessing global!" }
+      Fog.stub :credentials, unexpected_usage do
+        @service = TestService.new(@config)
+        assert_equal @config, @service.options
+      end
+    end
+  end
 end
