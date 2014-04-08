@@ -10,4 +10,10 @@ describe "Fog#wait_for" do
       Fog.wait_for(2) { false }
     end
   end
+
+  it "accepts a proc to determine the sleep interval" do
+    i = 0
+    ret = Fog.wait_for(1, lambda { |t| 1}) { i += 1; i > 1 }
+    assert_equal({:duration => 1}, ret)
+  end
 end
