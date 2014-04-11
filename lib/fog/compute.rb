@@ -67,7 +67,7 @@ module Fog
     end
 
     def self.providers
-      Fog.services[:compute] || []
+      Fog.services[:compute]
     end
 
     def self.servers
