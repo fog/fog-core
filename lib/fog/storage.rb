@@ -19,10 +19,14 @@ module Fog
       else
         if self.providers.include?(provider)
           require "fog/#{provider}/storage"
-          return Fog::Storage.const_get(Fog.providers[provider]).new(attributes)
+          begin
+            Fog::Storage.const_get(Fog.providers[provider])
+          rescue
+            Fog::const_get(Fog.providers[provider])::Storage
+          end.new(attributes)
+        else
+          raise ArgumentError.new("#{provider} is not a recognized storage provider")
         end
-
-        raise ArgumentError.new("#{provider} is not a recognized storage provider")
       end
     end
 
