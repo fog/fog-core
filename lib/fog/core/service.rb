@@ -99,11 +99,18 @@ module Fog
         end
         setup_requirements
 
+        svc = service
         if Fog.mocking?
-          service::Mock.send(:include, service::Collections)
+          while svc != Fog::Service
+            service::Mock.send(:include, svc::Collections)
+            svc = svc.superclass
+          end
           service::Mock.new(cleaned_settings)
         else
-          service::Real.send(:include, service::Collections)
+          while svc != Fog::Service
+            service::Real.send(:include, svc::Collections)
+            svc = svc.superclass
+          end
           service::Real.send(:include, service::NoLeakInspector)
           service::Real.new(cleaned_settings)
         end

@@ -13,8 +13,18 @@ describe Fog::Service do
       end
     end
 
-    class Mock < Real
+    class Mock
+      attr_reader :options
+
+      def initialize(opts = {})
+        @options = opts
+      end
     end
+  end
+
+  class ChildOfTestService < TestService
+    class Real; def initialize(*args); end; end
+    class Mock; def initialize(*args); end; end
   end
 
   it "properly passes headers" do
@@ -75,11 +85,29 @@ describe Fog::Service do
   end
 
   describe "when creating and mocking is disabled" do
-    it "returns mocked service" do
+    it "returns the real service" do
       Fog.stub :mocking?, false do
         service = TestService.new(:generic_api_key => "abc")
         service.must_be_instance_of TestService::Real
       end
+    end
+
+    it "TestService::Real has TestService::Collections mixed into the mocked service" do
+      Fog.stub :mocking?, false do
+        service = TestService.new(:generic_api_key => "abc")
+        assert_includes(service.class.ancestors, TestService::Collections)
+        assert_includes(service.class.ancestors, Fog::Service::Collections)
+        refute_includes(service.class.ancestors, ChildOfTestService::Collections)
+      end       
+    end
+
+    it "ChildOfTestService::Real has ChildOfTestService::Collections and TestService::Collections mixed in" do
+      Fog.stub :mocking?, true do
+        service = ChildOfTestService.new
+        assert_includes(service.class.ancestors, Fog::Service::Collections)
+        assert_includes(service.class.ancestors, TestService::Collections)
+        assert_includes(service.class.ancestors, ChildOfTestService::Collections)
+      end       
     end
   end
 
@@ -89,6 +117,24 @@ describe Fog::Service do
         service = TestService.new(:generic_api_key => "abc")
         service.must_be_instance_of TestService::Mock
       end
+    end
+
+    it "TestService::Mock has TestService::Collections mixed into the mocked service" do
+      Fog.stub :mocking?, true do
+        service = TestService.new(:generic_api_key => "abc")
+        assert_includes(service.class.ancestors, Fog::Service::Collections)
+        assert_includes(service.class.ancestors, TestService::Collections)
+        refute_includes(service.class.ancestors, ChildOfTestService::Collections)
+      end       
+    end
+
+    it "ChildOfTestService::Mock has ChildOfTestService::Collections and TestService::Collections mixed in" do
+      Fog.stub :mocking?, true do
+        service = ChildOfTestService.new
+        assert_includes(service.class.ancestors, Fog::Service::Collections)
+        assert_includes(service.class.ancestors, TestService::Collections)
+        assert_includes(service.class.ancestors, ChildOfTestService::Collections)
+      end       
     end
   end
 
