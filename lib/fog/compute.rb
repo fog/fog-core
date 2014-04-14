@@ -55,9 +55,14 @@ module Fog
       else
         if self.providers.include?(provider)
           require "fog/#{provider}/compute"
-          return Fog::Compute.const_get(Fog.providers[provider]).new(attributes)
+          begin
+            Fog::Compute.const_get(Fog.providers[provider])
+          rescue
+            Fog::const_get(Fog.providers[provider])::Compute
+          end.new(attributes)
+        else
+          raise ArgumentError.new("#{provider} is not a recognized compute provider")
         end
-        raise ArgumentError.new("#{provider} is not a recognized compute provider")
       end
     end
 
