@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency('builder')
   spec.add_dependency('excon', '~>0.33')
-  spec.add_dependency('formatador', '~>0.2.0')
+  spec.add_dependency('formatador', '~>0.2')
   spec.add_dependency('mime-types')
   spec.add_dependency('net-scp', '~>1.1')
   spec.add_dependency('net-ssh', '>=2.1.3')
@@ -32,5 +32,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('minitest-stub-const')
   spec.add_development_dependency('pry')
   spec.add_development_dependency('coveralls')
-
 end
