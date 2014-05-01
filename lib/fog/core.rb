@@ -32,8 +32,8 @@ require 'fog/core/wait_for'
 require 'fog/core/wait_for_defaults'
 require 'fog/core/class_from_string'
 require 'fog/core/uuid'
-require 'fog/core/stringify'
-require 'fog/core/whitelist'
+require 'fog/core/stringify_keys'
+require 'fog/core/whitelist_keys'
 
 # service wrappers
 require 'fog/compute'

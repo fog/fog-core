@@ -1,8 +1,8 @@
 module Fog
-  module Stringify
+  module StringifyKeys
 
     # Returns a new hash with all keys converted to strings.
-    def self.keys(hash)
+    def self.stringify(hash)
       self.transform_hash(hash) {|hash, key, value|
         hash[key.to_s] = value
       }

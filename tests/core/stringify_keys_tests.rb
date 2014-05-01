@@ -8,19 +8,19 @@ output_hash = {
   'flavor' => '123'
 }
 
-Shindo.tests('Fog::Stringify', 'core') do
+Shindo.tests('Fog::StringifyKeys', 'core') do
 
   tests('keys') do
 
     tests('stringifies symbols') do
       returns(output_hash) {
-        Fog::Stringify.keys(input_hash)
+        Fog::StringifyKeys.stringify(input_hash)
       }
     end
 
     tests('skips strings') do
       returns(output_hash) {
-        Fog::Stringify.keys(output_hash)
+        Fog::StringifyKeys.stringify(output_hash)
       }
     end
 

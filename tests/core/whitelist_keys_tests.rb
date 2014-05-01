@@ -11,12 +11,12 @@ output_hash = {
 
 valid_keys = %w{flavor name}
 
-Shindo.tests('Fog::Whitelist', 'core') do
+Shindo.tests('Fog::WhitelistKeys', 'core') do
 
   tests('whitelist_keys') do
     tests('excludes invalid values') do
       returns(output_hash) {
-        Fog::Whitelist.whitelist_keys(input_hash, valid_keys)
+        Fog::WhitelistKeys.whitelist(input_hash, valid_keys)
       }
     end
   end
