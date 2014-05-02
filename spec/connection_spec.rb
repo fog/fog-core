@@ -30,4 +30,14 @@ describe Fog::Core::Connection do
     }
     Fog::Core::Connection.new("http://example.com", true, options)
   end
+
+  describe "#new :base_path" do
+    it "does not emit a warning when provided this argument" do
+      $stderr = StringIO.new
+      
+      Fog::Core::Connection.new("http://example.com", false, :base_path => "foo")
+      
+      assert_empty($stderr.string)
+    end
+  end
 end

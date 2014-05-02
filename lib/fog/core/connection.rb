@@ -23,8 +23,10 @@ module Fog
       # @option params [Fixnum] :retry_limit Set how many times we'll retry a failed request.  (Default 4)
       # @option params [Class] :instrumentor Responds to #instrument as in ActiveSupport::Notifications
       # @option params [String] :instrumentor_name Name prefix for #instrument events.  Defaults to 'excon'
-      #
+      # @option params [String] :base_path Sticky version of the "path" arg. base_path => "foo/bar" with a request to path "blech" sends a request to path "foo/bar/blech"
       def initialize(url, persistent=false, params={})
+        @base_path = params.delete(:base_path)
+
         unless params.has_key?(:debug_response)
           params[:debug_response] = true
         end
