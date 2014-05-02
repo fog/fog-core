@@ -40,56 +40,60 @@ describe Fog::Core::Connection do
       assert_empty($stderr.string)
     end
 
-    it "raises when the 'path' arg is present when this arg is supplied" do
+    it "raises when the 'path' arg is present and this arg is supplied" do
       assert_raises(ArgumentError) do
         Fog::Core::Connection.new("http://example.com", false, :base_path => "foo", :path => "bar")
-      end
-    end
-
-    it "supplies the 'path' arg to Excon when 'base_path' is absent" do
-      spy = Object.new
-      spy.instance_eval do
-        def params
-          @params
-        end
-        def new(_, params)
-          @params = params
-        end
-      end
-
-      Object.stub_const("Excon", spy) do
-        c = Fog::Core::Connection.new("http://example.com", false, :path => "bar")
-        assert_equal("bar", spy.params[:path])
       end
     end
   end
 
   describe "#request" do
-    let(:spy) {
-      Object.new.tap { |spy|
+    describe "default behavior" do
+      it "supplies the 'path' arg directly to Excon" do
+        spy = Object.new
         spy.instance_eval do
-          def new(*args); self; end
-          def params; @params; end
-          def request(params)
+          def params
+            @params
+          end
+          def new(_, params)
             @params = params
           end
         end
-      }
-    }
 
-    it "uses the initializer-supplied :base_path arg with #request :arg to formulate a path to send to Excon.request" do
-      Object.stub_const("Excon", spy) do
-        c = Fog::Core::Connection.new("http://example.com", false, :base_path => "foo")
-        c.request(:path => "bar")
-        assert_equal("foo/bar", spy.params[:path])
+        Object.stub_const("Excon", spy) do
+          c = Fog::Core::Connection.new("http://example.com", false, :path => "bar")
+          assert_equal("bar", spy.params[:path])
+        end
       end
     end
-    
-    it "does not introduce consecutive '/'s into the path if 'path' starts with a '/'" do
-      Object.stub_const("Excon", spy) do
-        c = Fog::Core::Connection.new("http://example.com", false, :base_path => "foo")
-        c.request(:path => "/bar")
-        assert_equal("foo/bar", spy.params[:path])
+
+    describe "with base_path supplied to the initializer" do
+      let(:spy) {
+        Object.new.tap { |spy|
+          spy.instance_eval do
+            def new(*args); self; end
+            def params; @params; end
+            def request(params)
+              @params = params
+            end
+          end
+        }
+      }
+
+      it "uses the initializer-supplied :base_path arg with #request :arg to formulate a path to send to Excon.request" do
+        Object.stub_const("Excon", spy) do
+          c = Fog::Core::Connection.new("http://example.com", false, :base_path => "foo")
+          c.request(:path => "bar")
+          assert_equal("foo/bar", spy.params[:path])
+        end
+      end
+      
+      it "does not introduce consecutive '/'s into the path if 'path' starts with a '/'" do
+        Object.stub_const("Excon", spy) do
+          c = Fog::Core::Connection.new("http://example.com", false, :base_path => "foo")
+          c.request(:path => "/bar")
+          assert_equal("foo/bar", spy.params[:path])
+        end
       end
     end
   end
