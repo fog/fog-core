@@ -25,7 +25,13 @@ module Fog
       # @option params [String] :instrumentor_name Name prefix for #instrument events.  Defaults to 'excon'
       # @option params [String] :base_path Sticky version of the "path" arg. base_path => "foo/bar" with a request to path "blech" sends a request to path "foo/bar/blech"
       def initialize(url, persistent=false, params={})
-        @base_path = params.delete(:base_path)
+        if params[:base_path]
+          if params[:path]
+            raise ArgumentError, "optional arg 'path' is invalid when 'base_path' is provided"
+          end
+
+          @base_path = params.delete(:base_path)
+        end
 
         unless params.has_key?(:debug_response)
           params[:debug_response] = true
@@ -55,7 +61,7 @@ module Fog
       # @raise [Excon::Errors::SocketError]
       #
       def request(params, &block)
-        @excon.request(params, &block)
+        @excon.request(handle_base_path_for(params), &block)
       end
 
       # Make {#request} available even when it has been overidden by a subclass
@@ -68,6 +74,17 @@ module Fog
       #
       def reset
         @excon.reset
+      end
+
+      private
+
+      def handle_base_path_for(params)
+        return params unless @base_path
+
+        params[:path] = params[:path].sub(/^\//, "")
+        params[:path] = params[:path][1..-1] if params[:path][0] == "/"
+        params[:path] = "#{@base_path}/#{params[:path]}"
+        params
       end
     end
   end
