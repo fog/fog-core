@@ -31,18 +31,18 @@ describe Fog::Core::Connection do
     Fog::Core::Connection.new("http://example.com", true, options)
   end
 
-  describe ":base_path" do
+  describe ":path_prefix" do
     it "does not emit a warning when provided this argument in the initializer" do
       $stderr = StringIO.new
       
-      Fog::Core::Connection.new("http://example.com", false, :base_path => "foo")
+      Fog::Core::Connection.new("http://example.com", false, :path_prefix => "foo")
       
       assert_empty($stderr.string)
     end
 
     it "raises when the 'path' arg is present and this arg is supplied" do
       assert_raises(ArgumentError) do
-        Fog::Core::Connection.new("http://example.com", false, :base_path => "foo", :path => "bar")
+        Fog::Core::Connection.new("http://example.com", false, :path_prefix => "foo", :path => "bar")
       end
     end
   end
@@ -67,7 +67,7 @@ describe Fog::Core::Connection do
       end
     end
 
-    describe "with base_path supplied to the initializer" do
+    describe "with path_prefix supplied to the initializer" do
       let(:spy) {
         Object.new.tap { |spy|
           spy.instance_eval do
@@ -80,9 +80,9 @@ describe Fog::Core::Connection do
         }
       }
 
-      it "uses the initializer-supplied :base_path arg with #request :arg to formulate a path to send to Excon.request" do
+      it "uses the initializer-supplied :path_prefix arg with #request :arg to formulate a path to send to Excon.request" do
         Object.stub_const("Excon", spy) do
-          c = Fog::Core::Connection.new("http://example.com", false, :base_path => "foo")
+          c = Fog::Core::Connection.new("http://example.com", false, :path_prefix => "foo")
           c.request(:path => "bar")
           assert_equal("foo/bar", spy.params[:path])
         end
@@ -90,7 +90,7 @@ describe Fog::Core::Connection do
       
       it "does not introduce consecutive '/'s into the path if 'path' starts with a '/'" do
         Object.stub_const("Excon", spy) do
-          c = Fog::Core::Connection.new("http://example.com", false, :base_path => "foo")
+          c = Fog::Core::Connection.new("http://example.com", false, :path_prefix => "foo")
           c.request(:path => "/bar")
           assert_equal("foo/bar", spy.params[:path])
         end
