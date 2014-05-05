@@ -82,7 +82,6 @@ module Fog
         return params unless @path_prefix
 
         params[:path] = params[:path].sub(/^\//, "")
-        params[:path] = params[:path][1..-1] if params[:path][0] == "/"
         params[:path] = "#{@path_prefix}/#{params[:path]}"
         params
       end
