@@ -16,6 +16,7 @@ module Fog
       # @option params [Hash<Symbol, String>] :headers The default headers to supply in a request. Only used if params[:headers] is not supplied to Connection#request
       # @option params [String] :host The destination host's reachable DNS name or IP, in the form of a String
       # @option params [String] :path Default path; appears after 'scheme://host:port/'. Only used if params[:path] is not supplied to Connection#request
+      # @option params [String] :path_prefix Sticky version of the "path" arg. :XSpath_prefix => "foo/bar" with a request with :path => "blech" sends a request to path "foo/bar/blech"
       # @option params [Fixnum] :port The port on which to connect, to the destination host
       # @option params [Hash]   :query Default query; appended to the 'scheme://host:port/path/' in the form of '?key=value'. Will only be used if params[:query] is not supplied to Connection#request
       # @option params [String] :scheme The protocol; 'https' causes OpenSSL to be used
@@ -23,8 +24,15 @@ module Fog
       # @option params [Fixnum] :retry_limit Set how many times we'll retry a failed request.  (Default 4)
       # @option params [Class] :instrumentor Responds to #instrument as in ActiveSupport::Notifications
       # @option params [String] :instrumentor_name Name prefix for #instrument events.  Defaults to 'excon'
-      #
       def initialize(url, persistent=false, params={})
+        if params[:path_prefix]
+          if params[:path]
+            raise ArgumentError, "optional arg 'path' is invalid when 'path_prefix' is provided"
+          end
+
+          @path_prefix = params.delete(:path_prefix)
+        end
+
         unless params.has_key?(:debug_response)
           params[:debug_response] = true
         end
@@ -53,7 +61,7 @@ module Fog
       # @raise [Excon::Errors::SocketError]
       #
       def request(params, &block)
-        @excon.request(params, &block)
+        @excon.request(handle_path_prefix_for(params), &block)
       end
 
       # Make {#request} available even when it has been overidden by a subclass
@@ -66,6 +74,16 @@ module Fog
       #
       def reset
         @excon.reset
+      end
+
+      private
+
+      def handle_path_prefix_for(params)
+        return params unless @path_prefix
+
+        params[:path] = params[:path].sub(/^\//, "")
+        params[:path] = "#{@path_prefix}/#{params[:path]}"
+        params
       end
     end
   end

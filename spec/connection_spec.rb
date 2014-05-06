@@ -30,4 +30,71 @@ describe Fog::Core::Connection do
     }
     Fog::Core::Connection.new("http://example.com", true, options)
   end
+
+  describe ":path_prefix" do
+    it "does not emit a warning when provided this argument in the initializer" do
+      $stderr = StringIO.new
+      
+      Fog::Core::Connection.new("http://example.com", false, :path_prefix => "foo")
+      
+      assert_empty($stderr.string)
+    end
+
+    it "raises when the 'path' arg is present and this arg is supplied" do
+      assert_raises(ArgumentError) do
+        Fog::Core::Connection.new("http://example.com", false, :path_prefix => "foo", :path => "bar")
+      end
+    end
+  end
+
+  describe "#request" do
+    describe "default behavior" do
+      it "supplies the 'path' arg directly to Excon" do
+        spy = Object.new
+        spy.instance_eval do
+          def params
+            @params
+          end
+          def new(_, params)
+            @params = params
+          end
+        end
+
+        Object.stub_const("Excon", spy) do
+          c = Fog::Core::Connection.new("http://example.com", false, :path => "bar")
+          assert_equal("bar", spy.params[:path])
+        end
+      end
+    end
+
+    describe "with path_prefix supplied to the initializer" do
+      let(:spy) {
+        Object.new.tap { |spy|
+          spy.instance_eval do
+            def new(*args); self; end
+            def params; @params; end
+            def request(params)
+              @params = params
+            end
+          end
+        }
+      }
+
+      it "uses the initializer-supplied :path_prefix arg with #request :arg to formulate a path to send to Excon.request" do
+        Object.stub_const("Excon", spy) do
+          c = Fog::Core::Connection.new("http://example.com", false, :path_prefix => "foo")
+          c.request(:path => "bar")
+          assert_equal("foo/bar", spy.params[:path])
+        end
+      end
+      
+      it "does not introduce consecutive '/'s into the path if 'path' starts with a '/'" do
+        Object.stub_const("Excon", spy) do
+          c = Fog::Core::Connection.new("http://example.com", false, :path_prefix => "foo")
+          c.request(:path => "/bar")
+          assert_equal("foo/bar", spy.params[:path])
+        end
+      end
+    end
+  end
 end
