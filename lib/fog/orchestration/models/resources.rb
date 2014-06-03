@@ -12,8 +12,7 @@ module Fog
       def find_by_physical_id(id)
         self.find {|resource| resource.physical_resource_id == id}
       end
-      alias_method :find_by_id, :find_by_physical_id
-      alias_method :get, :find_by_id
+      alias_method :get, :find_by_physical_id
 
       def find_by_logical_id(id)
         self.find {|resource| resource.logical_resource_id == id}
