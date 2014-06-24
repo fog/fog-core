@@ -54,7 +54,7 @@ module Fog
         Fog::Compute::VcloudDirector.new(attributes)
       else
         if self.providers.include?(provider)
-          require "fog/#{provider}/compute"
+          require "fog/#{provider}/compute" rescue nil
           begin
             Fog::Compute.const_get(Fog.providers[provider])
           rescue
