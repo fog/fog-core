@@ -10,6 +10,10 @@ describe "Fog::Attributes" do
   
   let(:model) { FogAttributeTestModel.new }
 
+  it "should not create alias for nil" do
+    FogAttributeTestModel.aliases.must_equal({ "keys" => :key })
+  end
+
   describe "squash 'id'" do
     it "squashes if the key is a String" do
       model.merge_attributes("keys" => {:id => "value"})
