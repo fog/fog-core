@@ -99,7 +99,7 @@ module Fog
         end
         @attributes ||= []
         @attributes |= [name]
-        for new_alias in [*options[:aliases]]
+        Array(options[:aliases]).each do |new_alias|
           aliases[new_alias] = name
         end
       end
