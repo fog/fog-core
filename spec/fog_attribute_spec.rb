@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'xmlrpc/datetime'
 
 class FogAttributeTestModel < Fog::Model
   attribute :key, :aliases => "keys", :squash => "id"
@@ -36,6 +37,12 @@ describe "Fog::Attributes" do
     it "returns a Time object when passed a Time object" do
       now = Time.now
       model.merge_attributes(:time => now.to_s)
+      assert_equal Time.parse(now.to_s), model.time
+    end
+
+    it "returns a Time object when passed a XMLRPC::DateTime object" do
+      now = XMLRPC::DateTime.new(2000, 7, 8, 10, 20, 34)
+      model.merge_attributes(:time => now)
       assert_equal Time.parse(now.to_s), model.time
     end
   end
