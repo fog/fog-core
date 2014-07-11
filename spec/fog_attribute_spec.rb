@@ -122,19 +122,19 @@ describe "Fog::Attributes" do
   describe ":type => :timestamp" do
     it "returns a date as time" do
       model.merge_attributes(:timestamp => Date.new(2008, 10, 12))
-      assert_equal '2008-10-12 00:00:00', model.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+      assert_equal '2008-10-12 00:00', model.timestamp.strftime('%Y-%m-%d %M:%S')
       assert_instance_of Fog::Time, model.timestamp
     end
 
     it "returns a time as time" do
       model.merge_attributes(:timestamp => Time.mktime(2007, 11, 1, 15, 25))
-      assert_equal '2007-11-01 15:25:00', model.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+      assert_equal '2007-11-01 25:00', model.timestamp.strftime('%Y-%m-%d %M:%S')
       assert_instance_of Fog::Time, model.timestamp
     end
 
     it "returns a date_time as time" do
-      model.merge_attributes(:timestamp => DateTime.new(2007, 11, 1, 15, 25, 0, "+09:00"))
-      assert_equal '2007-11-01 02:25:00', model.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+      model.merge_attributes(:timestamp => DateTime.new(2007, 11, 1, 15, 25, 0))
+      assert_equal '2007-11-01 25:00', model.timestamp.strftime('%Y-%m-%d %M:%S')
       assert_instance_of Fog::Time, model.timestamp
     end
   end
