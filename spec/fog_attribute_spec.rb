@@ -13,7 +13,7 @@ class FogAttributeTestModel < Fog::Model
 end
 
 describe "Fog::Attributes" do
-  
+
   let(:model) { FogAttributeTestModel.new }
 
   it "should not create alias for nil" do
@@ -25,13 +25,13 @@ describe "Fog::Attributes" do
       model.merge_attributes("keys" => {:id => "value"})
       assert_equal"value", model.key
     end
-      
+
     it "squashes if the key is a Symbol" do
       model.merge_attributes("keys" => {"id" => "value"})
       assert_equal "value", model.key
     end
   end
-    
+
   describe ":type => time" do
     it "returns nil when provided nil" do
       model.merge_attributes(:time => nil)
@@ -121,18 +121,21 @@ describe "Fog::Attributes" do
 
   describe ":type => :timestamp" do
     it "returns a date as time" do
-      model.merge_attributes(:timestamp => Date.new(2008, 10, 12, 5))
-      assert_equal Time.new(2008, 10, 12, 0, 0, 0, '-04:00'), model.timestamp
+      model.merge_attributes(:timestamp => Date.new(2008, 10, 12))
+      assert_equal '2008-10-12 00:00:00', model.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+      assert_instance_of Fog::Time, model.timestamp
     end
 
     it "returns a time as time" do
-      model.merge_attributes(:timestamp => Time.new(2007, 11, 1, 15, 25, 0, "+09:00"))
-      assert_equal Time.new(2007,11,1,15,25,0, "+09:00"), model.timestamp
+      model.merge_attributes(:timestamp => Time.mktime(2007, 11, 1, 15, 25))
+      assert_equal '2007-11-01 15:25:00', model.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+      assert_instance_of Fog::Time, model.timestamp
     end
 
     it "returns a date_time as time" do
       model.merge_attributes(:timestamp => DateTime.new(2007, 11, 1, 15, 25, 0, "+09:00"))
-      assert_equal Time.new(2007,11,1,15,25,0, "+09:00"), model.timestamp
+      assert_equal '2007-11-01 02:25:00', model.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+      assert_instance_of Fog::Time, model.timestamp
     end
   end
 
