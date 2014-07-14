@@ -6,7 +6,7 @@ module Fog
     class Events < Fog::Collection
 
       def all(stack)
-        raise NotImplemented
+        raise NotImplementedError
       end
 
       def get(id)
