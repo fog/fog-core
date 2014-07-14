@@ -9,8 +9,11 @@ module Fog
         raise NotImplemented
       end
 
-      def get(id)
-        self.find {|stack| stack.id == id}
+      def get(name_or_id)
+        self.find do |stack|
+          stack.id == name_or_id ||
+            stack.stack_name == name_or_id
+        end
       end
 
     end
