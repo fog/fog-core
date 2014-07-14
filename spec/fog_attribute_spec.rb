@@ -5,10 +5,15 @@ class FogAttributeTestModel < Fog::Model
   attribute :key, :aliases => "keys", :squash => "id"
   attribute :time, :type => :time
   attribute :bool, :type => :boolean
+  attribute :float, :type => :float
+  attribute :integer, :type => :integer
+  attribute :string, :type => :string
+  attribute :timestamp, :type => :timestamp
+  attribute :array, :type => :array
 end
 
 describe "Fog::Attributes" do
-  
+
   let(:model) { FogAttributeTestModel.new }
 
   it "should not create alias for nil" do
@@ -20,13 +25,13 @@ describe "Fog::Attributes" do
       model.merge_attributes("keys" => {:id => "value"})
       assert_equal"value", model.key
     end
-      
+
     it "squashes if the key is a Symbol" do
       model.merge_attributes("keys" => {"id" => "value"})
       assert_equal "value", model.key
     end
   end
-    
+
   describe ":type => time" do
     it "returns nil when provided nil" do
       model.merge_attributes(:time => nil)
@@ -75,6 +80,79 @@ describe "Fog::Attributes" do
     it "returns a non-true/false value as nil" do
       model.merge_attributes(:bool => "foo")
       refute model.bool
+    end
+  end
+
+  describe ":type => :float" do
+    it "returns an integer as float" do
+      model.merge_attributes(:float => 1)
+      assert_in_delta 1.0, model.float
+    end
+
+    it "returns a string as float" do
+      model.merge_attributes(:float => '1')
+      assert_in_delta 1.0, model.float
+    end
+  end
+
+  describe ":type => :integer" do
+    it "returns a float as integer" do
+      model.merge_attributes(:integer => 1.5)
+      assert_in_delta 1, model.integer
+    end
+
+    it "returns a string as integer" do
+      model.merge_attributes(:integer => '1')
+      assert_in_delta 1, model.integer
+    end
+  end
+
+  describe ":type => :string" do
+    it "returns a float as string" do
+      model.merge_attributes(:string => 1.5)
+      assert_equal '1.5', model.string
+    end
+
+    it "returns a integer as string" do
+      model.merge_attributes(:string => 1)
+      assert_equal '1', model.string
+    end
+  end
+
+  describe ":type => :timestamp" do
+    it "returns a date as time" do
+      model.merge_attributes(:timestamp => Date.new(2008, 10, 12))
+      assert_equal '2008-10-12 00:00', model.timestamp.strftime('%Y-%m-%d %M:%S')
+      assert_instance_of Fog::Time, model.timestamp
+    end
+
+    it "returns a time as time" do
+      model.merge_attributes(:timestamp => Time.mktime(2007, 11, 1, 15, 25))
+      assert_equal '2007-11-01 25:00', model.timestamp.strftime('%Y-%m-%d %M:%S')
+      assert_instance_of Fog::Time, model.timestamp
+    end
+
+    it "returns a date_time as time" do
+      model.merge_attributes(:timestamp => DateTime.new(2007, 11, 1, 15, 25, 0))
+      assert_equal '2007-11-01 25:00', model.timestamp.strftime('%Y-%m-%d %M:%S')
+      assert_instance_of Fog::Time, model.timestamp
+    end
+  end
+
+  describe ":type => :array" do
+    it "returns an empty array as an empty array" do
+      model.merge_attributes(:array => [])
+      assert_equal [], model.array
+    end
+
+    it "returns a single element as array" do
+      model.merge_attributes(:array => 1.5)
+      assert_equal [ 1.5 ], model.array
+    end
+
+    it "returns an array as array" do
+      model.merge_attributes(:array => [ 1, 2 ])
+      assert_equal [ 1, 2 ], model.array
     end
   end
 end

@@ -65,7 +65,11 @@ module Fog
         when :timestamp
           class_eval <<-EOS, __FILE__, __LINE__
             def #{name}=(new_#{name})
-              attributes[:#{name}] = Time.at(new_#{name}.to_i)
+              if new_#{name}.respond_to?(:to_i)
+                attributes[:#{name}] = Time.at(new_#{name}.to_i)
+              else
+                attributes[:#{name}] = Time.parse(new_#{name}.to_s)
+              end
             end
           EOS
         when :array
