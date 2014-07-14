@@ -14,10 +14,14 @@ module Fog
       else
         if self.providers.include?(provider)
           require "fog/#{provider}/dns"
-          return Fog::DNS.const_get(Fog.providers[provider]).new(attributes)
+          begin
+            Fog::DNS.const_get(Fog.providers[provider])
+          rescue
+            Fog::const_get(Fog.providers[provider])::DNS
+          end.new(attributes)
+        else
+          raise ArgumentError.new("#{provider} is not a recognized dns provider")
         end
-
-        raise ArgumentError.new("#{provider} is not a recognized dns provider")
       end
     end
 
