@@ -1,6 +1,6 @@
 module Fog
   module Attributes
-    class DefaultAttribute
+    class Default
       attr_reader :model, :name, :squash
       
       def initialize(model, name, options)

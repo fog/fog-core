@@ -16,7 +16,7 @@ module Fog
 
       def attribute(name, options = {})
         type = options.fetch(:type, 'default').to_s.capitalize
-        Fog::Attributes::const_get("#{type}Attribute").new(self, name, options).create
+        Fog::Attributes::const_get(type).new(self, name, options).create
         self.attributes << name
         Array(options[:aliases]).each do |new_alias|
           aliases[new_alias] = name
