@@ -15,96 +15,9 @@ module Fog
       end
 
       def attribute(name, options = {})
-        class_eval <<-EOS, __FILE__, __LINE__
-          def #{name}
-            attributes[:#{name}]
-          end
-        EOS
-        case options[:type]
-        when :boolean
-          class_eval <<-EOS, __FILE__, __LINE__
-            def #{name}=(new_#{name})
-              attributes[:#{name}] = case new_#{name}
-              when true,'true'
-                true
-              when false,'false'
-                false
-              end
-            end
-          EOS
-        when :float
-          class_eval <<-EOS, __FILE__, __LINE__
-            def #{name}=(new_#{name})
-              attributes[:#{name}] = new_#{name}.to_f
-            end
-          EOS
-        when :integer
-          class_eval <<-EOS, __FILE__, __LINE__
-            def #{name}=(new_#{name})
-              attributes[:#{name}] = new_#{name}.to_i
-            end
-          EOS
-        when :string
-          class_eval <<-EOS, __FILE__, __LINE__
-            def #{name}=(new_#{name})
-              attributes[:#{name}] = new_#{name}.to_s
-            end
-          EOS
-        when :time
-          class_eval <<-EOS, __FILE__, __LINE__
-            def #{name}=(new_#{name})
-              attributes[:#{name}] = if new_#{name}.nil? || new_#{name} == "" || new_#{name}.is_a?(Time)
-                new_#{name}
-              elsif new_#{name}.respond_to?(:to_time)
-                new_#{name}.to_time
-              else
-                Time.parse(new_#{name})
-              end
-            end
-          EOS
-        when :timestamp
-          class_eval <<-EOS, __FILE__, __LINE__
-            def #{name}=(new_#{name})
-              if new_#{name}.respond_to?(:to_i)
-                attributes[:#{name}] = Time.at(new_#{name}.to_i)
-              else
-                attributes[:#{name}] = Time.parse(new_#{name}.to_s)
-              end
-            end
-          EOS
-        when :array
-          class_eval <<-EOS, __FILE__, __LINE__
-          def #{name}=(new_#{name})
-            attributes[:#{name}] = [*new_#{name}]
-          end
-          EOS
-        else
-          if squash = options[:squash]
-            class_eval <<-EOS, __FILE__, __LINE__
-              def #{name}=(new_data)
-                if new_data.is_a?(Hash)
-                  if new_data.has_key?(:'#{squash}')
-                    attributes[:#{name}] = new_data[:'#{squash}']
-                  elsif new_data.has_key?("#{squash}")
-                    attributes[:#{name}] = new_data["#{squash}"]
-                  else
-                    attributes[:#{name}] = [ new_data ]
-                  end
-                else
-                  attributes[:#{name}] = new_data
-                end
-              end
-            EOS
-          else
-            class_eval <<-EOS, __FILE__, __LINE__
-              def #{name}=(new_#{name})
-                attributes[:#{name}] = new_#{name}
-              end
-            EOS
-          end
-        end
-        @attributes ||= []
-        @attributes |= [name]
+        type = options.fetch(:type, 'default').to_s.capitalize
+        Fog::Attributes::const_get("#{type}Attribute").new(self, name, options).create
+        self.attributes << name
         Array(options[:aliases]).each do |new_alias|
           aliases[new_alias] = name
         end
