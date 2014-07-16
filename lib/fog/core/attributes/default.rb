@@ -43,6 +43,9 @@ module Fog
       def create_getter
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}
+            if self.class.default_values[:#{name}] && !persisted?
+              return self.class.default_values[:#{name}]
+            end
             attributes[:#{name}]
           end
         EOS

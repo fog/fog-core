@@ -14,10 +14,16 @@ module Fog
         @attributes ||= []
       end
 
+      def default_values
+        @default_values ||= {}
+      end
+
       def attribute(name, options = {})
         type = options.fetch(:type, 'default').to_s.capitalize
+        default = options.fetch(:default, false)
         Fog::Attributes::const_get(type).new(self, name, options).create
-        self.attributes << name
+        attributes << name
+        default_values[name] = default if default
         Array(options[:aliases]).each do |new_alias|
           aliases[new_alias] = name
         end
