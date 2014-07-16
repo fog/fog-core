@@ -24,7 +24,7 @@ end
 #require "tasks/changelog_task"
 #Fog::Rake::ChangelogTask.new
 task :coveralls_push_workaround do
-  use_coveralls = (Gem::Version.new(RUBY_VERSION) > Gem::Version.new('1.9.2'))
+  use_coveralls = (Gem::Version.new(RUBY_VERSION.dup) > Gem::Version.new('1.9.2'))
   if (ENV['COVERAGE'] != 'false') && use_coveralls
     require 'coveralls/rake/task'
     Coveralls::RakeTask.new
