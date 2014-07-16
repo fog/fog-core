@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'xmlrpc/datetime'
 
 class FogAttributeTestModel < Fog::Model
+  identity  :id
   attribute :key, :aliases => "keys", :squash => "id"
   attribute :time, :type => :time
   attribute :bool, :type => :boolean
@@ -10,6 +11,7 @@ class FogAttributeTestModel < Fog::Model
   attribute :string, :type => :string
   attribute :timestamp, :type => :timestamp
   attribute :array, :type => :array
+  attribute :default, :default => 'default_value'
 end
 
 describe "Fog::Attributes" do
@@ -153,6 +155,31 @@ describe "Fog::Attributes" do
     it "returns an array as array" do
       model.merge_attributes(:array => [ 1, 2 ])
       assert_equal [ 1, 2 ], model.array
+    end
+  end
+
+  describe ":default => 'default_value'" do
+    it "should return nil when default is not defined on a new object" do
+      assert_equal model.bool, nil
+    end
+
+    it "should return the value of the object when default is not defined" do
+      model.merge_attributes({ :bool => false })
+      assert_equal model.bool, false
+    end
+
+    it "should return the default value on a new object" do
+      assert_equal model.default, 'default_value'
+    end
+
+    it "should return the value of the persisted object" do
+      model.merge_attributes({ :id => 'some-crazy-id', :default => 23 })
+      assert_equal model.default, 23
+    end
+
+    it "should return nil on a persisted object without a value" do
+      model.merge_attributes({ :id => 'some-crazy-id' })
+      assert_equal model.default, nil
     end
   end
 end
