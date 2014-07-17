@@ -12,6 +12,7 @@ class FogAttributeTestModel < Fog::Model
   attribute :timestamp, :type => :timestamp
   attribute :array, :type => :array
   attribute :default, :default => 'default_value'
+  attribute :another_default, :default => false
 end
 
 describe "Fog::Attributes" do
@@ -170,6 +171,10 @@ describe "Fog::Attributes" do
 
     it "should return the default value on a new object" do
       assert_equal model.default, 'default_value'
+    end
+
+    it "should return false when default value is false on a new object" do
+      assert_equal model.another_default, false
     end
 
     it "should return the value of the persisted object" do
