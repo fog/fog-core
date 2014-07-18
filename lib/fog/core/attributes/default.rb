@@ -43,6 +43,7 @@ module Fog
       def create_getter
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}
+            return attributes[:#{name}] unless attributes[:#{name}].nil?
             if !self.class.default_values[:#{name}].nil? && !persisted?
               return self.class.default_values[:#{name}]
             end
