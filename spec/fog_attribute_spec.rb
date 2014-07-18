@@ -169,8 +169,13 @@ describe "Fog::Attributes" do
       assert_equal model.bool, false
     end
 
-    it "should return the default value on a new object" do
+    it "should return the default value on a new object with value equal nil" do
       assert_equal model.default, 'default_value'
+    end
+
+    it "should return the value on a new object with value not equal nil" do
+      model.default = 'not default'
+      assert_equal model.default, 'not default'
     end
 
     it "should return false when default value is false on a new object" do
