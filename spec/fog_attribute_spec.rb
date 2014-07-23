@@ -148,6 +148,16 @@ describe "Fog::Attributes" do
       assert_equal [], model.array
     end
 
+    it "returns nil as an empty array" do
+      model.merge_attributes(:array => nil)
+      assert_equal [], model.array
+    end
+
+    it "returns an array with nil as an array with nil" do
+      model.merge_attributes(:array => [nil])
+      assert_equal [nil], model.array
+    end
+
     it "returns a single element as array" do
       model.merge_attributes(:array => 1.5)
       assert_equal [ 1.5 ], model.array
@@ -190,6 +200,42 @@ describe "Fog::Attributes" do
     it "should return nil on a persisted object without a value" do
       model.merge_attributes({ :id => 'some-crazy-id' })
       assert_equal model.default, nil
+    end
+  end
+
+  describe "#all_attributes" do
+    describe "on a persisted object" do
+      it "should return all attributes without default values" do
+        model.merge_attributes( :id => 2, :float => 3.2, :integer => 55555555 )
+        assert_equal model.all_attributes, { :id => 2,
+                                             :key => nil,
+                                             :time => nil,
+                                             :bool => nil,
+                                             :float => 3.2,
+                                             :integer => 55555555,
+                                             :string => '',
+                                             :timestamp => Time.at(0),
+                                             :array => [],
+                                             :default => nil,
+                                             :another_default => nil }
+      end
+    end
+
+    describe "on a new object" do
+      it "should return all attributes including default values for empty attributes" do
+        model.merge_attributes( :id => nil, :float => 3.2, :integer => 55555555 )
+        assert_equal model.all_attributes, { :id => nil,
+                                             :key => nil, 
+                                             :time => nil, 
+                                             :bool => nil, 
+                                             :float => 3.2, 
+                                             :integer => 55555555, 
+                                             :string => '',
+                                             :timestamp => Time.at(0),
+                                             :array => [],
+                                             :default => 'default_value',
+                                             :another_default => false }
+      end
     end
   end
 end
