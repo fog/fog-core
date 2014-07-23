@@ -148,6 +148,16 @@ describe "Fog::Attributes" do
       assert_equal [], model.array
     end
 
+    it "returns nil as an empty array" do
+      model.merge_attributes(:array => nil)
+      assert_equal [], model.array
+    end
+
+    it "returns an array with nil as an array with nil" do
+      model.merge_attributes(:array => [nil])
+      assert_equal [nil], model.array
+    end
+
     it "returns a single element as array" do
       model.merge_attributes(:array => 1.5)
       assert_equal [ 1.5 ], model.array
