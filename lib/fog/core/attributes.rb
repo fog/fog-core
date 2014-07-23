@@ -55,8 +55,9 @@ module Fog
       end
 
       def all_attributes
-        all_attributes = self.class.attributes.each_with_object({}) do |attribute, hash|
+        all_attributes = self.class.attributes.inject({}) do |hash, attribute|
           hash[attribute] = send(attribute)
+          hash
         end
         self.class.new(all_attributes).attributes
       end
