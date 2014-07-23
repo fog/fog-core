@@ -54,6 +54,13 @@ module Fog
         @attributes ||= {}
       end
 
+      def all_attributes
+        all_attributes = self.class.attributes.each_with_object({}) do |attribute, hash|
+          hash[attribute] = send(attribute)
+        end
+        self.class.new(all_attributes).attributes
+      end
+
       def dup
         copy = super
         copy.dup_attributes!
