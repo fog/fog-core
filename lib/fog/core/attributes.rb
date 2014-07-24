@@ -20,13 +20,11 @@ module Fog
 
       def attribute(name, options = {})
         type = options.fetch(:type, 'default').to_s.capitalize
-        default = options[:default]
-        Fog::Attributes::const_get(type).new(self, name, options).create
-        attributes << name
-        default_values[name] = default unless default.nil?
-        Array(options[:aliases]).each do |new_alias|
-          aliases[new_alias] = name
-        end
+        attr = Fog::Attributes::const_get(type).new(self, name, options)
+        attr.create_setter
+        attr.create_getter
+        attr.create_aliases
+        attr.set_defaults
       end
 
       def identity(name, options = {})
