@@ -27,6 +27,23 @@ module Fog
         attr.set_defaults
       end
 
+      def has_one(association, collection_name, options = {})
+        attribute("__#{association}".to_sym, options)
+        options[:collection_name] = collection_name
+        attr = Fog::Attributes::SingleAssociation.new(self, association, options)
+        attr.create_setter
+        attr.create_getter
+      end
+
+      def has_many(associations, collection_name, options = {})
+        options[:type] = :array
+        attribute("__#{associations}".to_sym, options)
+        options[:collection_name] = collection_name
+        attr = Fog::Attributes::MultipleAssociations.new(self, associations, options)
+        attr.create_setter
+        attr.create_getter
+      end
+
       def identity(name, options = {})
         @identity = name
         self.attribute(name, options)
@@ -54,7 +71,7 @@ module Fog
 
       def all_attributes
         all_attributes = self.class.attributes.inject({}) do |hash, attribute|
-          hash[attribute] = send(attribute)
+          hash[attribute] = send(attribute) unless attribute.to_s.start_with?('__')
           hash
         end
         self.class.new(all_attributes).attributes

@@ -8,6 +8,14 @@ module Fog
           end
         EOS
       end
+
+      def create_getter
+        model.class_eval <<-EOS, __FILE__, __LINE__
+          def #{name}
+            Array(attributes[:#{name}])
+          end
+        EOS
+      end
     end
   end
 end

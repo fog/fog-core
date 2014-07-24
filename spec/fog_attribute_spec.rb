@@ -13,6 +13,45 @@ class FogAttributeTestModel < Fog::Model
   attribute :array, :type => :array
   attribute :default, :default => 'default_value'
   attribute :another_default, :default => false
+
+  has_one :association, :single_associations
+  has_many :associations, :multiple_associations
+
+  def service
+    Service.new
+  end
+end
+
+class Service
+  def single_associations
+    FogSingleAssociationCollection.new
+  end
+
+  def multiple_associations
+    FogMultipleAssociationsCollection.new
+  end
+end
+
+class FogSingleAssociationCollection
+  def get(id)
+    FogSingleAssociationModel.new(:id => id)
+  end
+end
+
+class FogMultipleAssociationsCollection
+  def get(id)
+    FogMultipleAssociationsModel.new(:id => id)
+  end
+end
+
+class FogSingleAssociationModel < Fog::Model
+  identity  :id
+  attribute :name,  :type => :string
+end
+
+class FogMultipleAssociationsModel < Fog::Model
+  identity  :id
+  attribute :name,  :type => :string
 end
 
 describe "Fog::Attributes" do
@@ -143,6 +182,10 @@ describe "Fog::Attributes" do
   end
 
   describe ":type => :array" do
+    it "returns an empty array when not initialized" do
+      assert_equal [], model.array
+    end
+
     it "returns an empty array as an empty array" do
       model.merge_attributes(:array => [])
       assert_equal [], model.array
@@ -203,6 +246,46 @@ describe "Fog::Attributes" do
     end
   end
 
+  describe ".has_one" do
+    it "should create an instance_variable to save the association identity" do
+      assert_equal model.__association, nil
+    end
+
+    it "should create a getter to load the association model" do
+      model.merge_attributes(:__association => '123')
+      assert_instance_of FogSingleAssociationModel, model.association
+      assert_equal model.association.attributes, { :id => '123' }
+    end
+
+    it "should create a setter that accept a model or id as param" do
+      model.association = '123'
+      assert_equal model.association.attributes, { :id => '123' }
+      model.association = FogSingleAssociationModel.new(:id => '123')
+      assert_equal model.association.attributes, { :id => '123' }
+    end
+  end
+
+  describe ".has_many" do
+    it "should create an instance_variable to save the associations identities" do
+      assert_equal model.__associations, []
+    end
+
+    it "should create a getter to load all association models" do
+      model.merge_attributes(:__associations => ['456'])
+      assert_instance_of Array, model.associations
+      assert_equal model.associations.size, 1
+      assert_instance_of FogMultipleAssociationsModel, model.associations.first
+      assert_equal model.associations.first.attributes, { :id => '456' }
+    end
+
+    it "should create a setter that accept an array of models or ids as param" do
+      model.associations = [ '456' ]
+      assert_equal model.associations.first.attributes, { :id => '456' }
+      model.associations = [ FogSingleAssociationModel.new(:id => '456') ]
+      assert_equal model.associations.first.attributes, { :id => '456' }
+    end
+  end
+
   describe "#all_attributes" do
     describe "on a persisted object" do
       it "should return all attributes without default values" do
@@ -219,22 +302,34 @@ describe "Fog::Attributes" do
                                              :default => nil,
                                              :another_default => nil }
       end
+
+      it "should not return any association attributes" do
+        model.merge_attributes( :id => 2, :float => 3.2, :integer => 55555555 )
+        refute_includes model.all_attributes, :__association
+        refute_includes model.all_attributes, :__associations
+      end
     end
 
     describe "on a new object" do
       it "should return all attributes including default values for empty attributes" do
         model.merge_attributes( :id => nil, :float => 3.2, :integer => 55555555 )
         assert_equal model.all_attributes, { :id => nil,
-                                             :key => nil, 
-                                             :time => nil, 
-                                             :bool => nil, 
-                                             :float => 3.2, 
-                                             :integer => 55555555, 
+                                             :key => nil,
+                                             :time => nil,
+                                             :bool => nil,
+                                             :float => 3.2,
+                                             :integer => 55555555,
                                              :string => '',
                                              :timestamp => Time.at(0),
                                              :array => [],
                                              :default => 'default_value',
                                              :another_default => false }
+      end
+
+      it "should not return any association attributes" do
+        model.merge_attributes( :float => 3.2, :integer => 55555555 )
+        refute_includes model.all_attributes, :__association
+        refute_includes model.all_attributes, :__associations
       end
     end
   end
