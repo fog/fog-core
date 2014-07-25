@@ -2,11 +2,15 @@ require 'fog/core/model'
 
 module Fog
   module Orchestration
-
+    # Stack model
     class Stack < Fog::Model
 
       class << self
 
+        # Register resources collection class
+        #
+        # @param model_klass [Class]
+        # @return [Class]
         def resources(model_klass=nil)
           if(model_klass)
             @resources_model = model_klass
@@ -14,6 +18,10 @@ module Fog
           @resources_model
         end
 
+        # Register events collection class
+        #
+        # @param model_klass [Class]
+        # @return [Class]
         def events(model_klass=nil)
           if(model_klass)
             @events_model = model_klass
@@ -21,6 +29,10 @@ module Fog
           @events_model
         end
 
+        # Register outputs collection class
+        #
+        # @param model_klass [Class]
+        # @return [Class]
         def outputs(model_klass=nil)
           if(model_klass)
             @outputs_model = model_klass
@@ -28,6 +40,9 @@ module Fog
           @outputs_model
         end
 
+        # Load common attributes into subclass
+        #
+        # @param klass [Class]
         def inherited(klass)
           klass.class_eval do
             identity :id
@@ -52,23 +67,36 @@ module Fog
 
       end
 
+      # Save the stack
+      #
+      # @return [self]
       def save
         requires :stack_name
         identity ? update : create
       end
 
+      # Create the stack
+      #
+      # @return [self]
       def create
         raise NotImlemented
       end
 
+      # Update the stack
+      #
+      # @return [self]
       def update
         raise NotImlemented
       end
 
+      # Destroy the stack
+      #
+      # @return [self]
       def destroy
         raise NotImlemented
       end
 
+      # @return [Fog::Orchestration::Resources]
       def resources
         if(self.class.resources)
           self.class.resources.new(:service => service).all(self)
@@ -77,6 +105,7 @@ module Fog
         end
       end
 
+      # @return [Fog::Orchestration::Events]
       def events
         if(self.class.events)
           self.class.events.new(:service => service).all(self)
@@ -85,6 +114,7 @@ module Fog
         end
       end
 
+      # @return [Fog::Orchestration::Outputs]
       def outputs
         if(self.class.outputs)
           self.class.outputs.new(:service => service).all(self)
@@ -93,8 +123,11 @@ module Fog
         end
       end
 
+      # Validate the stack template
+      #
+      # @return [TrueClass]
+      # @raises [Fog::Errors::OrchestationError::InvalidTemplate]
       def validate
-        requires :template
         raise NotImplemented
       end
 

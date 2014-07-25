@@ -2,13 +2,24 @@ require 'fog/core/collection'
 
 module Fog
   module Orchestration
-
+    # Stack events
     class Events < Fog::Collection
 
-      def all(stack)
+      # @return [Fog::Orchestration::Stack]
+      attr_accessor :stack
+
+      # Load all events for stack
+      #
+      # @param stack [Fog::Orchestration::Stack]
+      # @return [self]
+      def all(stack=nil)
         raise NotImplementedError
       end
 
+      # Fetch event by ID
+      #
+      # @param id [String]
+      # @return [Fog::Orchestration::Event]
       def get(id)
         self.find {|event| event.id == id}
       end
