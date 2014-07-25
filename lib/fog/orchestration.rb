@@ -1,3 +1,5 @@
+require 'fog/orchestration/error'
+
 module Fog
   module Orchestration
 
