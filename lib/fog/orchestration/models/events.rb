@@ -12,6 +12,8 @@ module Fog
       #
       # @param stack [Fog::Orchestration::Stack]
       # @return [self]
+      # @note events should be ordered by timestamp
+      #   in ascending order
       def all(stack=nil)
         raise NotImplementedError
       end
