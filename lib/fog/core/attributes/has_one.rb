@@ -1,6 +1,6 @@
 module Fog
   module Attributes
-    class SingleAssociation < Default
+    class HasOne < Default
       attr_reader :collection_name
 
       def initialize(model, name, options)
