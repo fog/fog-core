@@ -1,6 +1,6 @@
 module Fog
   module Attributes
-    class HasMany < HasOne
+    class HasMany < Association
       def create_setter
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}=(new_#{name})
