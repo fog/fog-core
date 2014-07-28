@@ -1,14 +1,6 @@
 module Fog
-  module Attributes
-    class HasOne < Association
-      attr_reader :collection_name
-
-      def initialize(model, name, options)
-        @model = model
-        @name = name
-        @collection_name = options[:collection_name]
-      end
-
+  module Associations
+    class HasOne < Default
       def create_setter
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}=(new_#{name})

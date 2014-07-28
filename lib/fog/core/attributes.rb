@@ -30,7 +30,7 @@ module Fog
       def has_one(association, collection_name, options = {})
         attribute("__#{association}".to_sym, options)
         options[:collection_name] = collection_name
-        attr = Fog::Attributes::HasOne.new(self, association, options)
+        attr = Fog::Associations::HasOne.new(self, association, options)
         attr.create_setter
         attr.create_getter
       end
@@ -39,7 +39,7 @@ module Fog
         options[:type] = :array
         attribute("__#{associations}".to_sym, options)
         options[:collection_name] = collection_name
-        attr = Fog::Attributes::HasMany.new(self, associations, options)
+        attr = Fog::Associations::HasMany.new(self, associations, options)
         attr.create_setter
         attr.create_getter
       end
