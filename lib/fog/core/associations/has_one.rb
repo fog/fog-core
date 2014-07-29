@@ -4,11 +4,7 @@ module Fog
       def create_setter
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}=(new_#{name})
-            if new_#{name}.respond_to?(:identity)
-              send("__#{name}=", new_#{name}.identity)
-            else
-              send("__#{name}=", new_#{name})
-            end
+            associations[:#{name}] = new_#{name}
           end
         EOS
       end
@@ -16,7 +12,12 @@ module Fog
       def create_getter
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}
-            service.send("#{collection_name}").get(send("__#{name}"))
+            return nil if associations[:#{name}].nil?
+            if associations[:#{name}].respond_to?(:identity)
+              associations[:#{name}]
+            else
+              service.send(self.class.associations[:#{name}]).get(associations[:#{name}])
+            end
           end
         EOS
       end

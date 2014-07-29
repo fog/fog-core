@@ -14,8 +14,8 @@ class FogAttributeTestModel < Fog::Model
   attribute :default, :default => 'default_value'
   attribute :another_default, :default => false
 
-  has_one :association, :single_associations
-  has_many :associations, :multiple_associations
+  has_one :one, :single_associations
+  has_many :many, :multiple_associations
 
   def service
     Service.new
@@ -248,41 +248,41 @@ describe "Fog::Attributes" do
 
   describe ".has_one" do
     it "should create an instance_variable to save the association identity" do
-      assert_equal model.__association, nil
+      assert_equal model.one, nil
     end
 
     it "should create a getter to load the association model" do
-      model.merge_attributes(:__association => '123')
-      assert_instance_of FogSingleAssociationModel, model.association
-      assert_equal model.association.attributes, { :id => '123' }
+      model.merge_attributes(:one => '123')
+      assert_instance_of FogSingleAssociationModel, model.one
+      assert_equal model.one.attributes, { :id => '123' }
     end
 
     it "should create a setter that accept a model or id as param" do
-      model.association = '123'
-      assert_equal model.association.attributes, { :id => '123' }
-      model.association = FogSingleAssociationModel.new(:id => '123')
-      assert_equal model.association.attributes, { :id => '123' }
+      model.one = '123'
+      assert_equal model.one.attributes, { :id => '123' }
+      model.one = FogSingleAssociationModel.new(:id => '123')
+      assert_equal model.one.attributes, { :id => '123' }
     end
   end
 
   describe ".has_many" do
     it "should create an instance_variable to save the associations identities" do
-      assert_equal model.__associations, []
+      assert_equal model.many, []
     end
 
     it "should create a getter to load all association models" do
-      model.merge_attributes(:__associations => ['456'])
-      assert_instance_of Array, model.associations
-      assert_equal model.associations.size, 1
-      assert_instance_of FogMultipleAssociationsModel, model.associations.first
-      assert_equal model.associations.first.attributes, { :id => '456' }
+      model.merge_attributes(:many => ['456'])
+      assert_instance_of Array, model.many
+      assert_equal model.many.size, 1
+      assert_instance_of FogMultipleAssociationsModel, model.many.first
+      assert_equal model.many.first.attributes, { :id => '456' }
     end
 
     it "should create a setter that accept an array of models or ids as param" do
-      model.associations = [ '456' ]
-      assert_equal model.associations.first.attributes, { :id => '456' }
-      model.associations = [ FogSingleAssociationModel.new(:id => '456') ]
-      assert_equal model.associations.first.attributes, { :id => '456' }
+      model.many = [ '456' ]
+      assert_equal model.many.first.attributes, { :id => '456' }
+      model.many = [ FogSingleAssociationModel.new(:id => '456') ]
+      assert_equal model.many.first.attributes, { :id => '456' }
     end
   end
 
@@ -302,12 +302,6 @@ describe "Fog::Attributes" do
                                              :default => nil,
                                              :another_default => nil }
       end
-
-      it "should not return any association attributes" do
-        model.merge_attributes( :id => 2, :float => 3.2, :integer => 55555555 )
-        refute_includes model.all_attributes, :__association
-        refute_includes model.all_attributes, :__associations
-      end
     end
 
     describe "on a new object" do
@@ -324,12 +318,6 @@ describe "Fog::Attributes" do
                                              :array => [],
                                              :default => 'default_value',
                                              :another_default => false }
-      end
-
-      it "should not return any association attributes" do
-        model.merge_attributes( :float => 3.2, :integer => 55555555 )
-        refute_includes model.all_attributes, :__association
-        refute_includes model.all_attributes, :__associations
       end
     end
   end

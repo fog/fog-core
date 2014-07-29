@@ -10,6 +10,10 @@ module Fog
         @aliases ||= {}
       end
 
+      def associations
+        @associations ||= {}
+      end
+
       def attributes
         @attributes ||= []
       end
@@ -28,18 +32,15 @@ module Fog
       end
 
       def has_one(association, collection_name, options = {})
-        attribute("__#{association}".to_sym, options)
-        options[:collection_name] = collection_name
+        associations[association] = collection_name
         attr = Fog::Associations::HasOne.new(self, association, options)
         attr.create_setter
         attr.create_getter
       end
 
-      def has_many(associations, collection_name, options = {})
-        options[:type] = :array
-        attribute("__#{associations}".to_sym, options)
-        options[:collection_name] = collection_name
-        attr = Fog::Associations::HasMany.new(self, associations, options)
+      def has_many(association, collection_name, options = {})
+        associations[association] = collection_name
+        attr = Fog::Associations::HasMany.new(self, association, options)
         attr.create_setter
         attr.create_getter
       end
@@ -69,9 +70,13 @@ module Fog
         @attributes ||= {}
       end
 
+      def associations
+        @associations ||= {}
+      end
+
       def all_attributes
         all_attributes = self.class.attributes.inject({}) do |hash, attribute|
-          hash[attribute] = send(attribute) unless attribute.to_s.start_with?('__')
+          hash[attribute] = send(attribute)
           hash
         end
         self.class.new(all_attributes).attributes
