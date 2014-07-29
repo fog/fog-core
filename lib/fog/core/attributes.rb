@@ -32,11 +32,11 @@ module Fog
       end
 
       def association(name, collection_name, options = {})
-        type = options.fetch(:type, 'one').to_s.capitalize
         associations[name] = collection_name
-        attr = Fog::Associations::const_get("Has#{type}").new(self, name, options)
-        attr.create_setter
-        attr.create_getter
+        magnitude = options.fetch(:magnitude, 'one').to_s.capitalize
+        assoc = Fog::Associations::const_get("#{magnitude}").new(self, name, options)
+        assoc.create_setter
+        assoc.create_getter
       end
 
       def identity(name, options = {})
