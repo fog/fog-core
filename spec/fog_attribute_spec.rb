@@ -256,13 +256,13 @@ describe "Fog::Attributes" do
         end
 
         it "should create a getter to save the association model" do
-          model.merge_attributes(:one_object => FogSingleAssociationModel.new(id: '123'))
+          model.merge_attributes(:one_object => FogSingleAssociationModel.new(:id => '123'))
           assert_instance_of FogSingleAssociationModel, model.one_object
           assert_equal model.one_object.attributes, { :id => '123' }
         end
 
         it "should create a setter that accept an object as param" do
-          model.one_object = FogSingleAssociationModel.new(id: '123')
+          model.one_object = FogSingleAssociationModel.new(:id => '123')
           assert_equal model.one_object.attributes, { :id => '123' }
         end
       end
@@ -292,7 +292,7 @@ describe "Fog::Attributes" do
         end
 
         it "should create a getter to save all associated models" do
-          model.merge_attributes(:many_objects => [ FogMultipleAssociationsModel.new(id: '456') ])
+          model.merge_attributes(:many_objects => [ FogMultipleAssociationsModel.new(:id => '456') ])
           assert_instance_of Array, model.many_objects
           assert_equal model.many_objects.size, 1
           assert_instance_of FogMultipleAssociationsModel, model.many_objects.first
@@ -300,7 +300,7 @@ describe "Fog::Attributes" do
         end
 
         it "should create a setter that accept an array of objects as param" do
-          model.many_objects = [ FogMultipleAssociationsModel.new(id: '456') ]
+          model.many_objects = [ FogMultipleAssociationsModel.new(:id => '456') ]
           assert_equal model.many_objects.first.attributes, { :id => '456' }
         end
       end
