@@ -14,8 +14,8 @@ class FogAttributeTestModel < Fog::Model
   attribute :default, :default => 'default_value'
   attribute :another_default, :default => false
 
-  has_one :one, :single_associations
-  has_many :many, :multiple_associations
+  association :one, :single_associations
+  association :many, :multiple_associations, :type => :many
 
   def service
     Service.new

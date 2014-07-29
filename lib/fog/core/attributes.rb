@@ -31,16 +31,10 @@ module Fog
         attr.set_defaults
       end
 
-      def has_one(association, collection_name, options = {})
-        associations[association] = collection_name
-        attr = Fog::Associations::HasOne.new(self, association, options)
-        attr.create_setter
-        attr.create_getter
-      end
-
-      def has_many(association, collection_name, options = {})
-        associations[association] = collection_name
-        attr = Fog::Associations::HasMany.new(self, association, options)
+      def association(name, collection_name, options = {})
+        type = options.fetch(:type, 'one').to_s.capitalize
+        associations[name] = collection_name
+        attr = Fog::Associations::const_get("Has#{type}").new(self, name, options)
         attr.create_setter
         attr.create_getter
       end
