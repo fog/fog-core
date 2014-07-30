@@ -1,6 +1,16 @@
 module Fog
   module Associations
     class One < Default
+      def create_setter
+        return create_setter_for_object if type == :object
+        create_setter_for_identity
+      end
+
+      def create_getter
+        return create_getter_for_object if type == :object
+        create_getter_for_identity
+      end
+
       def create_setter_for_identity
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}=(new_#{name})

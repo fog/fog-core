@@ -8,16 +8,6 @@ module Fog
         @name = name
         @type = options.fetch(:type, :object)
       end
-
-      def create_setter
-        return create_setter_for_object if type == :object
-        create_setter_for_identity
-      end
-
-      def create_getter
-        return create_getter_for_object if type == :object
-        create_getter_for_identity
-      end
     end
   end
 end

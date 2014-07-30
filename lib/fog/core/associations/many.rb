@@ -1,7 +1,17 @@
 module Fog
   module Associations
     class Many < Default
-      def create_setter_for_identity
+      def create_setter
+        return create_setter_for_objects if type == :object
+        create_setter_for_identities
+      end
+
+      def create_getter
+        return create_getter_for_objects if type == :object
+        create_getter_for_identities
+      end
+
+      def create_setter_for_identities
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}=(new_#{name})
             associations[:#{name}] = Array(new_#{name})
@@ -9,7 +19,7 @@ module Fog
         EOS
       end
 
-      def create_getter_for_identity
+      def create_getter_for_identities
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}
             return [] if associations[:#{name}].nil?
@@ -20,7 +30,7 @@ module Fog
         EOS
       end
 
-      def create_setter_for_object
+      def create_setter_for_objects
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}=(new_#{name})
             associations[:#{name}] = Array(new_#{name})
@@ -28,7 +38,7 @@ module Fog
         EOS
       end
 
-      def create_getter_for_object
+      def create_getter_for_objects
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}
             Array(associations[:#{name}])
