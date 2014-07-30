@@ -10,6 +10,10 @@ module Fog
         @squash = options.fetch(:squash, false)
         @aliases = options.fetch(:aliases, [])
         @default = options[:default]
+        create_setter
+        create_getter
+        create_aliases
+        set_defaults
       end
       
       def create_setter
