@@ -39,6 +39,34 @@ module Fog
         assoc.create_getter
       end
 
+      def has_one(name, collection_name, options = {})
+        associations[name] = collection_name
+        assoc = Fog::Associations::OneModel.new(self, name, options)
+        assoc.create_setter
+        assoc.create_getter
+      end
+
+      def has_many(name, collection_name, options = {})
+        associations[name] = collection_name
+        assoc = Fog::Associations::ManyModels.new(self, name, options)
+        assoc.create_setter
+        assoc.create_getter
+      end
+
+      def has_one_identity(name, collection_name, options = {})
+        associations[name] = collection_name
+        assoc = Fog::Associations::OneIdentity.new(self, name, options)
+        assoc.create_setter
+        assoc.create_getter
+      end
+
+      def has_many_identities(name, collection_name, options = {})
+        associations[name] = collection_name
+        assoc = Fog::Associations::ManyIdentities.new(self, name, options)
+        assoc.create_setter
+        assoc.create_getter
+      end
+
       def identity(name, options = {})
         @identity = name
         self.attribute(name, options)
