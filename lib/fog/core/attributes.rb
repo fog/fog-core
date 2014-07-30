@@ -31,14 +31,6 @@ module Fog
         attr.set_defaults
       end
 
-      def association(name, collection_name, options = {})
-        associations[name] = collection_name
-        magnitude = options.fetch(:magnitude, 'one').to_s.capitalize
-        assoc = Fog::Associations::const_get("#{magnitude}").new(self, name, options)
-        assoc.create_setter
-        assoc.create_getter
-      end
-
       def has_one(name, collection_name, options = {})
         associations[name] = collection_name
         assoc = Fog::Associations::OneModel.new(self, name, options)
