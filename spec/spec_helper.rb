@@ -4,5 +4,13 @@ require 'minitest/stub_const'
 
 $LOAD_PATH.unshift "lib"
 
-require 'fog/core'
+if ENV['COVERAGE']
+  require 'coveralls'
+  require 'simplecov'
 
+  SimpleCov.start do
+    add_filter '/spec/'
+  end
+end
+
+require 'fog/core'
