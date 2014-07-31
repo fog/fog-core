@@ -276,9 +276,16 @@ describe "Fog::Attributes" do
       assert_equal model.one_identity.attributes, { :id => '123' }
     end
 
-    it "should create a setter that accept an id as param" do
-      model.one_identity = '123'
-      assert_equal model.one_identity.attributes, { :id => '123' }
+    describe "should create a setter that accept" do
+      it "an id as param" do
+        model.one_identity = '123'
+        assert_equal model.one_identity.attributes, { :id => '123' }
+      end
+
+      it "a model as param" do
+        model.one_identity = FogSingleAssociationModel.new(:id => '123')
+        assert_equal model.one_identity.attributes, { :id => '123' }
+      end
     end
   end
 
@@ -314,9 +321,16 @@ describe "Fog::Attributes" do
       assert_equal model.many_identities.first.attributes, { :id => '456' }
     end
 
-    it "should create a setter that accept an array of ids as param" do
-      model.many_identities = [ '456' ]
-      assert_equal model.many_identities.first.attributes, { :id => '456' }
+    describe "should create a setter that accept an array of" do
+      it "ids as param" do
+        model.many_identities = [ '456' ]
+        assert_equal model.many_identities.first.attributes, { :id => '456' }
+      end
+
+      it "models as param" do
+        model.many_identities = [ FogMultipleAssociationsModel.new(:id => '456') ]
+        assert_equal model.many_identities.first.attributes, { :id => '456' }
+      end
     end
   end
 

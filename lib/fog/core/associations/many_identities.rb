@@ -4,7 +4,9 @@ module Fog
       def create_setter
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}=(new_#{name})
-            associations[:#{name}] = Array(new_#{name})
+            associations[:#{name}] = Array(new_#{name}).map do |association|
+                                       association.respond_to?(:identity) ? association.identity : association
+                                     end
           end
         EOS
       end
