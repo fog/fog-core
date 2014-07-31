@@ -246,6 +246,11 @@ describe "Fog::Attributes" do
       model.merge_attributes({ :id => 'some-crazy-id' })
       assert_equal model.default, nil
     end
+
+    it "should return nil when an attribute with default value is setted to nil" do
+      model.default = nil
+      assert_equal model.default, nil
+    end
   end
 
   describe ".has_one" do
