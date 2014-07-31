@@ -2,7 +2,7 @@ module Fog
   module Attributes
     class Default
       attr_reader :model, :name, :squash, :aliases, :default
-      
+
       def initialize(model, name, options)
         @model = model
         @model.attributes << name
@@ -15,7 +15,7 @@ module Fog
         create_aliases
         set_defaults
       end
-      
+
       def create_setter
         if squash
           model.class_eval <<-EOS, __FILE__, __LINE__
@@ -57,15 +57,6 @@ module Fog
       def create_aliases
         Array(aliases).each do |alias_name|
           model.aliases[alias_name] = name
-          model.class_eval <<-EOS, __FILE__, __LINE__
-            def #{alias_name}=(new_data)
-              name = new_data
-            end
-
-            def #{alias_name}
-              name
-            end
-          EOS
         end
       end
 
