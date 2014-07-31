@@ -13,6 +13,47 @@ class FogAttributeTestModel < Fog::Model
   attribute :array, :type => :array
   attribute :default, :default => 'default_value'
   attribute :another_default, :default => false
+
+  has_one :one_object, :single_associations
+  has_many :many_objects, :multiple_associations
+  has_one_identity :one_identity, :single_associations
+  has_many_identities :many_identities, :multiple_associations
+
+  def service
+    Service.new
+  end
+end
+
+class Service
+  def single_associations
+    FogSingleAssociationCollection.new
+  end
+
+  def multiple_associations
+    FogMultipleAssociationsCollection.new
+  end
+end
+
+class FogSingleAssociationCollection
+  def get(id)
+    FogSingleAssociationModel.new(:id => id)
+  end
+end
+
+class FogMultipleAssociationsCollection
+  def get(id)
+    FogMultipleAssociationsModel.new(:id => id)
+  end
+end
+
+class FogSingleAssociationModel < Fog::Model
+  identity  :id
+  attribute :name,  :type => :string
+end
+
+class FogMultipleAssociationsModel < Fog::Model
+  identity  :id
+  attribute :name,  :type => :string
 end
 
 describe "Fog::Attributes" do
@@ -143,6 +184,10 @@ describe "Fog::Attributes" do
   end
 
   describe ":type => :array" do
+    it "returns an empty array when not initialized" do
+      assert_equal [], model.array
+    end
+
     it "returns an empty array as an empty array" do
       model.merge_attributes(:array => [])
       assert_equal [], model.array
@@ -203,6 +248,78 @@ describe "Fog::Attributes" do
     end
   end
 
+  describe ".has_one" do
+    it "should create an instance_variable to save the association object" do
+      assert_equal model.one_object, nil
+    end
+
+    it "should create a getter to save the association model" do
+      model.merge_attributes(:one_object => FogSingleAssociationModel.new(:id => '123'))
+      assert_instance_of FogSingleAssociationModel, model.one_object
+      assert_equal model.one_object.attributes, { :id => '123' }
+    end
+
+    it "should create a setter that accept an object as param" do
+      model.one_object = FogSingleAssociationModel.new(:id => '123')
+      assert_equal model.one_object.attributes, { :id => '123' }
+    end
+  end
+
+  describe ".has_one_identity" do
+    it "should create an instance_variable to save the association identity" do
+      assert_equal model.one_identity, nil
+    end
+
+    it "should create a getter to load the association model" do
+      model.merge_attributes(:one_identity => '123')
+      assert_instance_of FogSingleAssociationModel, model.one_identity
+      assert_equal model.one_identity.attributes, { :id => '123' }
+    end
+
+    it "should create a setter that accept an id as param" do
+      model.one_identity = '123'
+      assert_equal model.one_identity.attributes, { :id => '123' }
+    end
+  end
+
+  describe ".has_many" do
+    it "should create an instance_variable to save the associated objects" do
+      assert_equal model.many_objects, []
+    end
+
+    it "should create a getter to save all associated models" do
+      model.merge_attributes(:many_objects => [ FogMultipleAssociationsModel.new(:id => '456') ])
+      assert_instance_of Array, model.many_objects
+      assert_equal model.many_objects.size, 1
+      assert_instance_of FogMultipleAssociationsModel, model.many_objects.first
+      assert_equal model.many_objects.first.attributes, { :id => '456' }
+    end
+
+    it "should create a setter that accept an array of objects as param" do
+      model.many_objects = [ FogMultipleAssociationsModel.new(:id => '456') ]
+      assert_equal model.many_objects.first.attributes, { :id => '456' }
+    end
+  end
+
+  describe ".has_many_identities" do
+    it "should create an instance_variable to save the associations identities" do
+      assert_equal model.many_identities, []
+    end
+
+    it "should create a getter to load all association models" do
+      model.merge_attributes(:many_identities => [ '456' ])
+      assert_instance_of Array, model.many_identities
+      assert_equal model.many_identities.size, 1
+      assert_instance_of FogMultipleAssociationsModel, model.many_identities.first
+      assert_equal model.many_identities.first.attributes, { :id => '456' }
+    end
+
+    it "should create a setter that accept an array of ids as param" do
+      model.many_identities = [ '456' ]
+      assert_equal model.many_identities.first.attributes, { :id => '456' }
+    end
+  end
+
   describe "#all_attributes" do
     describe "on a persisted object" do
       it "should return all attributes without default values" do
@@ -225,11 +342,11 @@ describe "Fog::Attributes" do
       it "should return all attributes including default values for empty attributes" do
         model.merge_attributes( :id => nil, :float => 3.2, :integer => 55555555 )
         assert_equal model.all_attributes, { :id => nil,
-                                             :key => nil, 
-                                             :time => nil, 
-                                             :bool => nil, 
-                                             :float => 3.2, 
-                                             :integer => 55555555, 
+                                             :key => nil,
+                                             :time => nil,
+                                             :bool => nil,
+                                             :float => 3.2,
+                                             :integer => 55555555,
                                              :string => '',
                                              :timestamp => Time.at(0),
                                              :array => [],

@@ -1,10 +1,10 @@
 module Fog
-  module Attributes
-    class Array < Default
+  module Associations
+    class OneIdentity < Default
       def create_setter
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}=(new_#{name})
-            attributes[:#{name}] = Array(new_#{name})
+            associations[:#{name}] = new_#{name}
           end
         EOS
       end
@@ -12,7 +12,8 @@ module Fog
       def create_getter
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}
-            Array(attributes[:#{name}])
+            return nil if associations[:#{name}].nil?
+            service.send(self.class.associations[:#{name}]).get(associations[:#{name}])
           end
         EOS
       end

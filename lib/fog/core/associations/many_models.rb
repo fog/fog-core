@@ -1,10 +1,10 @@
 module Fog
-  module Attributes
-    class Array < Default
+  module Associations
+    class ManyModels < Default
       def create_setter
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}=(new_#{name})
-            attributes[:#{name}] = Array(new_#{name})
+            associations[:#{name}] = Array(new_#{name})
           end
         EOS
       end
@@ -12,7 +12,7 @@ module Fog
       def create_getter
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}
-            Array(attributes[:#{name}])
+            Array(associations[:#{name}])
           end
         EOS
       end

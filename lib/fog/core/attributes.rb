@@ -10,6 +10,10 @@ module Fog
         @aliases ||= {}
       end
 
+      def associations
+        @associations ||= {}
+      end
+
       def attributes
         @attributes ||= []
       end
@@ -20,13 +24,23 @@ module Fog
 
       def attribute(name, options = {})
         type = options.fetch(:type, 'default').to_s.capitalize
-        default = options[:default]
-        Fog::Attributes::const_get(type).new(self, name, options).create
-        attributes << name
-        default_values[name] = default unless default.nil?
-        Array(options[:aliases]).each do |new_alias|
-          aliases[new_alias] = name
-        end
+        Fog::Attributes::const_get(type).new(self, name, options)
+      end
+
+      def has_one(name, collection_name)
+        Fog::Associations::OneModel.new(self, name, collection_name)
+      end
+
+      def has_many(name, collection_name)
+        Fog::Associations::ManyModels.new(self, name, collection_name)
+      end
+
+      def has_one_identity(name, collection_name)
+        Fog::Associations::OneIdentity.new(self, name, collection_name)
+      end
+
+      def has_many_identities(name, collection_name)
+        Fog::Associations::ManyIdentities.new(self, name, collection_name)
       end
 
       def identity(name, options = {})
@@ -52,6 +66,10 @@ module Fog
 
       def attributes
         @attributes ||= {}
+      end
+
+      def associations
+        @associations ||= {}
       end
 
       def all_attributes
