@@ -58,11 +58,11 @@ module Fog
         Array(aliases).each do |alias_name|
           model.aliases[alias_name] = name
           model.class_eval <<-EOS, __FILE__, __LINE__
-            def #{alias_name}=(new_data)
+            define_method(:'#{alias_name}=') do |new_data|
               name = new_data
             end
 
-            def #{alias_name}
+            define_method(:'#{alias_name}') do
               name
             end
           EOS
