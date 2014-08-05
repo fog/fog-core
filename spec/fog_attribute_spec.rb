@@ -11,7 +11,7 @@ class FogAttributeTestModel < Fog::Model
   attribute :string, :type => :string
   attribute :timestamp, :type => :timestamp
   attribute :array, :type => :array
-  attribute :default, :default => 'default_value'
+  attribute :default, :default => 'default_value', :aliases => :some_name
   attribute :another_default, :default => false
 
   has_one :one_object, :single_associations
@@ -61,7 +61,7 @@ describe "Fog::Attributes" do
   let(:model) { FogAttributeTestModel.new }
 
   it "should not create alias for nil" do
-    FogAttributeTestModel.aliases.must_equal({ "keys" => :key })
+    refute FogAttributeTestModel.aliases.keys.include?(nil)
   end
 
   describe "squash 'id'" do
@@ -372,6 +372,14 @@ describe "Fog::Attributes" do
                                              :default => 'default_value',
                                              :another_default => false }
       end
+    end
+  end
+
+  describe "aliases accessors" do
+    it "should have accessors to the original attribute" do
+      model.merge_attributes(:default => true)
+      assert model.respond_to?(:some_name)
+      assert model.some_name
     end
   end
 end

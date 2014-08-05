@@ -77,5 +77,17 @@ module Fog
       end
     end
 
+    def method_missing(method_name, *args)
+      if self.class.aliases.include?(method_name)
+        send(self.class.aliases[method_name])
+      else
+        super
+      end
+    end
+
+    def respond_to?(method_name, include_private = false)
+      return true if self.class.aliases.include?(method_name)
+      super
+    end
   end
 end
