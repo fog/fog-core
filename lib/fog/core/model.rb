@@ -86,8 +86,7 @@ module Fog
     end
 
     def respond_to?(method_name, include_private = false)
-      return true if self.class.aliases.include?(method_name)
-      super
+      super || self.class.aliases.include?(method_name)
     end
   end
 end
