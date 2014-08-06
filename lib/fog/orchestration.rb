@@ -27,5 +27,18 @@ module Fog
       Fog.services[:orchestration]
     end
 
+    def self.included(klass)
+      klass.class_eval do
+        include Fog::Orchestration::InstanceMethods
+      end
+    end
+
+    module InstanceMethods
+      # @return [Fog::Orchestration::Stacks]
+      def stacks
+        raise NotImplementedError
+      end
+    end
+
   end
 end
