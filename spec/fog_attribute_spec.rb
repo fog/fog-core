@@ -343,14 +343,15 @@ describe "Fog::Attributes" do
     describe "on a persisted object" do
       it "should return all attributes without default values" do
         model.merge_attributes( :id => 2, :float => 3.2, :integer => 55555555 )
+        assert model.persisted?
         assert_equal model.all_attributes, { :id => 2,
                                              :key => nil,
                                              :time => nil,
                                              :bool => nil,
                                              :float => 3.2,
                                              :integer => 55555555,
-                                             :string => '',
-                                             :timestamp => Time.at(0),
+                                             :string => nil,
+                                             :timestamp => nil,
                                              :array => [],
                                              :default => nil,
                                              :another_default => nil }
@@ -359,15 +360,16 @@ describe "Fog::Attributes" do
 
     describe "on a new object" do
       it "should return all attributes including default values for empty attributes" do
-        model.merge_attributes( :id => nil, :float => 3.2, :integer => 55555555 )
+        model.merge_attributes( :float => 3.2, :integer => 55555555 )
+        refute model.persisted?
         assert_equal model.all_attributes, { :id => nil,
                                              :key => nil,
                                              :time => nil,
                                              :bool => nil,
                                              :float => 3.2,
                                              :integer => 55555555,
-                                             :string => '',
-                                             :timestamp => Time.at(0),
+                                             :string => nil,
+                                             :timestamp => nil,
                                              :array => [],
                                              :default => 'default_value',
                                              :another_default => false }
