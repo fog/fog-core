@@ -377,6 +377,30 @@ describe "Fog::Attributes" do
     end
   end
 
+  describe "#all_associations" do
+    describe "without any association" do
+      it "should return all associations empty" do
+        assert_equal model.all_associations, { :one_object => nil,
+                                               :many_objects => [],
+                                               :one_identity => nil,
+                                               :many_identities => [] }
+      end
+    end
+
+    describe "with associations" do
+      it "should return all association objects" do
+        @one_object = FogMultipleAssociationsModel.new
+        @many_objects = [ @one_object ]
+        model.merge_attributes(:one_object => @one_object, :many_objects => @many_objects)
+        model.merge_attributes(:one_identity => 'XYZ', :many_identities => %w(ABC))
+        assert_equal model.all_associations, { :one_object => @one_object,
+                                               :many_objects => @many_objects,
+                                               :one_identity => 'XYZ',
+                                               :many_identities => %w(ABC) }
+      end
+    end
+  end
+
   describe "aliases accessors" do
     it "should have accessors to the original attribute" do
       model.merge_attributes(:default => true)
