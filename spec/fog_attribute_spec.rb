@@ -401,6 +401,60 @@ describe "Fog::Attributes" do
     end
   end
 
+  describe "#all_values" do
+    describe "on a persisted object" do
+      it "should return all association and attributes but no default values" do
+        @one_object = FogMultipleAssociationsModel.new
+        @many_objects = [ @one_object ]
+        model.merge_attributes(:id => 2, :float => 3.2, :integer => 55555555)
+        model.merge_attributes(:one_object => @one_object, :many_objects => @many_objects)
+        model.merge_attributes(:one_identity => 'XYZ', :many_identities => %w(ABC))
+        assert model.persisted?
+        assert_equal model.all_values, { :id => 2,
+                                         :key => nil,
+                                         :time => nil,
+                                         :bool => nil,
+                                         :float => 3.2,
+                                         :integer => 55555555,
+                                         :string => nil,
+                                         :timestamp => nil,
+                                         :array => [],
+                                         :default => nil,
+                                         :another_default => nil,
+                                         :one_object => @one_object,
+                                         :many_objects => @many_objects,
+                                         :one_identity => 'XYZ',
+                                         :many_identities => %w(ABC) }
+      end
+    end
+
+    describe "on a non persisted object" do
+      it "should return all association and attributes and the default value for blank attributes" do
+        @one_object = FogMultipleAssociationsModel.new
+        @many_objects = [ @one_object ]
+        model.merge_attributes(:float => 3.2, :integer => 55555555)
+        model.merge_attributes(:one_object => @one_object, :many_objects => @many_objects)
+        model.merge_attributes(:one_identity => 'XYZ', :many_identities => %w(ABC))
+        refute model.persisted?
+        assert_equal model.all_values, { :id => nil,
+                                         :key => nil,
+                                         :time => nil,
+                                         :bool => nil,
+                                         :float => 3.2,
+                                         :integer => 55555555,
+                                         :string => nil,
+                                         :timestamp => nil,
+                                         :array => [],
+                                         :default => 'default_value',
+                                         :another_default => false,
+                                         :one_object => @one_object,
+                                         :many_objects => @many_objects,
+                                         :one_identity => 'XYZ',
+                                         :many_identities => %w(ABC) }
+      end
+    end
+  end
+
   describe "aliases accessors" do
     it "should have accessors to the original attribute" do
       model.merge_attributes(:default => true)

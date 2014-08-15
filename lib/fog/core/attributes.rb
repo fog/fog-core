@@ -86,6 +86,10 @@ module Fog
         end
       end
 
+      def all_values
+        all_attributes.merge(all_associations)
+      end
+
       def dup
         copy = super
         copy.dup_attributes!
