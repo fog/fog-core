@@ -79,6 +79,13 @@ module Fog
         end
       end
 
+      def all_associations
+        self.class.associations.keys.inject({}) do |hash, association|
+          hash[association] = associations[association] || send(association)
+          hash
+        end
+      end
+
       def dup
         copy = super
         copy.dup_attributes!
