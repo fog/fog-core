@@ -86,7 +86,7 @@ module Fog
         end
       end
 
-      def all_values
+      def all_associations_and_attributes
         all_attributes.merge(all_associations)
       end
 

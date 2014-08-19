@@ -401,7 +401,7 @@ describe "Fog::Attributes" do
     end
   end
 
-  describe "#all_values" do
+  describe "#all_associations_and_attributes" do
     describe "on a persisted object" do
       it "should return all association and attributes but no default values" do
         @one_object = FogMultipleAssociationsModel.new
@@ -410,7 +410,7 @@ describe "Fog::Attributes" do
         model.merge_attributes(:one_object => @one_object, :many_objects => @many_objects)
         model.merge_attributes(:one_identity => 'XYZ', :many_identities => %w(ABC))
         assert model.persisted?
-        assert_equal model.all_values, { :id => 2,
+        assert_equal model.all_associations_and_attributes, { :id => 2,
                                          :key => nil,
                                          :time => nil,
                                          :bool => nil,
@@ -436,7 +436,7 @@ describe "Fog::Attributes" do
         model.merge_attributes(:one_object => @one_object, :many_objects => @many_objects)
         model.merge_attributes(:one_identity => 'XYZ', :many_identities => %w(ABC))
         refute model.persisted?
-        assert_equal model.all_values, { :id => nil,
+        assert_equal model.all_associations_and_attributes, { :id => nil,
                                          :key => nil,
                                          :time => nil,
                                          :bool => nil,
