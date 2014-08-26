@@ -11,7 +11,8 @@ require 'timeout'
 require 'ipaddr'
 
 # internal core dependencies
-require "fog/version"
+require "fog/core/version"
+
 require 'fog/core/attributes'
 require 'fog/core/attributes/default'
 require 'fog/core/attributes/array'
