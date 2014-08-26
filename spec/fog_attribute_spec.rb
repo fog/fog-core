@@ -14,10 +14,10 @@ class FogAttributeTestModel < Fog::Model
   attribute :default, :default => 'default_value', :aliases => :some_name
   attribute :another_default, :default => false
 
-  has_one :one_object, :single_associations
+  has_one :one_object, :single_associations, :aliases => :single
   has_many :many_objects, :multiple_associations
   has_one_identity :one_identity, :single_associations
-  has_many_identities :many_identities, :multiple_associations
+  has_many_identities :many_identities, :multiple_associations, :aliases => :multiple
 
   def service
     Service.new
@@ -268,6 +268,11 @@ describe "Fog::Attributes" do
       model.one_object = FogSingleAssociationModel.new(:id => '123')
       assert_equal model.one_object.attributes, { :id => '123' }
     end
+
+    it "should create an alias" do
+      model.merge_attributes(:single => FogSingleAssociationModel.new(:id => '123'))
+      assert_equal model.one_object.attributes, { :id => '123' }
+    end
   end
 
   describe ".has_one_identity" do
@@ -336,6 +341,11 @@ describe "Fog::Attributes" do
         model.many_identities = [ FogMultipleAssociationsModel.new(:id => '456') ]
         assert_equal model.many_identities.first.attributes, { :id => '456' }
       end
+    end
+
+    it "should create an alias" do
+      model.merge_attributes(:multiple => [ '456' ])
+      assert_equal model.many_identities.first.attributes, { :id => '456' }
     end
   end
 
