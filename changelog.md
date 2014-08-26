@@ -1,3 +1,14 @@
+1.24.0 08/26/2014
+==========================================================
+
+fixes for defaulting attributes
+add method for getting all attributes
+add methods for associations
+add all_attributes, all_associations and all_associations_and_attributes helper methods
+remove no-longer-needed gem update on travis
+add all_values
+fixes to avoid path conflicts with fog/fog
+
 1.23.0 07/16/2014
 ==========================================================
 
