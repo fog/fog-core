@@ -27,20 +27,20 @@ module Fog
         Fog::Attributes::const_get(type).new(self, name, options)
       end
 
-      def has_one(name, collection_name)
-        Fog::Associations::OneModel.new(self, name, collection_name)
+      def has_one(name, collection_name, options = {})
+        Fog::Associations::OneModel.new(self, name, collection_name, options)
       end
 
-      def has_many(name, collection_name)
-        Fog::Associations::ManyModels.new(self, name, collection_name)
+      def has_many(name, collection_name, options = {})
+        Fog::Associations::ManyModels.new(self, name, collection_name, options)
       end
 
-      def has_one_identity(name, collection_name)
-        Fog::Associations::OneIdentity.new(self, name, collection_name)
+      def has_one_identity(name, collection_name, options = {})
+        Fog::Associations::OneIdentity.new(self, name, collection_name, options)
       end
 
-      def has_many_identities(name, collection_name)
-        Fog::Associations::ManyIdentities.new(self, name, collection_name)
+      def has_many_identities(name, collection_name, options = {})
+        Fog::Associations::ManyIdentities.new(self, name, collection_name, options)
       end
 
       def identity(name, options = {})
