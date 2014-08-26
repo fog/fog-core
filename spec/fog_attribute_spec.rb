@@ -269,7 +269,7 @@ describe "Fog::Attributes" do
       assert_equal model.one_object.attributes, { :id => '123' }
     end
 
-    it "should create an alias" do
+    it "should create an alias to single" do
       model.merge_attributes(:single => FogSingleAssociationModel.new(:id => '123'))
       assert_equal model.one_object.attributes, { :id => '123' }
     end
@@ -343,7 +343,7 @@ describe "Fog::Attributes" do
       end
     end
 
-    it "should create an alias" do
+    it "should create an alias to multiple" do
       model.merge_attributes(:multiple => [ '456' ])
       assert_equal model.many_identities.first.attributes, { :id => '456' }
     end
