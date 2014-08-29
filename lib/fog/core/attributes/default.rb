@@ -1,7 +1,7 @@
 module Fog
   module Attributes
     class Default
-      attr_reader :model, :name, :squash, :aliases, :default
+      attr_reader :model, :name, :squash, :aliases, :default, :as
 
       def initialize(model, name, options)
         @model = model
@@ -10,10 +10,12 @@ module Fog
         @squash = options.fetch(:squash, false)
         @aliases = options.fetch(:aliases, [])
         @default = options[:default]
+        @as = options.fetch(:as, name)
         create_setter
         create_getter
         create_aliases
         set_defaults
+        create_mask
       end
 
       def create_setter
@@ -62,6 +64,10 @@ module Fog
 
       def set_defaults
         model.default_values[name] = default unless default.nil?
+      end
+
+      def create_mask
+        model.masks[name] = as
       end
     end
   end

@@ -22,6 +22,10 @@ module Fog
         @default_values ||= {}
       end
 
+      def masks
+        @masks ||= {}
+      end
+
       def attribute(name, options = {})
         type = options.fetch(:type, 'default').to_s.capitalize
         Fog::Attributes::const_get(type).new(self, name, options)
@@ -72,16 +76,20 @@ module Fog
         @associations ||= {}
       end
 
+      def masks
+        self.class.masks
+      end
+
       def all_attributes
         self.class.attributes.inject({}) do |hash, attribute|
-          hash[attribute] = send(attribute)
+          hash[masks[attribute]] = send(attribute)
           hash
         end
       end
 
       def all_associations
         self.class.associations.keys.inject({}) do |hash, association|
-          hash[association] = associations[association] || send(association)
+          hash[masks[association]] = associations[association] || send(association)
           hash
         end
       end

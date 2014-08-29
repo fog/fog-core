@@ -13,10 +13,11 @@ class FogAttributeTestModel < Fog::Model
   attribute :array, :type => :array
   attribute :default, :default => 'default_value', :aliases => :some_name
   attribute :another_default, :default => false
+  attribute :good_name, :as => :Badname
 
   has_one :one_object, :single_associations, :aliases => :single
   has_many :many_objects, :multiple_associations
-  has_one_identity :one_identity, :single_associations
+  has_one_identity :one_identity, :single_associations, :as => :Crazyname
   has_many_identities :many_identities, :multiple_associations, :aliases => :multiple
 
   def service
@@ -364,7 +365,8 @@ describe "Fog::Attributes" do
                                              :timestamp => nil,
                                              :array => [],
                                              :default => nil,
-                                             :another_default => nil }
+                                             :another_default => nil,
+                                             :Badname => nil }
       end
     end
 
@@ -382,7 +384,8 @@ describe "Fog::Attributes" do
                                              :timestamp => nil,
                                              :array => [],
                                              :default => 'default_value',
-                                             :another_default => false }
+                                             :another_default => false,
+                                             :Badname => nil }
       end
     end
   end
@@ -392,7 +395,7 @@ describe "Fog::Attributes" do
       it "should return all associations empty" do
         assert_equal model.all_associations, { :one_object => nil,
                                                :many_objects => [],
-                                               :one_identity => nil,
+                                               :Crazyname => nil,
                                                :many_identities => [] }
       end
     end
@@ -405,7 +408,7 @@ describe "Fog::Attributes" do
         model.merge_attributes(:one_identity => 'XYZ', :many_identities => %w(ABC))
         assert_equal model.all_associations, { :one_object => @one_object,
                                                :many_objects => @many_objects,
-                                               :one_identity => 'XYZ',
+                                               :Crazyname => 'XYZ',
                                                :many_identities => %w(ABC) }
       end
     end
@@ -431,9 +434,10 @@ describe "Fog::Attributes" do
                                          :array => [],
                                          :default => nil,
                                          :another_default => nil,
+                                         :Badname => nil,
                                          :one_object => @one_object,
                                          :many_objects => @many_objects,
-                                         :one_identity => 'XYZ',
+                                         :Crazyname => 'XYZ',
                                          :many_identities => %w(ABC) }
       end
     end
@@ -457,9 +461,10 @@ describe "Fog::Attributes" do
                                          :array => [],
                                          :default => 'default_value',
                                          :another_default => false,
+                                         :Badname => nil,
                                          :one_object => @one_object,
                                          :many_objects => @many_objects,
-                                         :one_identity => 'XYZ',
+                                         :Crazyname => 'XYZ',
                                          :many_identities => %w(ABC) }
       end
     end
