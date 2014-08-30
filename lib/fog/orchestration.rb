@@ -1,3 +1,5 @@
+require 'fog/orchestration/error'
+
 module Fog
   module Orchestration
 
@@ -10,7 +12,11 @@ module Fog
       provider = attributes.delete(:provider).to_s.downcase.to_sym
 
       if self.providers.include?(provider)
-        require "fog/#{provider}/network"
+        begin
+          require "fog/#{provider}/network"
+        rescue LoadError
+          # is there a reason for this being automatic?
+        end
         return Fog::Orchestration.const_get(Fog.providers[provider]).new(attributes)
       end
 
@@ -19,6 +25,19 @@ module Fog
 
     def self.providers
       Fog.services[:orchestration]
+    end
+
+    def self.included(klass)
+      klass.class_eval do
+        include Fog::Orchestration::InstanceMethods
+      end
+    end
+
+    module InstanceMethods
+      # @return [Fog::Orchestration::Stacks]
+      def stacks
+        raise NotImplementedError
+      end
     end
 
   end
