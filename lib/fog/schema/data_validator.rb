@@ -61,6 +61,10 @@ module Fog
     #     }
     #
     class DataValidator
+      # This returns the last message set by the validator
+      #
+      # @return [String]
+      attr_reader :message
 
       def initialize
         @message = nil
@@ -89,14 +93,7 @@ module Fog
         valid
       end
 
-      # This returns the last message set by the validator
-      #
-      # @return [String]
-      def message
-        @message
-      end
-
-    private
+      private
 
       # This contains a slightly modified version of the Hashidator gem
       # but unfortunately the gem does not cope with Array schemas.
@@ -109,26 +106,24 @@ module Fog
         case validator
         when Array
           return false if value.is_a?(Hash)
-          value.respond_to?(:all?) && value.all? {|x| validate_value(validator[0], x, options)}
+          value.respond_to?(:all?) && value.all? { |x| validate_value(validator[0], x, options) }
         when Symbol
           value.respond_to? validator
         when Hash
           return false if value.is_a?(Array)
 
           # When being strict values not specified in the schema are fails
-          unless options[:allow_extra_keys]
-            if value.respond_to?(:empty?)
-              # Validator is empty but values are not
-              return false if !value.empty? && validator.empty?
-            end
-          end
+          # Validator is empty but values are not
+          return false if options[:allow_extra_keys].nil? &&
+                          value.respond_to?(:empty?) &&
+                          !value.empty? &&
+                          validator.empty?
 
-          unless options[:allow_optional_rules]
-            if value.respond_to?(:empty?)
-              # Validator has rules left but no more values
-              return false if value.empty? && !validator.empty?
-            end
-          end
+          # Validator has rules left but no more values
+          return false if options[:allow_optional_rules].nil? &&
+                          value.respond_to?(:empty?) &&
+                          value.empty? &&
+                          !validator.empty?
 
           validator.all? do |key, sub_validator|
             Fog::Logger.write :debug, "[blue][DEBUG] #{key.inspect} against #{sub_validator.inspect}[/]\n"
@@ -138,7 +133,7 @@ module Fog
           result = validator == value
           result = validator === value unless result
           # Repeat unless we have a Boolean already
-          unless (result.is_a?(TrueClass) || result.is_a?(FalseClass))
+          unless result.is_a?(TrueClass) || result.is_a?(FalseClass)
             result = validate_value(result, value, options)
           end
           if result

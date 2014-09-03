@@ -1,12 +1,11 @@
-require "rake"
-require "rake/tasklib"
+require 'rake'
+require 'rake/tasklib'
 
 module Fog
   module Rake
     class TestTask < ::Rake::TaskLib
-
       def initialize
-        desc "Run the mocked tests"
+        desc 'Run the mocked tests'
         task :test do
           ::Rake::Task[:mock_tests].invoke
         end
@@ -33,14 +32,11 @@ module Fog
             }
           end
         end
-        threads.each do |thread|
-          thread.join
-        end
-        Formatador.display_table(Thread.main[:results].sort {|x,y| x[:provider] <=> y[:provider]})
+        threads.each(&:join)
+        Formatador.display_table(Thread.main[:results].sort { |x, y| x[:provider] <=> y[:provider] })
         Formatador.display_line("[bold]FOG_MOCK=#{mocked}[/] tests completed in [bold]#{Time.now.to_i - start}[/] seconds")
         Formatador.display_line
       end
-
     end
   end
 end
