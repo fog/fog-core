@@ -32,4 +32,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('minitest-stub-const')
   spec.add_development_dependency('pry')
   spec.add_development_dependency('coveralls')
+  spec.add_development_dependency('rubocop') if RUBY_VERSION.to_s >= '1.9.3'
 end

@@ -2,9 +2,8 @@ require 'mime/types'
 
 module Fog
   module Storage
-
     def self.[](provider)
-      self.new(:provider => provider)
+      new(:provider => provider)
     end
 
     def self.new(attributes)
@@ -17,22 +16,22 @@ module Fog
         require 'fog/storm_on_demand/storage'
         Fog::Storage::StormOnDemand.new(attributes)
       else
-        if self.providers.include?(provider)
+        if providers.include?(provider)
           require "fog/#{provider}/storage"
           begin
             Fog::Storage.const_get(Fog.providers[provider])
           rescue
-            Fog::const_get(Fog.providers[provider])::Storage
+            Fog.const_get(Fog.providers[provider])::Storage
           end.new(attributes)
         else
-          raise ArgumentError.new("#{provider} is not a recognized storage provider")
+          fail ArgumentError, "#{provider} is not a recognized storage provider"
         end
       end
     end
 
     def self.directories
       directories = []
-      for provider in self.providers
+      providers.each do |provider|
         begin
           directories.concat(self[provider].directories)
         rescue # ignore any missing credentials/etc
@@ -42,9 +41,7 @@ module Fog
     end
 
     def self.get_body_size(body)
-      if body.respond_to?(:force_encoding)
-        body.force_encoding('BINARY')
-      end
+      body.force_encoding('BINARY') if body.respond_to?(:force_encoding)
       if body.respond_to?(:bytesize)
         body.bytesize
       elsif body.respond_to?(:size)
@@ -57,7 +54,7 @@ module Fog
     end
 
     def self.get_content_type(data)
-      if data.respond_to?(:path) and !data.path.nil?
+      if data.respond_to?(:path) && !data.path.nil?
         filename = ::File.basename(data.path)
         unless (mime_types = MIME::Types.of(filename)).empty?
           mime_types.first.content_type
@@ -71,7 +68,7 @@ module Fog
         :headers  => {
           'Content-Length'  => get_body_size(data),
           'Content-Type'    => get_content_type(data)
-          #'Content-MD5' => Base64.encode64(Digest::MD5.digest(metadata[:body])).strip
+          # 'Content-MD5' => Base64.encode64(Digest::MD5.digest(metadata[:body])).strip
         }
       }
     end
@@ -79,6 +76,5 @@ module Fog
     def self.providers
       Fog.services[:storage]
     end
-
   end
 end

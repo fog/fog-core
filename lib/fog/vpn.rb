@@ -1,8 +1,7 @@
 module Fog
   module VPN
-
     def self.[](provider)
-      self.new(:provider => provider)
+      new(:provider => provider)
     end
 
     def self.new(attributes)
@@ -13,13 +12,12 @@ module Fog
         require 'fog/storm_on_demand/vpn'
         Fog::VPN::StormOnDemand.new(attributes)
       else
-        raise ArgumentError.new("#{provider} has no vpn service")
+        fail ArgumentError, "#{provider} has no vpn service"
       end
     end
 
     def self.providers
       Fog.services[:vpn]
     end
-
   end
 end
