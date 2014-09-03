@@ -1,14 +1,12 @@
 module Fog
   module Compute
-
     def self.[](provider)
-      self.new(:provider => provider)
+      new(:provider => provider)
     end
 
     def self.new(attributes)
       attributes = attributes.dup # prevent delete from having side effects
       provider = attributes.delete(:provider).to_s.downcase.to_sym
-
 
       case provider
       when :gogrid
@@ -19,24 +17,24 @@ module Fog
         version = version.to_s.downcase.to_sym unless version.nil?
         if version == :v2
           require 'fog/hp/compute_v2'
-           Fog::Compute::HPV2.new(attributes)
+          Fog::Compute::HPV2.new(attributes)
         else
-          Fog::Logger.deprecation "HP Cloud Compute V1 service will be soon deprecated. Please use `:version => v2` attribute to use HP Cloud Compute V2 service."
+          Fog::Logger.deprecation 'HP Cloud Compute V1 service will be soon deprecated. Please use `:version => v2` attribute to use HP Cloud Compute V2 service.'
           require 'fog/hp/compute'
           Fog::Compute::HP.new(attributes)
         end
       when :new_servers
         require 'fog/bare_metal_cloud/compute'
-        Fog::Logger.deprecation "`new_servers` is deprecated. Please use `bare_metal_cloud` instead."
+        Fog::Logger.deprecation '`new_servers` is deprecated. Please use `bare_metal_cloud` instead.'
         Fog::Compute::BareMetalCloud.new(attributes)
       when :baremetalcloud
         require 'fog/bare_metal_cloud/compute'
         Fog::Compute::BareMetalCloud.new(attributes)
       when :rackspace
-        version = attributes.delete(:version) 
+        version = attributes.delete(:version)
         version = version.to_s.downcase.to_sym unless version.nil?
         if version == :v1
-          Fog::Logger.deprecation "First Gen Cloud Servers are deprecated. Please use `:version => :v2` attribute to use Next Gen Cloud Servers."
+          Fog::Logger.deprecation 'First Gen Cloud Servers are deprecated. Please use `:version => :v2` attribute to use Next Gen Cloud Servers.'
           require 'fog/rackspace/compute'
           Fog::Compute::Rackspace.new(attributes)
         else
@@ -53,7 +51,7 @@ module Fog
         require 'fog/vcloud_director/compute'
         Fog::Compute::VcloudDirector.new(attributes)
       else
-        if self.providers.include?(provider)
+        if providers.include?(provider)
           require "fog/#{provider}/compute"
           begin
             Fog::Compute.const_get(Fog.providers[provider])
@@ -61,7 +59,7 @@ module Fog
             Fog::const_get(Fog.providers[provider])::Compute
           end.new(attributes)
         else
-          raise ArgumentError.new("#{provider} is not a recognized compute provider")
+          fail ArgumentError, "#{provider} is not a recognized compute provider"
         end
       end
     end
@@ -72,7 +70,7 @@ module Fog
 
     def self.servers
       servers = []
-      for provider in self.providers
+      providers.each do |provider|
         begin
           servers.concat(self[provider].servers)
         rescue # ignore any missing credentials/etc
@@ -80,6 +78,5 @@ module Fog
       end
       servers
     end
-
   end
 end

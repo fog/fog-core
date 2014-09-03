@@ -1,8 +1,7 @@
 module Fog
   module DNS
-
     def self.[](provider)
-      self.new(:provider => provider)
+      new(:provider => provider)
     end
 
     def self.new(attributes)
@@ -12,7 +11,7 @@ module Fog
         require 'fog/storm_on_demand/dns'
         Fog::DNS::StormOnDemand.new(attributes)
       else
-        if self.providers.include?(provider)
+        if providers.include?(provider)
           require "fog/#{provider}/dns"
           begin
             Fog::DNS.const_get(Fog.providers[provider])
@@ -20,7 +19,7 @@ module Fog
             Fog::const_get(Fog.providers[provider])::DNS
           end.new(attributes)
         else
-          raise ArgumentError.new("#{provider} is not a recognized dns provider")
+          fail ArgumentError, "#{provider} is not a recognized dns provider"
         end
       end
     end
@@ -31,7 +30,7 @@ module Fog
 
     def self.zones
       zones = []
-      for provider in self.providers
+      providers.each do |provider|
         begin
           zones.concat(self[provider].zones)
         rescue # ignore any missing credentials/etc
@@ -39,6 +38,5 @@ module Fog
       end
       zones
     end
-
   end
 end

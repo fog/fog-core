@@ -1,8 +1,7 @@
 module Fog
   module Identity
-
     def self.[](provider)
-      self.new(:provider => provider)
+      new(:provider => provider)
     end
 
     def self.new(attributes)
@@ -10,10 +9,10 @@ module Fog
       provider = attributes.delete(:provider).to_s.downcase.to_sym
 
       unless providers.include?(provider)
-        raise ArgumentError.new("#{provider} has no identity service")
+        fail ArgumentError, "#{provider} has no identity service"
       end
 
-      require "fog/#{provider}/identity"
+      require 'fog/#{provider}/identity'
       begin
         Fog::Identity.const_get(Fog.providers[provider]).new(attributes)
       rescue
