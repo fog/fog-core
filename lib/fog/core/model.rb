@@ -76,17 +76,5 @@ module Fog
         raise Fog::Errors::Error.new("Reload failed, #{self.class} #{self.identity} not present.")
       end
     end
-
-    def method_missing(method_name, *args)
-      if self.class.aliases.include?(method_name)
-        send(self.class.aliases[method_name])
-      else
-        super
-      end
-    end
-
-    def respond_to?(method_name, include_private = false)
-      super || self.class.aliases.include?(method_name)
-    end
   end
 end

@@ -469,12 +469,4 @@ describe "Fog::Attributes" do
       end
     end
   end
-
-  describe "aliases accessors" do
-    it "should have accessors to the original attribute" do
-      model.merge_attributes(:default => true)
-      assert model.respond_to?(:some_name)
-      assert model.some_name
-    end
-  end
 end
