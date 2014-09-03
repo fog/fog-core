@@ -114,13 +114,13 @@ module Fog
 
           # When being strict values not specified in the schema are fails
           # Validator is empty but values are not
-          return false if options[:allow_extra_keys].nil? &&
+          return false if !options[:allow_extra_keys] &&
                           value.respond_to?(:empty?) &&
                           !value.empty? &&
                           validator.empty?
 
           # Validator has rules left but no more values
-          return false if options[:allow_optional_rules].nil? &&
+          return false if !options[:allow_optional_rules] &&
                           value.respond_to?(:empty?) &&
                           value.empty? &&
                           !validator.empty?
