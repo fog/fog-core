@@ -54,7 +54,7 @@ module Fog
     end
 
     def self.get_content_type(data)
-      if data.respond_to?(:path) and !data.path.nil?
+      if data.respond_to?(:path) && !data.path.nil?
         filename = ::File.basename(data.path)
         unless (mime_types = MIME::Types.of(filename)).empty?
           mime_types.first.content_type
