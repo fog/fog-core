@@ -16,7 +16,7 @@ module Fog
       begin
         Fog::Identity.const_get(Fog.providers[provider]).new(attributes)
       rescue
-        Fog::const_get(Fog.providers[provider])::Identity.new(attributes)
+        Fog.const_get(Fog.providers[provider])::Identity.new(attributes)
       end
     end
 

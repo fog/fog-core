@@ -21,7 +21,7 @@ module Fog
           begin
             Fog::Storage.const_get(Fog.providers[provider])
           rescue
-            Fog::const_get(Fog.providers[provider])::Storage
+            Fog.const_get(Fog.providers[provider])::Storage
           end.new(attributes)
         else
           fail ArgumentError, "#{provider} is not a recognized storage provider"

@@ -16,7 +16,7 @@ module Fog
           begin
             Fog::DNS.const_get(Fog.providers[provider])
           rescue
-            Fog::const_get(Fog.providers[provider])::DNS
+            Fog.const_get(Fog.providers[provider])::DNS
           end.new(attributes)
         else
           fail ArgumentError, "#{provider} is not a recognized dns provider"

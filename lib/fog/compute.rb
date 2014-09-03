@@ -56,7 +56,7 @@ module Fog
           begin
             Fog::Compute.const_get(Fog.providers[provider])
           rescue
-            Fog::const_get(Fog.providers[provider])::Compute
+            Fog.const_get(Fog.providers[provider])::Compute
           end.new(attributes)
         else
           fail ArgumentError, "#{provider} is not a recognized compute provider"
