@@ -1,8 +1,6 @@
-def flavors_tests(connection, params = {}, mocks_implemented = true)
-
+def flavors_tests(connection, _params = {}, mocks_implemented = true)
   tests('success') do
-
-    tests("#all").succeeds do
+    tests('#all').succeeds do
       pending if Fog.mocking? && !mocks_implemented
       connection.flavors.all
     end
@@ -15,11 +13,9 @@ def flavors_tests(connection, params = {}, mocks_implemented = true)
       pending if Fog.mocking? && !mocks_implemented
       connection.flavors.get(@identity)
     end
-
   end
 
   tests('failure') do
-
     if !Fog.mocking? || mocks_implemented
       invalid_flavor_identity = connection.flavors.first.identity.to_s.gsub(/\w/, '0')
     end
@@ -28,7 +24,5 @@ def flavors_tests(connection, params = {}, mocks_implemented = true)
       pending if Fog.mocking? && !mocks_implemented
       connection.flavors.get(invalid_flavor_identity)
     end
-
   end
-
 end
