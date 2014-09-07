@@ -1,7 +1,7 @@
-require 'excon'
+require "excon"
 
-ENV['FOG_RC']         = ENV['FOG_RC'] || File.expand_path('../.fog', __FILE__)
-ENV['FOG_CREDENTIAL'] = ENV['FOG_CREDENTIAL'] || 'default'
+ENV["FOG_RC"]         = ENV["FOG_RC"] || File.expand_path("../.fog", __FILE__)
+ENV["FOG_CREDENTIAL"] = ENV["FOG_CREDENTIAL"] || "default"
 
 Excon.defaults.merge!(:debug_request => true, :debug_response => true)
 
@@ -14,10 +14,10 @@ eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
 sunt in culpa qui officia deserunt mollit anim id est laborum.
 HERE
 
-require 'tempfile'
+require "tempfile"
 
 def lorem_file
-  Tempfile.new('lorem').tap do |f|
+  Tempfile.new("lorem").tap do |f|
     f.write(LOREM)
     f.rewind
   end

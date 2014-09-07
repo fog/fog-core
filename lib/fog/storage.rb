@@ -1,4 +1,4 @@
-require 'mime/types'
+require "mime/types"
 
 module Fog
   module Storage
@@ -10,10 +10,10 @@ module Fog
       attributes = attributes.dup # prevent delete from having side effects
       case provider = attributes.delete(:provider).to_s.downcase.to_sym
       when :internetarchive
-        require 'fog/internet_archive/storage'
+        require "fog/internet_archive/storage"
         Fog::Storage::InternetArchive.new(attributes)
       when :stormondemand
-        require 'fog/storm_on_demand/storage'
+        require "fog/storm_on_demand/storage"
         Fog::Storage::StormOnDemand.new(attributes)
       else
         if providers.include?(provider)
@@ -24,7 +24,7 @@ module Fog
             Fog.const_get(Fog.providers[provider])::Storage
           end.new(attributes)
         else
-          fail ArgumentError, "#{provider} is not a recognized storage provider"
+          raise ArgumentError, "#{provider} is not a recognized storage provider"
         end
       end
     end
@@ -41,7 +41,7 @@ module Fog
     end
 
     def self.get_body_size(body)
-      body.force_encoding('BINARY') if body.respond_to?(:force_encoding)
+      body.force_encoding("BINARY") if body.respond_to?(:force_encoding)
       if body.respond_to?(:bytesize)
         body.bytesize
       elsif body.respond_to?(:size)
@@ -66,9 +66,9 @@ module Fog
       {
         :body     => data,
         :headers  => {
-          'Content-Length'  => get_body_size(data),
-          'Content-Type'    => get_content_type(data)
-          # 'Content-MD5' => Base64.encode64(Digest::MD5.digest(metadata[:body])).strip
+          "Content-Length"  => get_body_size(data),
+          "Content-Type"    => get_content_type(data)
+          # "Content-MD5" => Base64.encode64(Digest::MD5.digest(metadata[:body])).strip
         }
       }
     end

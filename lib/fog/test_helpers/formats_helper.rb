@@ -1,8 +1,8 @@
-require 'fog/schema/data_validator'
+require "fog/schema/data_validator"
 
 # format related hackery
 # allows both true.is_a?(Fog::Boolean) and false.is_a?(Fog::Boolean)
-# allows both nil.is_a?(Fog::Nullable::String) and ''.is_a?(Fog::Nullable::String)
+# allows both nil.is_a?(Fog::Nullable::String) and "".is_a?(Fog::Nullable::String)
 module Fog
   module Boolean; end
   module Nullable
@@ -72,7 +72,7 @@ module Shindo
     #
     # @return [Boolean]
     def data_matches_schema(schema, options = {})
-      test('data matches schema') do
+      test("data matches schema") do
         validator = Fog::Schema::DataValidator.new
         valid = validator.validate(yield, schema, options)
         @message = validator.message unless valid
@@ -82,7 +82,7 @@ module Shindo
 
     # @deprecated #formats is deprecated. Use #data_matches_schema instead
     def formats(format, strict = true)
-      test('has proper format') do
+      test("has proper format") do
         if strict
           options = { :allow_extra_keys => false, :allow_optional_rules => true }
         else

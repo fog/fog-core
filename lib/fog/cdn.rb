@@ -11,7 +11,7 @@ module Fog
         require "fog/#{provider}/cdn"
         return Fog::CDN.const_get(Fog.providers[provider]).new(attributes)
       end
-      fail ArgumentError, "#{provider} is not a recognized cdn provider"
+      raise ArgumentError, "#{provider} is not a recognized cdn provider"
     end
 
     def self.providers

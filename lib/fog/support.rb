@@ -9,10 +9,10 @@ module Fog
       provider = attributes.delete(:provider).to_s.downcase.to_sym
 
       if provider == :stormondemand
-        require 'fog/storm_on_demand/support'
+        require "fog/storm_on_demand/support"
         Fog::Support::StormOnDemand.new(attributes)
       else
-        fail ArgumentError, "#{provider} has no support service"
+        raise ArgumentError, "#{provider} has no support service"
       end
     end
 

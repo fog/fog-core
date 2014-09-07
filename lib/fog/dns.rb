@@ -8,7 +8,7 @@ module Fog
       attributes = attributes.dup # prevent delete from having side effects
       case provider = attributes.delete(:provider).to_s.downcase.to_sym
       when :stormondemand
-        require 'fog/storm_on_demand/dns'
+        require "fog/storm_on_demand/dns"
         Fog::DNS::StormOnDemand.new(attributes)
       else
         if providers.include?(provider)
@@ -19,7 +19,7 @@ module Fog
             Fog.const_get(Fog.providers[provider])::DNS
           end.new(attributes)
         else
-          fail ArgumentError, "#{provider} is not a recognized dns provider"
+          raise ArgumentError, "#{provider} is not a recognized dns provider"
         end
       end
     end
