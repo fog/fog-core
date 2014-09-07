@@ -4,9 +4,7 @@ require 'fog/core'
 #
 # FOG_MOCK=true fog
 
-if ENV["FOG_MOCK"] == "true"
-  Fog.mock!
-end
+Fog.mock! if ENV['FOG_MOCK'] == 'true'
 
 # if in mocked mode, fill in some fake credentials for us
 if Fog.mock?
@@ -55,8 +53,8 @@ if Fog.mock?
     :os_account_meta_temp_url_key     => 'os_account_meta_temp_url_key',
     :ibm_username                     => 'ibm_username',
     :ibm_password                     => 'ibm_password',
-    :joyent_username                  => "joyentuser",
-    :joyent_password                  => "joyentpass",
+    :joyent_username                  => 'joyentuser',
+    :joyent_password                  => 'joyentpass',
     :linode_api_key                   => 'linode_api_key',
     :local_root                       => '~/.fog',
     :bare_metal_cloud_password        => 'bare_metal_cloud_password',
@@ -65,8 +63,8 @@ if Fog.mock?
     :ninefold_compute_secret          => 'ninefold_compute_secret',
     :ninefold_storage_secret          => 'ninefold_storage_secret',
     :ninefold_storage_token           => 'ninefold_storage_token',
-#    :public_key_path                  => '~/.ssh/id_rsa.pub',
-#    :private_key_path                 => '~/.ssh/id_rsa',
+    # :public_key_path                  => '~/.ssh/id_rsa.pub',
+    # :private_key_path                 => '~/.ssh/id_rsa',
     :openstack_api_key                => 'openstack_api_key',
     :openstack_username               => 'openstack_username',
     :openstack_tenant                 => 'openstack_tenant',
