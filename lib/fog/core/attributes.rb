@@ -1,7 +1,6 @@
 module Fog
   module Attributes
     module ClassMethods
-
       def _load(marshalled)
         new(Marshal.load(marshalled))
       end
@@ -27,8 +26,8 @@ module Fog
       end
 
       def attribute(name, options = {})
-        type = options.fetch(:type, 'default').to_s.capitalize
-        Fog::Attributes::const_get(type).new(self, name, options)
+        type = options.fetch(:type, "default").to_s.capitalize
+        Fog::Attributes.const_get(type).new(self, name, options)
       end
 
       def has_one(name, collection_name, options = {})
@@ -49,22 +48,20 @@ module Fog
 
       def identity(name, options = {})
         @identity = name
-        self.attribute(name, options)
+        attribute(name, options)
       end
 
       def ignore_attributes(*args)
-        @ignored_attributes = args.collect {|attr| attr.to_s }
+        @ignored_attributes = args.map(&:to_s)
       end
 
       def ignored_attributes
         @ignored_attributes ||= []
       end
-
     end
 
     module InstanceMethods
-
-      def _dump(level)
+      def _dump(_level)
         Marshal.dump(attributes)
       end
 
@@ -81,16 +78,14 @@ module Fog
       end
 
       def all_attributes
-        self.class.attributes.inject({}) do |hash, attribute|
+        self.class.attributes.each_with_object({}) do |attribute, hash|
           hash[masks[attribute]] = send(attribute)
-          hash
         end
       end
 
       def all_associations
-        self.class.associations.keys.inject({}) do |hash, association|
+        self.class.associations.keys.each_with_object({}) do |association, hash|
           hash[masks[association]] = associations[association] || send(association)
-          hash
         end
       end
 
@@ -105,23 +100,22 @@ module Fog
       end
 
       def identity
-        send(self.class.instance_variable_get('@identity'))
+        send(self.class.instance_variable_get("@identity"))
       end
 
       def identity=(new_identity)
-        send("#{self.class.instance_variable_get('@identity')}=", new_identity)
+        send("#{self.class.instance_variable_get("@identity")}=", new_identity)
       end
 
       def merge_attributes(new_attributes = {})
-        for key, value in new_attributes
-          unless self.class.ignored_attributes.include?(key)
-            if aliased_key = self.class.aliases[key]
-              send("#{aliased_key}=", value)
-            elsif self.respond_to?("#{key}=",true)
-              send("#{key}=", value)
-            else
-              attributes[key] = value
-            end
+        new_attributes.each_pair do |key, value|
+          next if self.class.ignored_attributes.include?(key)
+          if self.class.aliases[key]
+            send("#{self.class.aliases[key]}=", value)
+          elsif self.respond_to?("#{key}=", true)
+            send("#{key}=", value)
+          else
+            attributes[key] = value
           end
         end
         self
@@ -159,20 +153,16 @@ module Fog
       end
 
       def requires_one(*args)
-        missing = missing_attributes(args)
-        if missing.length == args.length
-          raise(ArgumentError, "#{missing[0...-1].join(", ")} or #{missing[-1]} are required for this operation")
-        end
+        return unless missing_attributes(args).length == args.length
+        raise(ArgumentError, "#{missing[0...-1].join(", ")} or #{missing[-1]} are required for this operation")
       end
 
       protected
 
       def missing_attributes(args)
         missing = []
-        for arg in [:service] | args
-          unless send("#{arg}") || attributes.has_key?(arg)
-            missing << arg
-          end
+        ([:service] | args).each do |arg|
+          missing << arg unless send("#{arg}") || attributes.key?(arg)
         end
         missing
       end
@@ -184,13 +174,10 @@ module Fog
       private
 
       def remap_attributes(attributes, mapping)
-        for key, value in mapping
-          if attributes.key?(key)
-            attributes[value] = attributes.delete(key)
-          end
+        mapping.each_pair do |key, value|
+          attributes[value] = attributes.delete(key) if attributes.key?(key)
         end
       end
-
     end
   end
 end
