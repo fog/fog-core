@@ -78,14 +78,16 @@ module Fog
       end
 
       def all_attributes
-        self.class.attributes.each_with_object({}) do |attribute, hash|
+        self.class.attributes.reduce({}) do |hash, attribute|
           hash[masks[attribute]] = send(attribute)
+          hash
         end
       end
 
       def all_associations
-        self.class.associations.keys.each_with_object({}) do |association, hash|
+        self.class.associations.keys.reduce({}) do |hash, association|
           hash[masks[association]] = associations[association] || send(association)
+          hash
         end
       end
 

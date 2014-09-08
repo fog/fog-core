@@ -1,6 +1,9 @@
 Metrics/LineLength:
   Enabled: false
 
+Style/EachWithObject:
+  Enabled: false
+
 Style/Encoding:
   EnforcedStyle: when_needed
 
