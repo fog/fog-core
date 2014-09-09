@@ -8,10 +8,10 @@ module Fog
       attributes = attributes.dup
       provider = attributes.delete(:provider).to_s.downcase.to_sym
       if provider == :stormondemand
-        require 'fog/storm_on_demand/billing'
+        require "fog/storm_on_demand/billing"
         Fog::Monitoring::StormOnDemand.new(attributes)
       else
-        fail ArgumentError, "#{provider} has no monitoring service"
+        raise ArgumentError, "#{provider} has no monitoring service"
       end
     end
 

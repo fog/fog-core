@@ -9,10 +9,10 @@ module Fog
       provider = attributes.delete(:provider).to_s.downcase.to_sym
 
       if provider == :stormondemand
-        require 'fog/storm_on_demand/vpn'
+        require "fog/storm_on_demand/vpn"
         Fog::VPN::StormOnDemand.new(attributes)
       else
-        fail ArgumentError, "#{provider} has no vpn service"
+        raise ArgumentError, "#{provider} has no vpn service"
       end
     end
 

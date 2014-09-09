@@ -13,7 +13,7 @@ module Fog
         return Fog::Orchestration.const_get(Fog.providers[provider]).new(attributes)
       end
 
-      fail ArgumentError, "#{provider} has no orchestration service"
+      raise ArgumentError, "#{provider} has no orchestration service"
     end
 
     def self.providers

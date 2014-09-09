@@ -9,14 +9,14 @@ module Fog
       provider = attributes.delete(:provider).to_s.downcase.to_sym
 
       if provider == :stormondemand
-        require 'fog/storm_on_demand/network'
+        require "fog/storm_on_demand/network"
         return Fog::Network::StormOnDemand.new(attributes)
       elsif providers.include?(provider)
         require "fog/#{provider}/network"
         return Fog::Network.const_get(Fog.providers[provider]).new(attributes)
       end
 
-      fail ArgumentError, "#{provider} has no network service"
+      raise ArgumentError, "#{provider} has no network service"
     end
 
     def self.providers

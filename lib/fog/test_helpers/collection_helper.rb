@@ -1,5 +1,5 @@
 def collection_tests(collection, params = {}, mocks_implemented = true)
-  tests('success') do
+  tests("success") do
     tests("#new(#{params.inspect})").succeeds do
       pending if Fog.mocking? && !mocks_implemented
       collection.new(params)
@@ -15,7 +15,7 @@ def collection_tests(collection, params = {}, mocks_implemented = true)
       @instance.wait_for { ready? }
     end
 
-    tests('#all').succeeds do
+    tests("#all").succeeds do
       pending if Fog.mocking? && !mocks_implemented
       collection.all
     end
@@ -27,7 +27,7 @@ def collection_tests(collection, params = {}, mocks_implemented = true)
       collection.get(@identity)
     end
 
-    tests('Enumerable') do
+    tests("Enumerable") do
       pending if Fog.mocking? && !mocks_implemented
 
       methods = %w(all any? find detect collect map find_index flat_map
@@ -35,8 +35,8 @@ def collection_tests(collection, params = {}, mocks_implemented = true)
 
       # JRuby 1.7.5+ issue causes a SystemStackError: stack level too deep
       # https://github.com/jruby/jruby/issues/1265
-      if RUBY_PLATFORM == 'java' && JRUBY_VERSION =~ /1\.7\.[5-8]/
-        methods.delete('all?')
+      if RUBY_PLATFORM == "java" && JRUBY_VERSION =~ /1\.7\.[5-8]/
+        methods.delete("all?")
       end
 
       methods.each do |enum_method|
@@ -66,7 +66,7 @@ def collection_tests(collection, params = {}, mocks_implemented = true)
     @instance.destroy if !Fog.mocking? || mocks_implemented
   end
 
-  tests('failure') do
+  tests("failure") do
     if !Fog.mocking? || mocks_implemented
       @identity = @identity.to_s
       @identity = @identity.gsub(/[a-zA-Z]/) { Fog::Mock.random_letters(1) }

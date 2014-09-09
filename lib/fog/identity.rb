@@ -9,10 +9,10 @@ module Fog
       provider = attributes.delete(:provider).to_s.downcase.to_sym
 
       unless providers.include?(provider)
-        fail ArgumentError, "#{provider} has no identity service"
+        raise ArgumentError, "#{provider} has no identity service"
       end
 
-      require 'fog/#{provider}/identity'
+      require "fog/#{provider}/identity"
       begin
         Fog::Identity.const_get(Fog.providers[provider]).new(attributes)
       rescue

@@ -1,11 +1,11 @@
-require 'rake'
-require 'rake/tasklib'
+require "rake"
+require "rake/tasklib"
 
 module Fog
   module Rake
     class TestTask < ::Rake::TaskLib
       def initialize
-        desc 'Run the mocked tests'
+        desc "Run the mocked tests"
         task :test do
           ::Rake::Task[:mock_tests].invoke
         end

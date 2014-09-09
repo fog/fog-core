@@ -12,7 +12,7 @@ module Fog
         return Fog::Metering.const_get(Fog.providers[provider]).new(attributes)
       end
 
-      fail ArgumentError, "#{provider} has no identity service"
+      raise ArgumentError, "#{provider} has no identity service"
     end
 
     def self.providers
