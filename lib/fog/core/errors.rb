@@ -1,6 +1,5 @@
 module Fog
   module Errors
-
     class Error < StandardError
       attr_accessor :verbose
 
@@ -16,9 +15,9 @@ module Fog
 
     class NotFound < Fog::Errors::Error; end
 
-    class LoadError < LoadError; end
+    class LoadError < Fog::Errors::Error; end
 
-    class TimeoutError< Fog::Errors::Error; end
+    class TimeoutError < Fog::Errors::Error; end
 
     class NotImplemented < Fog::Errors::Error; end
 
@@ -111,8 +110,7 @@ An alternate file may be used by placing its path in the FOG_RC environment vari
 #######################################################
 
     YML
-      raise(Fog::Errors::LoadError.new(missing_credentials_message))
+      raise Fog::Errors::LoadError, missing_credentials_message
     end
-
   end
 end

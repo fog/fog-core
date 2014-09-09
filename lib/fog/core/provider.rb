@@ -1,17 +1,15 @@
 module Fog
+  class << self
+    attr_writer :providers
+  end
 
   def self.providers
     @providers ||= {}
   end
 
-  def self.providers=(new_providers)
-    @providers = new_providers
-  end
-
   module Provider
-
     def self.extended(base)
-      provider = base.to_s.split('::').last
+      provider = base.to_s.split("::").last
       Fog.providers[provider.downcase.to_sym] = provider
     end
 
@@ -21,14 +19,13 @@ module Fog
 
     def service(new_service, constant_string)
       Fog.services[new_service] ||= []
-      Fog.services[new_service] |= [self.to_s.split('::').last.downcase.to_sym]
+      Fog.services[new_service] |= [to_s.split("::").last.downcase.to_sym]
       @services_registry ||= {}
-      @services_registry[new_service] = [self.to_s, constant_string].join('::')
+      @services_registry[new_service] = [to_s, constant_string].join("::")
     end
 
     def services
       @services_registry.keys
     end
-
   end
 end

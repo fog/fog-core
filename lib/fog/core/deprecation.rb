@@ -1,6 +1,5 @@
 module Fog
   module Deprecation
-
     def deprecate(older, newer)
       module_eval <<-EOS, __FILE__, __LINE__
         def #{older}(*args)
@@ -18,6 +17,5 @@ module Fog
         end
       EOS
     end
-
   end
 end

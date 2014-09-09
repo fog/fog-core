@@ -1,5 +1,5 @@
 module Fog
-  def self.wait_for(timeout=Fog.timeout, interval=Fog.interval, &block)
+  def self.wait_for(timeout = Fog.timeout, interval = Fog.interval, &_block)
     duration = 0
     start = Time.now
     retries = 0
@@ -8,7 +8,7 @@ module Fog
       duration = Time.now - start
     end
     if duration > timeout
-      raise Errors::TimeoutError.new("The specified wait_for timeout (#{timeout} seconds) was exceeded")
+      raise Errors::TimeoutError, "The specified wait_for timeout (#{timeout} seconds) was exceeded"
     else
       { :duration => duration }
     end

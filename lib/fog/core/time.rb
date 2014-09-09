@@ -1,10 +1,9 @@
-require 'time'
+require "time"
 
 module Fog
   class Time < ::Time
-
-    DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-    MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    DAYS = %w(Sun Mon Tue Wed Thu Fri Sat)
+    MONTHS = %w(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)
 
     def self.now
       at((::Time.now - offset).to_i)
@@ -21,12 +20,11 @@ module Fog
     end
 
     def to_date_header
-      self.utc.strftime("#{DAYS[self.utc.wday]}, %d #{MONTHS[self.utc.month - 1]} %Y %H:%M:%S +0000")
+      utc.strftime("#{DAYS[utc.wday]}, %d #{MONTHS[utc.month - 1]} %Y %H:%M:%S +0000")
     end
 
     def to_iso8601_basic
-      self.utc.strftime('%Y%m%dT%H%M%SZ')
+      utc.strftime("%Y%m%dT%H%M%SZ")
     end
-
   end
 end

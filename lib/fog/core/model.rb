@@ -2,7 +2,6 @@ require "fog/core/deprecated_connection_accessors"
 
 module Fog
   class Model
-
     extend Fog::Attributes::ClassMethods
     include Fog::Attributes::InstanceMethods
     include Fog::Core::DeprecatedConnectionAccessors
@@ -11,7 +10,7 @@ module Fog
     attr_reader :service
 
     def initialize(new_attributes = {})
-      # TODO Remove compatibility with old connection option
+      # TODO: Remove compatibility with old connection option
       attribs = new_attributes.clone
       @service = attribs.delete(:service)
       if @service.nil? && attribs[:connection]
@@ -27,7 +26,7 @@ module Fog
       Thread.current[:formatador].indent do
         unless self.class.attributes.empty?
           data << "\n#{Thread.current[:formatador].indentation}"
-          data << self.class.attributes.map {|attribute| "#{attribute}=#{send(attribute).inspect}"}.join(",\n#{Thread.current[:formatador].indentation}")
+          data << self.class.attributes.map { |attribute| "#{attribute}=#{send(attribute).inspect}" }.join(",\n#{Thread.current[:formatador].indentation}")
         end
       end
       data << "\n#{Thread.current[:formatador].indentation}>"
@@ -37,30 +36,32 @@ module Fog
     def reload
       requires :identity
 
-      return unless data = begin
+      data = begin
         collection.get(identity)
       rescue Excon::Errors::SocketError
         nil
       end
+
+      return unless data
 
       new_attributes = data.attributes
       merge_attributes(new_attributes)
       self
     end
 
-    def to_json(options = {})
+    def to_json(_options = {})
       Fog::JSON.encode(attributes)
     end
 
     def symbolize_keys(hash)
       return nil if hash.nil?
-      hash.inject({}) do |options, (key, value)|
+      hash.reduce({}) do |options, (key, value)|
         options[(key.to_sym rescue key) || key] = value
         options
       end
     end
 
-    def wait_for(timeout=Fog.timeout, interval=1, &block)
+    def wait_for(timeout = Fog.timeout, interval = 1, &block)
       reload_has_succeeded = false
       duration = Fog.wait_for(timeout, interval) do # Note that duration = false if it times out
         if reload
@@ -73,7 +74,7 @@ module Fog
       if reload_has_succeeded
         return duration # false if timeout; otherwise {:duration => elapsed time }
       else
-        raise Fog::Errors::Error.new("Reload failed, #{self.class} #{self.identity} not present.")
+        raise Fog::Errors::Error, "Reload failed, #{self.class} #{identity} not present."
       end
     end
   end
