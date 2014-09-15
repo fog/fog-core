@@ -1,5 +1,9 @@
 module Fog
   module Associations
+    # = Fog Single Association
+    #
+    # This class handles single association between the models.
+    # It expects the provider to map the attribute with an initialized object.
     class OneModel < Default
       def create_setter
         model.class_eval <<-EOS, __FILE__, __LINE__

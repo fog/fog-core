@@ -1,5 +1,9 @@
 module Fog
   module Attributes
+    # = Fog String Attribute
+    #
+    # This class handles String attributes from the providers,
+    # converting values to String objects
     class String < Default
       def create_setter
         model.class_eval <<-EOS, __FILE__, __LINE__

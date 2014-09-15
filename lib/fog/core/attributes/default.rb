@@ -1,5 +1,9 @@
 module Fog
   module Attributes
+    # = Fog Default Attribute
+    #
+    # This class handles the attributes without a type force.
+    # The attributes returned from the provider will keep its original values.
     class Default
       attr_reader :model, :name, :squash, :aliases, :default, :as
 
