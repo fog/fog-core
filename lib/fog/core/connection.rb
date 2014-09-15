@@ -1,6 +1,5 @@
 module Fog
   module Core
-
     # Fog::Core::Connection is a generic class to contain a HTTP link to an API.
     #
     # It is intended to be subclassed by providers who can then add their own
@@ -24,7 +23,7 @@ module Fog
       # @option params [Fixnum] :retry_limit Set how many times we'll retry a failed request.  (Default 4)
       # @option params [Class] :instrumentor Responds to #instrument as in ActiveSupport::Notifications
       # @option params [String] :instrumentor_name Name prefix for #instrument events.  Defaults to 'excon'
-      def initialize(url, persistent=false, params={})
+      def initialize(url, persistent = false, params = {})
         if params[:path_prefix]
           if params[:path]
             raise ArgumentError, "optional arg 'path' is invalid when 'path_prefix' is provided"
@@ -33,11 +32,9 @@ module Fog
           @path_prefix = params.delete(:path_prefix)
         end
 
-        unless params.has_key?(:debug_response)
-          params[:debug_response] = true
-        end
+        params[:debug_response] = true unless params.key?(:debug_response)
         params[:headers] ||= {}
-        params[:headers]['User-Agent'] ||= "fog/#{Fog::VERSION}"
+        params[:headers]["User-Agent"] ||= "fog/#{Fog::VERSION}"
         params.merge!(:persistent => params.fetch(:persistent, persistent))
         @excon = Excon.new(url, params)
       end

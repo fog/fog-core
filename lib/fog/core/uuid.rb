@@ -1,9 +1,8 @@
-require 'securerandom'
+require "securerandom"
 
 module Fog
   class UUID
     class << self
-
       def uuid
         if supported?
           SecureRandom.uuid

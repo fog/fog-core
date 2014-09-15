@@ -11,7 +11,7 @@ module Fog
 
     module NoLeakInspector
       def inspect
-        "#<#{self.class}:#{self.object_id} #{(self.instance_variables - service.secrets).map {|iv| [iv, self.instance_variable_get(iv).inspect].join('=')}.join(' ')}>"
+        "#<#{self.class}:#{object_id} #{(instance_variables - service.secrets).map { |iv| [iv, instance_variable_get(iv).inspect].join("=") }.join(" ")}>"
       end
     end
 
@@ -117,14 +117,12 @@ module Fog
       end
 
       # @deprecated
-      def fetch_credentials(options)
+      def fetch_credentials(_options)
         # attempt to load credentials from config file
-        begin
-          Fog.credentials.reject { |key, value| !(recognized | requirements).include?(key) }
-        rescue LoadError
-          # if there are no configured credentials, do nothing
-          {}
-        end
+        Fog.credentials.reject { |key, _value| !(recognized | requirements).include?(key) }
+      rescue LoadError
+        # if there are no configured credentials, do nothing
+        {}
       end
 
       def setup_requirements
@@ -133,12 +131,13 @@ module Fog
         end
 
         @required ||= false
-        unless @required
-          require_models
-          require_collections_and_define
-          require_requests_and_mock
-          @required = true
-        end
+
+        return false unless @required
+
+        require_models
+        require_collections_and_define
+        require_requests_and_mock
+        @required = true
       end
 
       # @note This path is used to require model and collection files
@@ -163,13 +162,13 @@ module Fog
             options[key] = value.to_i
           else
             options[key] = case value_string
-            when 'false'
-              false
-            when 'true'
-              true
-            else
-              value
-            end
+                           when "false"
+                             false
+                           when "true"
+                             true
+                           else
+                             value
+                           end
           end
         end
       end
@@ -202,7 +201,7 @@ module Fog
         if args.empty?
           @secrets ||= []
         else
-          args.inject(secrets) do |secrets, secret|
+          args.reduce(secrets) do |secrets, secret|
             secrets << "@#{secret}".to_sym
           end
         end
@@ -226,21 +225,19 @@ module Fog
 
       def validate_options(options)
         keys = []
-        for key, value in options
-          unless value.nil?
-            keys << key
-          end
+        options.each_pair do |key, value|
+          keys << key unless value.nil?
         end
         missing = requirements - keys
 
         unless missing.empty?
-          raise ArgumentError, "Missing required arguments: #{missing.join(', ')}"
+          raise ArgumentError, "Missing required arguments: #{missing.join(", ")}"
         end
 
         unless recognizes.empty?
           unrecognized = options.keys - requirements - recognized
           unless unrecognized.empty?
-            Fog::Logger.warning("Unrecognized arguments: #{unrecognized.join(', ')}")
+            Fog::Logger.warning("Unrecognized arguments: #{unrecognized.join(", ")}")
           end
         end
       end
@@ -262,7 +259,7 @@ module Fog
         coerce_options(prepared_settings)
       end
 
-      # This will attempt to require all model files declared by the service using fog's DSL
+      # This will attempt to require all model files declared by the service using fog"s DSL
       def require_models
         models.each do |model|
           require File.join(@model_path, model.to_s)
@@ -287,10 +284,10 @@ module Fog
       # @param [String,Symbol] collection The name of the collection broken with underscores
       # @return [String] in camel case
       def camel_case_collection_name(collection)
-        collection.to_s.split('_').map(&:capitalize).join
+        collection.to_s.split("_").map(&:capitalize).join
       end
 
-      # This will attempt to require all request files declared in the service using fog's DSL
+      # This will attempt to require all request files declared in the service using fog"s DSL
       def require_requests_and_mock
         requests.each do |request|
           require File.join(@request_path, request.to_s)

@@ -1,12 +1,14 @@
-require 'thread'
+require "thread"
+
 module Fog
   class CurrentMachine
-    @@lock = Mutex.new
-    AMAZON_AWS_CHECK_IP = 'http://checkip.amazonaws.com'
+    @lock = Mutex.new
 
-    def self.ip_address= ip_address
-      @@lock.synchronize do
-        @@ip_address = ip_address
+    AMAZON_AWS_CHECK_IP = "http://checkip.amazonaws.com"
+
+    def self.ip_address=(ip_address)
+      @lock.synchronize do
+        @ip_address = ip_address
       end
     end
 
@@ -26,8 +28,8 @@ module Fog
     #
     # @raise [Excon::Errors::Error] if the net/http request fails.
     def self.ip_address
-      @@lock.synchronize do
-        @@ip_address ||= Excon.get(AMAZON_AWS_CHECK_IP).body.chomp
+      @lock.synchronize do
+        @ip_address ||= Excon.get(AMAZON_AWS_CHECK_IP).body.chomp
       end
     end
   end

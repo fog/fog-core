@@ -1,7 +1,7 @@
-require 'yaml'
+require "yaml"
 
 module Fog
-  require 'fog/core/deprecation'
+  require "fog/core/deprecation"
 
   # Sets the global configuration up from a Hash rather than using background loading from a file
   #
@@ -19,8 +19,8 @@ module Fog
   #   }
   #
   # @return [Hash] The newly assigned credentials
-  def self.credentials=(new_credentials)
-    @credentials = new_credentials
+  class << self
+    attr_writer :credentials
   end
 
   # Assign a new credential to use from configuration file
@@ -38,7 +38,7 @@ module Fog
   #
   # @return [Symbol] The credential to use in Fog
   def self.credential
-    @credential ||= ( ENV["FOG_CREDENTIAL"] && ENV["FOG_CREDENTIAL"].to_sym ) || :default
+    @credential ||= (ENV["FOG_CREDENTIAL"] && ENV["FOG_CREDENTIAL"].to_sym) || :default
   end
 
   # This returns the path to the configuration file being used globally to look for sets of
@@ -49,7 +49,7 @@ module Fog
   # @return [String] The path for configuration_file
   def self.credentials_path
     @credential_path ||= begin
-      path = ENV["FOG_RC"] || (ENV['HOME'] && File.directory?(ENV['HOME']) && '~/.fog')
+      path = ENV["FOG_RC"] || (ENV["HOME"] && File.directory?(ENV["HOME"]) && "~/.fog")
       File.expand_path(path) if path
     rescue
       nil
@@ -66,7 +66,7 @@ module Fog
   # @raise [LoadError] Configuration unavailable in configuration file
   def self.credentials
     @credentials ||= begin
-      if credentials_path && File.exists?(credentials_path)
+      if credentials_path && File.exist?(credentials_path)
         credentials = Fog::Core::Utils.prepare_service_settings(YAML.load_file(credentials_path))
         (credentials && credentials[credential]) || Fog::Errors.missing_credentials
       else

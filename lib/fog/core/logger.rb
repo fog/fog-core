@@ -1,12 +1,11 @@
 module Fog
   class Logger
-
     @channels = {
       :deprecation  => ::STDERR,
       :warning      => ::STDERR
     }
 
-    @channels[:debug] = ::STDERR if ENV['DEBUG']
+    @channels[:debug] = ::STDERR if ENV["DEBUG"]
 
     def self.[](channel)
       @channels[channel]
@@ -17,28 +16,28 @@ module Fog
     end
 
     def self.debug(message)
-      self.write(:debug, "[light_black][fog][DEBUG] #{message}[/]\n")
+      write(:debug, "[light_black][fog][DEBUG] #{message}[/]\n")
     end
 
     def self.deprecation(message)
-      self.write(:deprecation, "[yellow][fog][DEPRECATION] #{message}[/]\n")
+      write(:deprecation, "[yellow][fog][DEPRECATION] #{message}[/]\n")
     end
 
     def self.warning(message)
-      self.write(:warning, "[yellow][fog][WARNING] #{message}[/]\n")
+      write(:warning, "[yellow][fog][WARNING] #{message}[/]\n")
     end
 
     def self.write(key, value)
-      if channel = @channels[key]
+      channel = @channels[key]
+      if channel
         message = if channel.tty?
-          value.gsub(Formatador::PARSE_REGEX) { "\e[#{Formatador::STYLES[$1.to_sym]}m" }.gsub(Formatador::INDENT_REGEX, '')
-        else
-          value.gsub(Formatador::PARSE_REGEX, '').gsub(Formatador::INDENT_REGEX, '')
-        end
+                    value.gsub(Formatador::PARSE_REGEX) { "\e[#{Formatador::STYLES[$1.to_sym]}m" }.gsub(Formatador::INDENT_REGEX, "")
+                  else
+                    value.gsub(Formatador::PARSE_REGEX, "").gsub(Formatador::INDENT_REGEX, "")
+                  end
         channel.write(message)
       end
       nil
     end
-
   end
 end

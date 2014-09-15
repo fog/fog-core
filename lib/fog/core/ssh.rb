@@ -1,8 +1,7 @@
-require 'delegate'
+require "delegate"
 
 module Fog
   module SSH
-
     def self.new(address, username, options = {})
       if Fog.mocking?
         Fog::SSH::Mock.new(address, username, options)
@@ -12,7 +11,6 @@ module Fog
     end
 
     class Mock
-
       def self.data
         @data ||= Hash.new do |hash, key|
           hash[key] = []
@@ -20,7 +18,7 @@ module Fog
       end
 
       def self.reset
-        @data= nil
+        @data = nil
       end
 
       def initialize(address, username, options)
@@ -29,28 +27,26 @@ module Fog
         @options  = options
       end
 
-      def run(commands, &blk)
-        self.class.data[@address] << {:commands => commands, :username => @username, :options => @options}
+      def run(commands, &_blk)
+        self.class.data[@address] << { :commands => commands, :username => @username, :options => @options }
       end
-
     end
 
     class Real
-
       def initialize(address, username, options)
-        require 'net/ssh'
+        require "net/ssh"
 
         key_manager = Net::SSH::Authentication::KeyManager.new(nil, options)
 
         unless options[:key_data] || options[:keys] || options[:password] || key_manager.agent
-          raise ArgumentError.new(':key_data, :keys, :password or a loaded ssh-agent is required to initialize SSH')
+          raise ArgumentError, ":key_data, :keys, :password or a loaded ssh-agent is required to initialize SSH"
         end
 
         options[:timeout] ||= 30
         if options[:key_data] || options[:keys]
           options[:keys_only] = true
-          #Explicitly set these so net-ssh doesn't add the default keys
-          #as seen at https://github.com/net-ssh/net-ssh/blob/master/lib/net/ssh/authentication/session.rb#L131-146
+          # Explicitly set these so net-ssh doesn"t add the default keys
+          # as seen at https://github.com/net-ssh/net-ssh/blob/master/lib/net/ssh/authentication/session.rb#L131-146
           options[:keys] = [] unless options[:keys]
           options[:key_data] = [] unless options[:key_data]
         end
@@ -74,22 +70,22 @@ module Fog
                     raise "Could not execute command: #{command.inspect}"
                   end
 
-                  channel.on_data do |ch, data|
+                  channel.on_data do |_ch, data|
                     result.stdout << data
-                    yield [data, ''] if blk
+                    yield [data, ""] if blk
                   end
 
-                  channel.on_extended_data do |ch, type, data|
+                  channel.on_extended_data do |_ch, type, data|
                     next unless type == 1
                     result.stderr << data
-                    yield ['', data] if blk
+                    yield ["", data] if blk
                   end
 
-                  channel.on_request('exit-status') do |ch, data|
+                  channel.on_request("exit-status") do |_ch, data|
                     result.status = data.read_long
                   end
 
-                  channel.on_request('exit-signal') do |ch, data|
+                  channel.on_request("exit-signal") do |_ch, _data|
                     result.status = 255
                   end
                 end
@@ -105,11 +101,9 @@ module Fog
         end
         results
       end
-
     end
 
     class Result
-
       attr_accessor :command, :stderr, :stdout, :status
 
       def display_stdout
@@ -127,11 +121,9 @@ module Fog
 
       def initialize(command)
         @command = command
-        @stderr = ''
-        @stdout = ''
+        @stderr = ""
+        @stdout = ""
       end
-
     end
-
   end
 end
