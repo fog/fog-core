@@ -1,5 +1,8 @@
 module Fog
   module Associations
+    # = Fog Default Association
+    #
+    # This class has the shared behavior between all association models.
     class Default
       attr_reader :model, :name, :aliases, :as
 

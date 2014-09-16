@@ -1,5 +1,10 @@
 module Fog
   module Associations
+    # = Fog Single Association
+    #
+    # This class handles single association between the models.
+    # It expects the provider to return only the id of the association.
+    # The association model will be loaded based on the id initialized.
     class OneIdentity < Default
       def create_setter
         model.class_eval <<-EOS, __FILE__, __LINE__

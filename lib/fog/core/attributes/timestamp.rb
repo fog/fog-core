@@ -1,5 +1,9 @@
 module Fog
   module Attributes
+    # = Fog Timestamp Attribute
+    #
+    # This class handles Timestamp attributes from the providers,
+    # converting Integer and String values as a real Timestamp objects
     class Timestamp < Default
       def create_setter
         model.class_eval <<-EOS, __FILE__, __LINE__

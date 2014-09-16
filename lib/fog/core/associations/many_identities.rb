@@ -1,5 +1,10 @@
 module Fog
   module Associations
+    # = Fog Multiple Association
+    #
+    # This class handles multiple association between the models.
+    # It expects the provider to return a collection of ids.
+    # The association models will be loaded based on the collection of ids.
     class ManyIdentities < Default
       def create_setter
         model.class_eval <<-EOS, __FILE__, __LINE__

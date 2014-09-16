@@ -1,5 +1,9 @@
 module Fog
   module Attributes
+    # = Fog Array Attribute
+    #
+    # This class handles Array attributes from the providers,
+    # converting values to Array objects
     class Array < Default
       def create_setter
         model.class_eval <<-EOS, __FILE__, __LINE__

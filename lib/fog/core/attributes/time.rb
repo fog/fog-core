@@ -1,5 +1,9 @@
 module Fog
   module Attributes
+    # = Fog Time Attribute
+    #
+    # This class handles Time attributes from the providers,
+    # converting values to Time objects
     class Time < Default
       def create_setter
         model.class_eval <<-EOS, __FILE__, __LINE__
