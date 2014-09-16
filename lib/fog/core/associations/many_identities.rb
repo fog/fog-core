@@ -17,14 +17,26 @@ module Fog
       end
 
       def create_getter
-        model.class_eval <<-EOS, __FILE__, __LINE__
-          def #{name}
-            return [] if associations[:#{name}].nil?
-            Array(associations[:#{name}]).map do |association|
-              service.send(self.class.associations[:#{name}]).get(association)
+        if collection_class.nil?
+          model.class_eval <<-EOS, __FILE__, __LINE__
+            def #{name}
+              return [] if associations[:#{name}].nil?
+              Array(associations[:#{name}]).map do |association|
+                service.send(self.class.associations[:#{name}]).get(association)
+              end
             end
-          end
-        EOS
+          EOS
+        else
+          model.class_eval <<-EOS, __FILE__, __LINE__
+            def #{name}
+              return [] if associations[:#{name}].nil?
+              data = Array(associations[:#{name}]).map do |association|
+                service.send(self.class.associations[:#{name}]).get(association).attributes
+              end
+              eval("#{collection_class}").new.load(data)
+            end
+          EOS
+        end
       end
     end
   end

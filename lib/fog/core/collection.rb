@@ -65,7 +65,7 @@ module Fog
     #
     def initialize(attributes = {})
       @service = attributes.delete(:service)
-      @loaded = false
+      @loaded = @service.nil?
       merge_attributes(attributes)
     end
 
