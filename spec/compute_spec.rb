@@ -1,9 +1,8 @@
-require 'spec_helper'
-
+require "spec_helper"
 
 module Fog
   module Compute
-    def self.require(*args); end
+    def self.require(*_args); end
   end
 end
 
@@ -12,14 +11,14 @@ describe "Fog::Compute" do
     module Fog
       module TheRightWay
         extend Provider
-        service(:compute, 'Compute')
+        service(:compute, "Compute")
       end
     end
 
     module Fog
       module Compute
         class TheRightWay
-          def initialize(args); end
+          def initialize(_args); end
         end
       end
     end
@@ -29,18 +28,17 @@ describe "Fog::Compute" do
       assert_instance_of(Fog::Compute::TheRightWay, compute)
     end
 
-
     module Fog
       module TheWrongWay
         extend Provider
-        service(:compute, 'Compute')
+        service(:compute, "Compute")
       end
     end
 
     module Fog
       module TheWrongWay
         class Compute
-          def initialize(args); end
+          def initialize(_args); end
         end
       end
     end
@@ -53,14 +51,14 @@ describe "Fog::Compute" do
     module Fog
       module BothWays
         extend Provider
-        service(:compute, 'Compute')
+        service(:compute, "Compute")
       end
     end
 
     module Fog
       module BothWays
         class Compute
-          def initialize(args); end
+          def initialize(_args); end
         end
       end
     end
@@ -82,16 +80,16 @@ describe "Fog::Compute" do
         assert_instance_of(Fog::Compute::BothWays, compute)
       end
     end
-    
+
     it "passes the supplied keyword args less :provider to Fog::Compute::<Provider>#new" do
       compute = Fog::Compute.new(:provider => :bothways, :extra => :stuff)
-      assert_equal({:extra => :stuff}, compute.args)
+      assert_equal({ :extra => :stuff }, compute.args)
     end
 
     it "raises ArgumentError when given a :provider where a Fog::Compute::Provider that does not exist" do
       assert_raises(ArgumentError) do
         Fog::Compute.new(:provider => :wat)
       end
-    end    
+    end
   end
 end

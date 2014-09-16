@@ -1,8 +1,8 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe "Fog#wait_for" do
   it "returns a Hash indicating the wait duration if successful" do
-    assert_equal({:duration => 0}, Fog.wait_for(1) { true })
+    assert_equal({ :duration => 0 }, Fog.wait_for(1) { true })
   end
 
   it "raises if the wait timeout is exceeded" do
@@ -13,7 +13,10 @@ describe "Fog#wait_for" do
 
   it "accepts a proc to determine the sleep interval" do
     i = 0
-    ret = Fog.wait_for(1, lambda { |t| 1}) { i += 1; i > 1 }
-    assert_equal({:duration => 1}, ret)
+    ret = Fog.wait_for(1, lambda { |_t| 1 }) do
+      i += 1
+      i > 1
+    end
+    assert_equal({ :duration => 1 }, ret)
   end
 end

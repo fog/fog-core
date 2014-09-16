@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Fog::Service do
   class TestService < Fog::Service
@@ -23,8 +23,8 @@ describe Fog::Service do
   end
 
   class ChildOfTestService < TestService
-    class Real; def initialize(*args); end; end
-    class Mock; def initialize(*args); end; end
+    class Real; def initialize(*_args); end; end
+    class Mock; def initialize(*_args); end; end
   end
 
   it "properly passes headers" do
@@ -98,7 +98,7 @@ describe Fog::Service do
         assert_includes(service.class.ancestors, TestService::Collections)
         assert_includes(service.class.ancestors, Fog::Service::Collections)
         refute_includes(service.class.ancestors, ChildOfTestService::Collections)
-      end       
+      end
     end
 
     it "ChildOfTestService::Real has ChildOfTestService::Collections and TestService::Collections mixed in" do
@@ -107,7 +107,7 @@ describe Fog::Service do
         assert_includes(service.class.ancestors, Fog::Service::Collections)
         assert_includes(service.class.ancestors, TestService::Collections)
         assert_includes(service.class.ancestors, ChildOfTestService::Collections)
-      end       
+      end
     end
   end
 
@@ -125,7 +125,7 @@ describe Fog::Service do
         assert_includes(service.class.ancestors, Fog::Service::Collections)
         assert_includes(service.class.ancestors, TestService::Collections)
         refute_includes(service.class.ancestors, ChildOfTestService::Collections)
-      end       
+      end
     end
 
     it "ChildOfTestService::Mock has ChildOfTestService::Collections and TestService::Collections mixed in" do
@@ -134,7 +134,7 @@ describe Fog::Service do
         assert_includes(service.class.ancestors, Fog::Service::Collections)
         assert_includes(service.class.ancestors, TestService::Collections)
         assert_includes(service.class.ancestors, ChildOfTestService::Collections)
-      end       
+      end
     end
   end
 
