@@ -1,19 +1,19 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe "credentials" do
   before do
-    @old_home = ENV['HOME']
-    @old_rc   = ENV['FOG_RC']
-    @old_credential = ENV['FOG_CREDENTIAL']
+    @old_home = ENV["HOME"]
+    @old_rc   = ENV["FOG_RC"]
+    @old_credential = ENV["FOG_CREDENTIAL"]
     @old_credentials = Fog.credentials
-    Fog.instance_variable_set('@credential_path', nil) # kill memoization
-    Fog.instance_variable_set('@credential', nil) # kill memoization
+    Fog.instance_variable_set("@credential_path", nil) # kill memoization
+    Fog.instance_variable_set("@credential", nil) # kill memoization
   end
 
   after do
-    ENV['HOME'] = @old_home
-    ENV['FOG_RC'] = @old_rc
-    ENV['FOG_CREDENTIAL'] = @old_credential
+    ENV["HOME"] = @old_home
+    ENV["FOG_RC"] = @old_rc
+    ENV["FOG_CREDENTIAL"] = @old_credential
     Fog.credentials = @old_credentials
   end
 
@@ -35,33 +35,33 @@ describe "credentials" do
 
   describe "credentials_path"  do
     it "has FOG_RC takes precedence over HOME" do
-      ENV['HOME'] = '/home/path'
-      ENV['FOG_RC'] = '/rc/path'
+      ENV["HOME"] = "/home/path"
+      ENV["FOG_RC"] = "/rc/path"
 
-      assert_equal '/rc/path', Fog.credentials_path
+      assert_equal "/rc/path", Fog.credentials_path
     end
 
     it "properly expands paths" do
-      ENV['FOG_RC'] = '/expanded/subdirectory/../path'
-      assert_equal '/expanded/path', Fog.credentials_path
+      ENV["FOG_RC"] = "/expanded/subdirectory/../path"
+      assert_equal "/expanded/path", Fog.credentials_path
     end
 
     it "falls back to home path if FOG_RC not set" do
-      ENV.delete('FOG_RC')
-      assert_equal File.join(ENV['HOME'], '.fog'), Fog.credentials_path
+      ENV.delete("FOG_RC")
+      assert_equal File.join(ENV["HOME"], ".fog"), Fog.credentials_path
     end
 
     it "ignores home path if it does not exist" do
-      ENV.delete('FOG_RC')
-      ENV['HOME'] = '/no/such/path'
+      ENV.delete("FOG_RC")
+      ENV["HOME"] = "/no/such/path"
       assert_nil Fog.credentials_path
     end
 
     it "File.expand_path raises because of non-absolute path" do
-      ENV.delete('FOG_RC')
-      ENV['HOME'] = '.'
+      ENV.delete("FOG_RC")
+      ENV["HOME"] = "."
 
-      if RUBY_PLATFORM == 'java'
+      if RUBY_PLATFORM == "java"
         Fog::Logger.warning("Stubbing out non-absolute path credentials test due to JRuby bug: https://github.com/jruby/jruby/issues/1163")
       else
         assert_nil Fog.credentials_path
@@ -69,8 +69,8 @@ describe "credentials" do
     end
 
     it "returns nil when neither FOG_RC or HOME are set" do
-      ENV.delete('HOME')
-      ENV.delete('FOG_RC')
+      ENV.delete("HOME")
+      ENV.delete("FOG_RC")
       assert_nil Fog.credentials_path
     end
   end

@@ -1,9 +1,8 @@
-require 'spec_helper'
-
+require "spec_helper"
 
 module Fog
   module Identity
-    def self.require(*args); end
+    def self.require(*_args); end
   end
 end
 
@@ -12,14 +11,14 @@ describe "Fog::Identity" do
     module Fog
       module TheRightWay
         extend Provider
-        service(:identity, 'Identity')
+        service(:identity, "Identity")
       end
     end
 
     module Fog
       module Identity
         class TheRightWay
-          def initialize(args); end
+          def initialize(_args); end
         end
       end
     end
@@ -29,18 +28,17 @@ describe "Fog::Identity" do
       assert_instance_of(Fog::Identity::TheRightWay, identity)
     end
 
-
     module Fog
       module Rackspace
         extend Provider
-        service(:identity, 'Identity')
+        service(:identity, "Identity")
       end
     end
 
     module Fog
       module Rackspace
         class Identity
-          def initialize(args); end
+          def initialize(_args); end
         end
       end
     end
@@ -53,14 +51,14 @@ describe "Fog::Identity" do
     module Fog
       module BothWays
         extend Provider
-        service(:identity, 'Identity')
+        service(:identity, "Identity")
       end
     end
 
     module Fog
       module BothWays
         class Identity
-          def initialize(args); end
+          def initialize(_args); end
         end
       end
     end
@@ -82,16 +80,16 @@ describe "Fog::Identity" do
         assert_instance_of(Fog::Identity::BothWays, identity)
       end
     end
-    
+
     it "passes the supplied keyword args less :provider to Fog::Identity::<Provider>#new" do
       identity = Fog::Identity.new(:provider => :bothways, :extra => :stuff)
-      assert_equal({:extra => :stuff}, identity.args)
+      assert_equal({ :extra => :stuff }, identity.args)
     end
 
     it "raises ArgumentError when given a :provider where a Fog::Identity::Provider that does not exist" do
       assert_raises(ArgumentError) do
         Fog::Identity.new(:provider => :wat)
       end
-    end    
+    end
   end
 end

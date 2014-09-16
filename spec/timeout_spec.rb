@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe "Fog#timeout" do
   before do
@@ -18,4 +18,3 @@ describe "Fog#timeout" do
     assert_equal 300, Fog.timeout
   end
 end
-

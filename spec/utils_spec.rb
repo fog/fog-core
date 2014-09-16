@@ -21,8 +21,8 @@ describe Fog::Core::Utils do
     end
 
     it "does not change the :header key or contents" do
-      settings = { :headers => { 'User-Agent' => "my user agent" } }
-      expected = { :headers => { 'User-Agent' => "my user agent" } }
+      settings = { :headers => { "User-Agent" => "my user agent" } }
+      expected = { :headers => { "User-Agent" => "my user agent" } }
       assert_equal expected, Fog::Core::Utils.prepare_service_settings(settings)
     end
   end
