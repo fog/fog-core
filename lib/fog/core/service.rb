@@ -132,7 +132,7 @@ module Fog
 
         @required ||= false
 
-        return false unless @required
+        return false if @required
 
         require_models
         require_collections_and_define
