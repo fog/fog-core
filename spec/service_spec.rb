@@ -183,4 +183,18 @@ describe Fog::Service do
       end
     end
   end
+
+  describe "#setup_requirements" do
+    before :each do
+      @service = FakeService.new
+    end
+
+    it "should require collections" do
+      assert @service.respond_to?(:collection)
+    end
+
+    it "should mock" do
+      assert_includes @service.mocked_requests, :request
+    end
+  end
 end
