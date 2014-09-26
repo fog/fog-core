@@ -14,9 +14,9 @@ describe Fog::Core::Connection do
     end
   end
 
-  it "writes the Fog::VERSION to the User-Agent header" do
+  it "writes the Fog::Core::VERSION to the User-Agent header" do
     connection = Fog::Core::Connection.new("http://example.com")
-    assert_equal "fog/#{Fog::VERSION}",
+    assert_equal "fog/#{Fog::Core::VERSION}",
                  connection.instance_variable_get(:@excon).data[:headers]["User-Agent"]
   end
 
