@@ -11,7 +11,7 @@ module Fog
         require "fog/#{provider}/image"
         return Fog::Image.const_get(Fog.providers[provider]).new(attributes)
       end
-      raise ArgumentError, "#{provider} has no identity service"
+      raise ArgumentError, "#{provider} has no image service"
     end
 
     def self.providers
