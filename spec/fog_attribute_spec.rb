@@ -27,7 +27,7 @@ class FogSingleAssociationCollection
   end
 end
 
-class FogMultipleAssociationsCollection < Fog::Collection
+class FogMultipleAssociationsCollection < Fog::Association
   model FogMultipleAssociationsModel
 
   def get(id)
@@ -51,10 +51,10 @@ class FogAttributeTestModel < Fog::Model
 
   has_one :one_object, :single_associations, :aliases => :single
   has_many :many_objects, :multiple_associations
-  has_many :objects, :multiple_associations, :collection_class => FogMultipleAssociationsCollection
+  has_many :objects, :multiple_associations, :association_class => FogMultipleAssociationsCollection
   has_one_identity :one_identity, :single_associations, :as => :Crazyname
   has_many_identities :many_identities, :multiple_associations, :aliases => :multiple
-  has_many_identities :identities, :multiple_associations, :collection_class => FogMultipleAssociationsCollection
+  has_many_identities :identities, :multiple_associations, :association_class => FogMultipleAssociationsCollection
 
   def service
     Service.new
@@ -304,9 +304,9 @@ describe "Fog::Attributes" do
   end
 
   describe ".has_many" do
-    it "should return an instance of array" do
+    it "should return an instance of Fog::Association" do
       model.many_objects = [FogMultipleAssociationsModel.new(:id => "456")]
-      assert_instance_of Array, model.many_objects
+      assert_instance_of Fog::Association, model.many_objects
     end
 
     it "should create an instance_variable to save the associated objects" do
@@ -315,7 +315,7 @@ describe "Fog::Attributes" do
 
     it "should create a getter to save all associated models" do
       model.merge_attributes(:many_objects => [FogMultipleAssociationsModel.new(:id => "456")])
-      assert_instance_of Array, model.many_objects
+      assert_instance_of Fog::Association, model.many_objects
       assert_equal model.many_objects.size, 1
       assert_instance_of FogMultipleAssociationsModel, model.many_objects.first
       assert_equal model.many_objects.first.attributes, :id => "456"
@@ -335,9 +335,9 @@ describe "Fog::Attributes" do
   end
 
   describe ".has_many_identities" do
-    it "should return an instance of array" do
+    it "should return an instance of Fog::Association" do
       model.many_identities = ["456"]
-      assert_instance_of Array, model.many_identities
+      assert_instance_of Fog::Association, model.many_identities
     end
 
     it "should create an instance_variable to save the associations identities" do
@@ -346,7 +346,7 @@ describe "Fog::Attributes" do
 
     it "should create a getter to load all association models" do
       model.merge_attributes(:many_identities => ["456"])
-      assert_instance_of Array, model.many_identities
+      assert_instance_of Fog::Association, model.many_identities
       assert_equal model.many_identities.size, 1
       assert_instance_of FogMultipleAssociationsModel, model.many_identities.first
       assert_equal model.many_identities.first.attributes, :id => "456"
