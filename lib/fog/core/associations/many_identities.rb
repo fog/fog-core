@@ -20,9 +20,10 @@ module Fog
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}
             return [] if associations[:#{name}].nil?
-            Array(associations[:#{name}]).map do |association|
+            data = Array(associations[:#{name}]).map do |association|
               service.send(self.class.associations[:#{name}]).get(association)
             end
+            #{association_class}.new(data)
           end
         EOS
       end

@@ -16,7 +16,8 @@ module Fog
       def create_getter
         model.class_eval <<-EOS, __FILE__, __LINE__
           def #{name}
-            Array(associations[:#{name}])
+            data = associations[:#{name}]
+            #{association_class}.new(data)
           end
         EOS
       end

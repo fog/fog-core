@@ -4,7 +4,7 @@ module Fog
     #
     # This class has the shared behavior between all association models.
     class Default
-      attr_reader :model, :name, :aliases, :as
+      attr_reader :model, :name, :aliases, :as, :association_class
 
       def initialize(model, name, collection_name, options)
         @model = model
@@ -12,6 +12,7 @@ module Fog
         model.associations[name] = collection_name
         @aliases = options.fetch(:aliases, [])
         @as = options.fetch(:as, name)
+        @association_class = options.fetch(:association_class, Fog::Association)
         create_setter
         create_getter
         create_aliases

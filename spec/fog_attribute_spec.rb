@@ -1,6 +1,40 @@
 require "spec_helper"
 require "xmlrpc/datetime"
 
+class Service
+  def single_associations
+    FogSingleAssociationCollection.new
+  end
+
+  def multiple_associations
+    FogMultipleAssociationsCollection.new
+  end
+end
+
+class FogSingleAssociationModel < Fog::Model
+  identity  :id
+  attribute :name,  :type => :string
+end
+
+class FogMultipleAssociationsModel < Fog::Model
+  identity  :id
+  attribute :name,  :type => :string
+end
+
+class FogSingleAssociationCollection
+  def get(id)
+    FogSingleAssociationModel.new(:id => id)
+  end
+end
+
+class FogMultipleAssociationsCollection < Fog::Association
+  model FogMultipleAssociationsModel
+
+  def get(id)
+    FogMultipleAssociationsModel.new(:id => id)
+  end
+end
+
 class FogAttributeTestModel < Fog::Model
   identity  :id
   attribute :key, :aliases => "keys", :squash => "id"
@@ -17,48 +51,17 @@ class FogAttributeTestModel < Fog::Model
 
   has_one :one_object, :single_associations, :aliases => :single
   has_many :many_objects, :multiple_associations
+  has_many :objects, :multiple_associations, :association_class => FogMultipleAssociationsCollection
   has_one_identity :one_identity, :single_associations, :as => :Crazyname
   has_many_identities :many_identities, :multiple_associations, :aliases => :multiple
+  has_many_identities :identities, :multiple_associations, :association_class => FogMultipleAssociationsCollection
 
   def service
     Service.new
   end
 end
 
-class Service
-  def single_associations
-    FogSingleAssociationCollection.new
-  end
-
-  def multiple_associations
-    FogMultipleAssociationsCollection.new
-  end
-end
-
-class FogSingleAssociationCollection
-  def get(id)
-    FogSingleAssociationModel.new(:id => id)
-  end
-end
-
-class FogMultipleAssociationsCollection
-  def get(id)
-    FogMultipleAssociationsModel.new(:id => id)
-  end
-end
-
-class FogSingleAssociationModel < Fog::Model
-  identity  :id
-  attribute :name,  :type => :string
-end
-
-class FogMultipleAssociationsModel < Fog::Model
-  identity  :id
-  attribute :name,  :type => :string
-end
-
 describe "Fog::Attributes" do
-
   let(:model) { FogAttributeTestModel.new }
 
   it "should not create alias for nil" do
@@ -301,13 +304,18 @@ describe "Fog::Attributes" do
   end
 
   describe ".has_many" do
+    it "should return an instance of Fog::Association" do
+      model.many_objects = [FogMultipleAssociationsModel.new(:id => "456")]
+      assert_instance_of Fog::Association, model.many_objects
+    end
+
     it "should create an instance_variable to save the associated objects" do
       assert_equal model.many_objects, []
     end
 
     it "should create a getter to save all associated models" do
       model.merge_attributes(:many_objects => [FogMultipleAssociationsModel.new(:id => "456")])
-      assert_instance_of Array, model.many_objects
+      assert_instance_of Fog::Association, model.many_objects
       assert_equal model.many_objects.size, 1
       assert_instance_of FogMultipleAssociationsModel, model.many_objects.first
       assert_equal model.many_objects.first.attributes, :id => "456"
@@ -317,16 +325,28 @@ describe "Fog::Attributes" do
       model.many_objects = [FogMultipleAssociationsModel.new(:id => "456")]
       assert_equal model.many_objects.first.attributes, :id => "456"
     end
+
+    describe "with a custom collection class" do
+      it "should return an instance of that collection class" do
+        model.objects = [FogMultipleAssociationsModel.new(:id => "456")]
+        assert_instance_of FogMultipleAssociationsCollection, model.objects
+      end
+    end
   end
 
   describe ".has_many_identities" do
+    it "should return an instance of Fog::Association" do
+      model.many_identities = ["456"]
+      assert_instance_of Fog::Association, model.many_identities
+    end
+
     it "should create an instance_variable to save the associations identities" do
       assert_equal model.many_identities, []
     end
 
     it "should create a getter to load all association models" do
       model.merge_attributes(:many_identities => ["456"])
-      assert_instance_of Array, model.many_identities
+      assert_instance_of Fog::Association, model.many_identities
       assert_equal model.many_identities.size, 1
       assert_instance_of FogMultipleAssociationsModel, model.many_identities.first
       assert_equal model.many_identities.first.attributes, :id => "456"
@@ -347,6 +367,13 @@ describe "Fog::Attributes" do
     it "should create an alias to multiple" do
       model.merge_attributes(:multiple => ["456"])
       assert_equal model.many_identities.first.attributes, :id => "456"
+    end
+
+    describe "with a custom collection class" do
+      it "should return an instance of that collection class" do
+        model.identities = ["456"]
+        assert_instance_of FogMultipleAssociationsCollection, model.identities
+      end
     end
   end
 
@@ -396,7 +423,9 @@ describe "Fog::Attributes" do
         assert_equal model.all_associations, :one_object => nil,
                                              :many_objects => [],
                                              :Crazyname => nil,
-                                             :many_identities => []
+                                             :many_identities => [],
+                                             :objects => [],
+                                             :identities => []
       end
     end
 
@@ -409,7 +438,9 @@ describe "Fog::Attributes" do
         assert_equal model.all_associations,   :one_object => @one_object,
                                                :many_objects => @many_objects,
                                                :Crazyname => "XYZ",
-                                               :many_identities => %w(ABC)
+                                               :many_identities => %w(ABC),
+                                               :objects => [],
+                                               :identities => []
       end
     end
   end
@@ -437,6 +468,8 @@ describe "Fog::Attributes" do
                                                              :Badname => nil,
                                                              :one_object => @one_object,
                                                              :many_objects => @many_objects,
+                                                             :objects => [],
+                                                             :identities => [],
                                                              :Crazyname => "XYZ",
                                                              :many_identities => %w(ABC)
       end
@@ -464,6 +497,8 @@ describe "Fog::Attributes" do
                                                              :Badname => nil,
                                                              :one_object => @one_object,
                                                              :many_objects => @many_objects,
+                                                             :objects => [],
+                                                             :identities => [],
                                                              :Crazyname => "XYZ",
                                                              :many_identities => %w(ABC)
       end
