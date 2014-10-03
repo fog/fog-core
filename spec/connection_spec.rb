@@ -16,8 +16,18 @@ describe Fog::Core::Connection do
 
   it "writes the Fog::Core::VERSION to the User-Agent header" do
     connection = Fog::Core::Connection.new("http://example.com")
-    assert_equal "fog/#{Fog::Core::VERSION}",
+    assert_equal "fog-core/#{Fog::Core::VERSION}",
                  connection.instance_variable_get(:@excon).data[:headers]["User-Agent"]
+  end
+
+  describe "when Fog is installed" do
+    it "writes the Fog::VERSION to the User-Agent header" do
+      Fog::VERSION = 'Version'
+      connection = Fog::Core::Connection.new("http://example.com")
+      assert_equal "fog/Version fog-core/#{Fog::Core::VERSION}",
+                   connection.instance_variable_get(:@excon).data[:headers]["User-Agent"]
+      Fog.send(:remove_const, :VERSION)
+    end
   end
 
   it "doesn't error when persistence is enabled" do
