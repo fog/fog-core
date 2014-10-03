@@ -34,7 +34,9 @@ module Fog
 
         params[:debug_response] = true unless params.key?(:debug_response)
         params[:headers] ||= {}
-        params[:headers]["User-Agent"] ||= "fog/#{Fog::VERSION}"
+        user_agent = "fog-core/#{Fog::Core::VERSION}"
+        user_agent = "fog/#{Fog::VERSION} #{user_agent}" if defined?(Fog::VERSION)
+        params[:headers]["User-Agent"] ||= user_agent
         params.merge!(:persistent => params.fetch(:persistent, persistent))
         @excon = Excon.new(url, params)
       end

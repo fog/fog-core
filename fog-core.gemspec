@@ -5,7 +5,7 @@ require 'fog/core/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "fog-core"
-  spec.version       = Fog::VERSION
+  spec.version       = Fog::Core::VERSION
   spec.authors       = ["Evan Light", "Wesley Beary"]
   spec.email         = ["evan@tripledogdare.net", "geemus@gmail.com"]
   spec.summary       = %q{Shared classes and tests for fog providers and services.}
