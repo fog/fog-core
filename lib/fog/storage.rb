@@ -41,11 +41,12 @@ module Fog
     end
 
     def self.get_body_size(body)
-      if body.respond_to?(:force_encoding)
-        body = body.dup
+      if body.respond_to?(:encoding)
+        original_encoding = body.encoding
         body.force_encoding('BINARY')
       end
-      if body.respond_to?(:bytesize)
+
+      size = if body.respond_to?(:bytesize)
         body.bytesize
       elsif body.respond_to?(:size)
         body.size
@@ -54,6 +55,12 @@ module Fog
       else
         0
       end
+
+      if body.respond_to?(:encoding)
+        body.force_encoding(original_encoding)
+      end
+
+      size
     end
 
     def self.get_content_type(data)
