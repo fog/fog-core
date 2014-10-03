@@ -92,4 +92,18 @@ describe "Fog::Storage" do
       end
     end
   end
+
+  describe ".get_body_size" do
+    current_version = Gem::Version.new(RUBY_VERSION)
+
+    # Ruby 1.8 doesn't support string encodings, so we can't test that
+    if current_version >= Gem::Version.new("1.9.0")
+      it "doesn't alter the encoding of the string passed to it" do
+        body = "foo".encode("UTF-8")
+        Fog::Storage.get_body_size(body)
+
+        assert_equal("UTF-8", body.encoding.to_s)
+      end
+    end
+  end
 end
