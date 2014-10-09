@@ -14,10 +14,10 @@ module Fog
 
       require "fog/#{provider}/identity"
       begin
-        Fog::Identity.const_get(Fog.providers[provider]).new(attributes)
+        Fog::Identity.const_get(Fog.providers[provider])
       rescue
-        Fog.const_get(Fog.providers[provider])::Identity.new(attributes)
-      end
+        Fog.const_get(Fog.providers[provider])::Identity
+      end.new(attributes)
     end
 
     def self.providers
