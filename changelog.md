@@ -1,3 +1,20 @@
+1.25.0 11/18/2014
+==========================================================
+
+add alias options for associations
+improve spec message
+add feature to overwrite keys on hash of attributes generation
+remove method_missing from model
+add rubocop
+fix rubocop warnings
+return collections on association getters
+fix require bug in service
+put fog and fog-core versions in user agent
+don't mutate/destroy encoding in get_body_size
+fix error output in from const_get usage
+separate to have distinct version from fog
+
+
 1.24.0 08/26/2014
 ==========================================================
 
