@@ -13,6 +13,8 @@ rvm:
   - jruby-19mode
   - jruby-head
 
+sudo: false
+
 script: bundle exec rake travis
 
 matrix:
