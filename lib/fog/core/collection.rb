@@ -141,7 +141,7 @@ module Fog
   # Base class for collection classes whose 'all' method returns only a single page of results and passes the
   # 'Marker' option along as self.filters[:marker]
   class PagedCollection < Collection
-    def each(filters = filters)
+    def each(filters = filters())
       if block_given?
         begin
           page = all(filters)
