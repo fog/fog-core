@@ -1,3 +1,13 @@
+1.26.0 12/02/2014
+==========================================================
+
+remove rackspace logic
+use new travis builds
+fix error handling around credential fetch
+move fog/bin stuff to fog-core
+fix circular reference in collection.rb
+
+
 1.25.0 11/18/2014
 ==========================================================
 
