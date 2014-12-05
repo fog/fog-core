@@ -1,29 +1,33 @@
-class DNSimple < Fog::Bin
-  class << self
-    def class_for(key)
-      case key
-      when :dns
-        Fog::DNS::DNSimple
-      else
-        raise ArgumentError, "Unrecognized service: #{key}"
-      end
-    end
-
-    def [](service)
-      @@connections ||= Hash.new do |hash, key|
-        hash[key] = case key
+begin
+  require "fog/dnsimple"
+  class DNSimple < Fog::Bin
+    class << self
+      def class_for(key)
+        case key
         when :dns
-          Fog::Logger.warning("DNSimple[:dns] is not recommended, use DNS[:dnsimple] for portability")
-          Fog::DNS.new(:provider => 'DNSimple')
+          Fog::DNS::DNSimple
         else
-          raise ArgumentError, "Unrecognized service: #{key.inspect}"
+          raise ArgumentError, "Unrecognized service: #{key}"
         end
       end
-      @@connections[service]
-    end
 
-    def services
-      Fog::DNSimple.services
+      def [](service)
+        @@connections ||= Hash.new do |hash, key|
+          hash[key] = case key
+          when :dns
+            Fog::Logger.warning("DNSimple[:dns] is not recommended, use DNS[:dnsimple] for portability")
+            Fog::DNS.new(:provider => 'DNSimple')
+          else
+            raise ArgumentError, "Unrecognized service: #{key.inspect}"
+          end
+        end
+        @@connections[service]
+      end
+
+      def services
+        Fog::DNSimple.services
+      end
     end
   end
+rescue LoadError
 end

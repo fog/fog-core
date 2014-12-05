@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'fog'))
+require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'fog', 'core'))
 require 'optparse'
 require 'irb'
 require 'yaml'
@@ -34,7 +34,7 @@ if Fog.credentials.empty?
   end
 end
 
-require 'fog/bin'
+require 'fog/core/bin'
 
 providers = Fog.available_providers
 providers = if providers.length > 1
