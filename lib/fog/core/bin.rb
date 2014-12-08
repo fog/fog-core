@@ -54,7 +54,6 @@ module Fog
   end
 end
 
-require 'fog/core/bin/atmos'
 require 'fog/core/bin/aws'
 require 'fog/core/bin/bare_metal_cloud'
 require 'fog/core/bin/bluebox'
