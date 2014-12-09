@@ -138,17 +138,20 @@ module Fog
     end
   end
 
-  # Base class for collection classes whose 'all' method returns only a single page of results and passes the
-  # 'Marker' option along as self.filters[:marker]
+  # Base class for collection classes whose 'all' method returns only a single
+  # page of results and passes the 'Marker' option along as
+  # self.filters[:marker]
   class PagedCollection < Collection
     def each(collection_filters = filters)
       if block_given?
-        begin
+        Kernel.loop do
+          break unless filters[:marker]
           page = all(collection_filters)
-          # We need to explicitly use the base 'each' method here on the page, otherwise we get infinite recursion
+          # We need to explicitly use the base 'each' method here on the page,
+          #  otherwise we get infinite recursion
           base_each = Fog::Collection.instance_method(:each)
           base_each.bind(page).call { |item| yield item }
-        end while self.filters[:marker]
+        end
       end
       self
     end
