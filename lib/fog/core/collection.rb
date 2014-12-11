@@ -1,12 +1,11 @@
 require "fog/core/deprecated_connection_accessors"
 
 module Fog
-  # Fog::Collection - FILL ME IN
+  # Fog::Collection
   class Collection < Array
     extend Fog::Attributes::ClassMethods
     include Fog::Attributes::InstanceMethods
     include Fog::Core::DeprecatedConnectionAccessors
-    extend Fog::Collection::Data
 
     attr_reader :service
 
@@ -47,9 +46,9 @@ module Fog
     end
 
     def create(attributes = {})
-      obj = new(attributes)
-      obj.save
-      obj
+      object = new(attributes)
+      object.save
+      object
     end
 
     def destroy(identity)
@@ -71,7 +70,7 @@ module Fog
 
     def inspect
       Thread.current[:formatador] ||= Formatador.new
-      Fog::Collection::Data.make_data(Thread.current)
+      Fog::Collection::Data.new(self, Thread.current).make
     end
 
     def load(objects)
@@ -133,44 +132,49 @@ module Fog
     end
   end
 
-  # Fog::Collection::Data module
-  module Data
-    def make_data(thread)
-      data = "#{thread[:formatador].indentation}<#{self.class.name}\n"
-      thread[:formatador].indent do
-        append_data(thread, ->(val) { data << val })
-      end
-      data << "#{thread[:formatador].indentation}>"
-      data
+  # Data class for fog Collection
+  class Data
+    attr_accessor :collection, :thread, :data
+
+    def initialize(obj, t)
+      @collection, @thread = obj, t
+      @data = "#{@thread[:formatador].indentation}<#{collection.class.name}\n"
     end
 
-    def append_data(thread, &data)
-      add_attributes(thread, data) unless self.class.attributes.empty?
-      data.call("#{thread[:formatador].indentation}[")
-      add_stuff(thread, data) unless self.empty?
-      data.call("]\n")
+    def make
+      @thread[:formatador].indent { append_data }
+      @data << "#{thread[:formatador].indentation}>"
+      @data.dup
     end
 
-    def add_params(thread, &data)
-      data.call("#{thread[:formatador].indentation}")
-      add_attributes(thread, data)
-      data.call("\n")
+    def append_data
+      add_attributes unless collection.class.attributes.empty?
+      @data << ("#{thread[:formatador].indentation}[")
+      add_stuff unless self.empty?
+      @data << "]\n"
     end
 
-    def add_attributes(thread, &data)
-      attrs = self.class.attributes.map do |attr|
+    def add_params
+      @data << "#{thread[:formatador].indentation}"
+      add_attributes
+      @data << "\n"
+    end
+
+    def add_attributes
+      attrs = collection.class.attributes.map do |attr|
         str = "#{attr}=#{send(attr).inspect}"
         str.join(",\n#{thread[:formatador].indentation}")
       end
-      data.call(attrs)
+      @data << attrs
     end
 
-    def add_stuff(thread, &data)
-      data.call("\n")
-      thread[:formatador].indent do
-        data.call map(&:inspect).join(", \n") << "\n"
+    def add_stuff
+      @data << "\n"
+      @thread[:formatador].indent do
+        @data << map(&:inspect).join(", \n")
+        @data << "\n"
       end
-      data.call(thread[:formatador].indentation)
+      @data << @thread[:formatador].indentation
     end
   end
 end
