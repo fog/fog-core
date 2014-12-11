@@ -145,8 +145,8 @@ module Fog
         @model_path = new_path
       end
 
-      def collection(new_collection)
-        collections << new_collection
+      def collection(new_collection, path = nil)
+        collections << [path, new_collection]
       end
 
       def collections
@@ -177,8 +177,8 @@ module Fog
         @mocked_requests ||= []
       end
 
-      def model(new_model)
-        models << new_model
+      def model(new_model, path = nil)
+        models << [path, new_model]
       end
 
       def models
@@ -189,8 +189,8 @@ module Fog
         @request_path = new_path
       end
 
-      def request(new_request)
-        requests << new_request
+      def request(new_request, path = nil)
+        requests << [path, new_request]
       end
 
       def requests
@@ -261,17 +261,15 @@ module Fog
 
       # This will attempt to require all model files declared by the service using fog"s DSL
       def require_models
-        models.each do |model|
-          require File.join(@model_path, model.to_s)
-        end
+        models.each { |model| require_item(model, @model_path) }
       end
 
       def require_collections_and_define
         collections.each do |collection|
-          require File.join(@model_path, collection.to_s)
-          constant = camel_case_collection_name(collection)
+          require_item(collection, @model_path)
+          constant = camel_case_collection_name(collection.last)
           service::Collections.module_eval <<-EOS, __FILE__, __LINE__
-            def #{collection}(attributes = {})
+            def #{collection.last}(attributes = {})
               #{service}::#{constant}.new({ :service => self }.merge(attributes))
             end
           EOS
@@ -290,17 +288,30 @@ module Fog
       # This will attempt to require all request files declared in the service using fog"s DSL
       def require_requests_and_mock
         requests.each do |request|
-          require File.join(@request_path, request.to_s)
-          if service::Mock.method_defined?(request)
-            mocked_requests << request
+          require_item(request, @request_path)
+          if service::Mock.method_defined?(request.last)
+            mocked_requests << request.last
           else
             service::Mock.module_eval <<-EOS, __FILE__, __LINE__
-              def #{request}(*args)
+              def #{request.last}(*args)
                 Fog::Mock.not_implemented
               end
             EOS
           end
         end
+      end
+
+      # Requires the correct file for an item (collection, model, or request).
+      #
+      # @param [Array] item
+      #   An item to require. Should be an array in the form of [path, file].
+      # @param [String] fallback_dir
+      #   The directory to look for the file in if the first element of `item`
+      #   is nil.
+      # @return [Boolean] Returns the same as `Kernel#require`.
+      def require_item(item, fallback_dir)
+        path, file = item
+        require File.join(path || fallback_dir, file.to_s)
       end
     end
   end
