@@ -3,9 +3,11 @@ require "fog/core/deprecated_connection_accessors"
 module Fog
   # Fog::Collection
   class Collection < Array
+    require 'fog/formatador'
     extend Fog::Attributes::ClassMethods
     include Fog::Attributes::InstanceMethods
     include Fog::Core::DeprecatedConnectionAccessors
+    
 
     attr_reader :service
 
@@ -70,7 +72,7 @@ module Fog
 
     def inspect
       Thread.current[:formatador] ||= Formatador.new
-      Fog::CollectionString.new(self, Thread.current).make
+      Fog::Formatador.new(self, Thread.current)
     end
 
     def load(objects)
@@ -129,54 +131,6 @@ module Fog
         end
       end
       self
-    end
-  end
-
-  # Data class for fog Collection
-  class CollectionString
-    attr_accessor :collection, :thread, :data
-
-    def initialize(obj, t)
-      @collection, @thread = obj, t
-      @data = "#{@thread[:formatador].indentation}<#{collection.class.name}\n"
-    end
-
-    def make
-      @thread[:formatador].indent { append_data }
-      @data << "#{thread[:formatador].indentation}>"
-      @data.dup
-    end
-
-    private
-
-    def append_data
-      add_attributes unless collection.class.attributes.empty?
-      @data << ("#{thread[:formatador].indentation}[")
-      add_stuff unless @collection.empty?
-      @data << "]\n"
-    end
-
-    def add_params
-      @data << "#{thread[:formatador].indentation}"
-      add_attributes
-      @data << "\n"
-    end
-
-    def add_attributes
-      attrs = collection.class.attributes.map do |attr|
-        str = "#{attr}=#{send(attr).inspect}"
-        str.join(",\n#{thread[:formatador].indentation}")
-      end
-      @data << attrs
-    end
-
-    def add_stuff
-      @data << "\n"
-      @thread[:formatador].indent do
-        @data << map(&:inspect).join(", \n")
-        @data << "\n"
-      end
-      @data << @thread[:formatador].indentation
     end
   end
 end
