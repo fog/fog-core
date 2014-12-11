@@ -70,7 +70,7 @@ module Fog
 
     def inspect
       Thread.current[:formatador] ||= Formatador.new
-      Fog::Collection::Data.new(self, Thread.current).make
+      Fog::CollectionString.new(self, Thread.current).make
     end
 
     def load(objects)
@@ -133,7 +133,7 @@ module Fog
   end
 
   # Data class for fog Collection
-  class Data
+  class CollectionString
     attr_accessor :collection, :thread, :data
 
     def initialize(obj, t)
