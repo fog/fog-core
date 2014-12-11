@@ -147,6 +147,8 @@ module Fog
       @data.dup
     end
 
+    private
+
     def append_data
       add_attributes unless collection.class.attributes.empty?
       @data << ("#{thread[:formatador].indentation}[")
