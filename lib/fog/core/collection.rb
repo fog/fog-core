@@ -150,7 +150,7 @@ module Fog
     def append_data
       add_attributes unless collection.class.attributes.empty?
       @data << ("#{thread[:formatador].indentation}[")
-      add_stuff unless self.empty?
+      add_stuff unless @collection.empty?
       @data << "]\n"
     end
 
