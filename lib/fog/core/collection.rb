@@ -1,10 +1,12 @@
 require "fog/core/deprecated_connection_accessors"
 
 module Fog
+  # Fog::Collection - FILL ME IN
   class Collection < Array
     extend Fog::Attributes::ClassMethods
     include Fog::Attributes::InstanceMethods
     include Fog::Core::DeprecatedConnectionAccessors
+    extend Fog::Collection::Data
 
     attr_reader :service
 
@@ -41,19 +43,15 @@ module Fog
     end
 
     def clear
-      @loaded = true
-      super
+      @loaded = true && super
     end
 
     def create(attributes = {})
-      object = new(attributes)
-      object.save
-      object
+      new(attributes).save
     end
 
     def destroy(identity)
-      object = new(:identity => identity)
-      object.destroy
+      new(:identity => identity).destroy
     end
 
     # Creates a new Fog::Collection based around the passed service
@@ -71,33 +69,11 @@ module Fog
 
     def inspect
       Thread.current[:formatador] ||= Formatador.new
-      data = "#{Thread.current[:formatador].indentation}<#{self.class.name}\n"
-      Thread.current[:formatador].indent do
-        unless self.class.attributes.empty?
-          data << "#{Thread.current[:formatador].indentation}"
-          data << self.class.attributes.map { |attribute| "#{attribute}=#{send(attribute).inspect}" }.join(",\n#{Thread.current[:formatador].indentation}")
-          data << "\n"
-        end
-        data << "#{Thread.current[:formatador].indentation}["
-        unless self.empty?
-          data << "\n"
-          Thread.current[:formatador].indent do
-            data << map(&:inspect).join(", \n")
-            data << "\n"
-          end
-          data << Thread.current[:formatador].indentation
-        end
-        data << "]\n"
-      end
-      data << "#{Thread.current[:formatador].indentation}>"
-      data
+      Fog::Collection::Data.make_data(Thread.current)
     end
 
     def load(objects)
-      clear
-      objects.each do |object|
-        self << new(object)
-      end
+      clear && objects.each { |object| self << new(object) }
       self
     end
 
@@ -118,8 +94,7 @@ module Fog
     end
 
     def reload
-      clear
-      lazy_load
+      clear && lazy_load
       self
     end
 
@@ -137,7 +112,6 @@ module Fog
       all
     end
   end
-
   # Base class for collection classes whose 'all' method returns only a single
   # page of results and passes the 'Marker' option along as
   # self.filters[:marker]
@@ -154,6 +128,47 @@ module Fog
         end
       end
       self
+    end
+  end
+
+  # Fog::Collection::Data module
+  module Data
+    def make_data(thread)
+      data = "#{thread[:formatador].indentation}<#{self.class.name}\n"
+      thread[:formatador].indent do
+        append_data(thread, ->(val) { data << val })
+      end
+      data << "#{thread[:formatador].indentation}>"
+      data
+    end
+
+    def append_data(thread, &data)
+      add_attributes(thread, data) unless self.class.attributes.empty?
+      data.call("#{thread[:formatador].indentation}[")
+      add_stuff(thread, data) unless self.empty?
+      data.call("]\n")
+    end
+
+    def add_params(thread, &data)
+      data.call("#{thread[:formatador].indentation}")
+      add_attributes(thread, data)
+      data.call("\n")
+    end
+
+    def add_attributes(thread, &data)
+      attrs = self.class.attributes.map do |attr|
+        str = "#{attr}=#{send(attr).inspect}"
+        str.join(",\n#{thread[:formatador].indentation}")
+      end
+      data.call(attrs)
+    end
+
+    def add_stuff(thread, &data)
+      data.call("\n")
+      thread[:formatador].indent do
+        data.call map(&:inspect).join(", \n") << "\n"
+      end
+      data.call(thread[:formatador].indentation)
     end
   end
 end
