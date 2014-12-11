@@ -47,7 +47,9 @@ module Fog
     end
 
     def create(attributes = {})
-      new(attributes).save
+      obj = new(attributes)
+      obj.save
+      obj
     end
 
     def destroy(identity)
