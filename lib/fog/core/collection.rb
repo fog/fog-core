@@ -3,7 +3,7 @@ require "fog/core/deprecated_connection_accessors"
 module Fog
   # Fog::Collection
   class Collection < Array
-    require 'fog/formatador'
+    require 'fog/inspector'
     extend Fog::Attributes::ClassMethods
     include Fog::Attributes::InstanceMethods
     include Fog::Core::DeprecatedConnectionAccessors
@@ -72,7 +72,7 @@ module Fog
 
     def inspect
       Thread.current[:formatador] ||= Formatador.new
-      Fog::Formatador.new(self, Thread.current)
+      Fog::Inspector.new(self, Thread.current)
     end
 
     def load(objects)
