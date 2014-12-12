@@ -8,19 +8,21 @@ module Fog
       thread[:formatador] ||= ::Formatador.new
     end
 
+    def to_s
+      return string unless string.nil?
+      init_string
+      thread[:formatador].indent { string << object_string }
+      (string << "#{indentation}>").dup
+    end
+
+    private 
+
     def indentation
       "#{@thread[:formatador].indentation}"
     end
 
     def init_string
       @string = "#{indentation}<#{object.class.name}\n"
-    end
-
-    def to_s
-      return string unless string.nil?
-      init_string
-      thread[:formatador].indent { string << object_string }
-      (string << "#{indentation}>").dup
     end
 
     def object_string
