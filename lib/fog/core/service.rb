@@ -183,7 +183,7 @@ module Fog
       end
 
       def model(new_model, path = nil)
-        models_files << [path, new_model]
+        model_files << [path, new_model]
         models << [new_model]
       end
 
