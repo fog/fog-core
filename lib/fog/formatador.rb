@@ -1,25 +1,25 @@
 module Fog
   # Fog::Formatador
   class Formatador
-    attr_accessor :object, :thread, :string
+    extend Forwardable
 
+    attr_accessor :object, :thread, :string, :formatador
+    def_delegator :formatador, :indent, :indentation
+ 
     def initialize(obj, t)
       @object, @thread = obj, t
       thread[:formatador] ||= ::Formatador.new
+      @formatador = thread[:formatador]
     end
 
     def to_s
       return string unless string.nil?
       init_string
-      thread[:formatador].indent { string << object_string }
+      indent { string << object_string }
       (string << "#{indentation}>").dup
     end
 
     private 
-
-    def indentation
-      "#{@thread[:formatador].indentation}"
-    end
 
     def init_string
       @string = "#{indentation}<#{object.class.name}\n"
@@ -53,7 +53,7 @@ module Fog
 
     def inspect_nested
       nested = ""
-      thread[:formatador].indent do
+      indent do
         nested << map(&:inspect).join(", \n")
         nested << "\n"
       end
