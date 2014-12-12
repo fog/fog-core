@@ -1,10 +1,11 @@
 module Fog
-  # Fog::Inspector
-  class Inspector
+  # Fog::Formatador
+  class Formatador
     attr_accessor :object, :thread, :string
 
     def initialize(obj, t)
       @object, @thread = obj, t
+      thread[:formatador] ||= ::Formatador.new
     end
 
     def indentation
