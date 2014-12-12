@@ -146,7 +146,12 @@ module Fog
       end
 
       def collection(new_collection, path = nil)
-        collections << [path, new_collection]
+        collection_files << [path, new_collection]
+        collections << new_collection
+      end
+
+      def collection_files
+        @collection_files ||= []
       end
 
       def collections
@@ -265,7 +270,7 @@ module Fog
       end
 
       def require_collections_and_define
-        collections.each do |collection|
+        collection_files.each do |collection|
           require_item(collection, @model_path)
           constant = camel_case_collection_name(collection.last)
           service::Collections.module_eval <<-EOS, __FILE__, __LINE__
