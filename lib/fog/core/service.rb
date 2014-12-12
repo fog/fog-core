@@ -183,7 +183,12 @@ module Fog
       end
 
       def model(new_model, path = nil)
-        models << [path, new_model]
+        models_files << [path, new_model]
+        models << [new_model]
+      end
+
+      def model_files
+        @model_files ||= []
       end
 
       def models
@@ -266,7 +271,7 @@ module Fog
 
       # This will attempt to require all model files declared by the service using fog"s DSL
       def require_models
-        models.each { |model| require_item(model, @model_path) }
+        model_files.each { |model| require_item(model, @model_path) }
       end
 
       def require_collections_and_define
