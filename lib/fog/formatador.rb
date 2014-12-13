@@ -52,9 +52,10 @@ module Fog
     end
 
     def object_attributes
-      object.class.attributes.map do |attr|
-        "#{attr}=#{send(attr).inspect}".join(",\n#{indentation}")
+      attrs = object.class.attributes.map do |attr|
+        "#{attr}=#{object.send(attr).inspect}"
       end
+      attrs.join(",\n#{indentation}")
     end
 
     def inspect_nested
