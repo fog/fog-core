@@ -51,7 +51,7 @@ describe Fog::Formatador do
     @formatador.must_respond_to :to_s
   end
 
-  it "should equal something" do
+  it "should give a string representation of object with proper indentation" do
     "#{@formatador}".must_equal test_case_str
   end
 end
