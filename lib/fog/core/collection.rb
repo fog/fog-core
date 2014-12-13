@@ -70,7 +70,7 @@ module Fog
     end
 
     def inspect
-      Fog::Formatador.new(self, Thread.current)
+      Fog::Formatador.new(self)
     end
 
     def load(objects)

@@ -1,12 +1,11 @@
 module Fog
   # Fog::Formatador
   class Formatador
-    attr_accessor :object, :thread, :string
+    attr_accessor :object, :string, :formatador
 
-    def initialize(obj, t)
-      raise ArgumentError, "#{t} is not a Thread" unless t.is_a? Thread
-      @object, @thread = obj, t
-      thread[:formatador] ||= ::Formatador.new
+    def initialize(obj)
+      @object = obj
+      @formatador ||= ::Formatador.new
     end
 
     def to_s
@@ -19,11 +18,11 @@ module Fog
     private
 
     def indent(&block)
-      thread[:formatador].indent(&block)
+      formatador.indent(&block)
     end
 
     def indentation
-      thread[:formatador].indentation
+      formatador.indentation
     end
 
     def init_string
