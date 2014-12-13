@@ -47,7 +47,7 @@ module Fog
         nested = "#{indentation}[\n"
         indent { nested << indentation + inspect_object }
         nested << "#{indentation}\n#{indentation}]\n"
-        nested 
+        nested
       else
         ""
       end
