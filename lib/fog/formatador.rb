@@ -1,7 +1,6 @@
 module Fog
   # Fog::Formatador
   class Formatador
-
     attr_accessor :object, :thread, :string
 
     def initialize(obj, t)
@@ -17,10 +16,10 @@ module Fog
       (string << "#{indentation}>").dup
     end
 
-    private 
+    private
 
     def indent(&block)
-      thread[:formatador].indent &block
+      thread[:formatador].indent(&block)
     end
 
     def indentation
@@ -42,8 +41,8 @@ module Fog
         ""
       end
     end
- 
-   def nested_objects_string
+
+    def nested_objects_string
       if object.empty?
         "\n#{inspect_nested}\n"
       else
