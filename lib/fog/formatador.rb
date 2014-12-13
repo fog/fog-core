@@ -1,25 +1,33 @@
 module Fog
   # Fog::Formatador
   class Formatador
-    extend Forwardable
 
-    attr_accessor :object, :thread, :string, :formatador
-    def_delegator :formatador, :indent, :indentation
- 
+    attr_accessor :object, :thread, :string
+
     def initialize(obj, t)
+      raise ArgumentError, "#{t} is not a Thread" unless t.is_a? Thread
       @object, @thread = obj, t
       thread[:formatador] ||= ::Formatador.new
-      @formatador = thread[:formatador]
     end
 
     def to_s
       return string unless string.nil?
       init_string
-      indent { string << object_string }
+      indent do 
+        string << object_string 
+      end
       (string << "#{indentation}>").dup
     end
 
     private 
+
+    def indent
+      thread[:formatador].indent yield
+    end
+
+    def indentation
+      @thread[:formatador].indentation
+    end
 
     def init_string
       @string = "#{indentation}<#{object.class.name}\n"
