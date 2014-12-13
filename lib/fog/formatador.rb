@@ -31,7 +31,7 @@ module Fog
     end
 
     def object_string
-      "#{attribute_string}#{indentation}[#{nested_objects_string}"
+      "#{attribute_string}#{nested_objects_string}"
     end
 
     def attribute_string
@@ -44,7 +44,10 @@ module Fog
 
     def nested_objects_string
       if object.empty?
-        "\n#{inspect_nested}\n"
+        nested = "#{indentation}[\n"
+        indent { nested << indentation + inspect_object }
+        nested << "#{indentation}\n#{indentation}]\n"
+        nested 
       else
         ""
       end
@@ -57,11 +60,8 @@ module Fog
       attrs.join(",\n#{indentation}")
     end
 
-    def inspect_nested
-      nested = ""
-      indent { nested << object.map(&:inspect).join(", \n") && nested << "\n" }
-      nested << indentation
-      nested
+    def inspect_object
+      object.map { |o| indentation + o.inspect }.join(", \n#{indentation}")
     end
   end
 end
