@@ -13,20 +13,18 @@ module Fog
     def to_s
       return string unless string.nil?
       init_string
-      indent do 
-        string << object_string 
-      end
+      indent { string << object_string }
       (string << "#{indentation}>").dup
     end
 
     private 
 
-    def indent
-      thread[:formatador].indent yield
+    def indent(&block)
+      thread[:formatador].indent &block
     end
 
     def indentation
-      @thread[:formatador].indentation
+      thread[:formatador].indentation
     end
 
     def init_string
@@ -61,10 +59,7 @@ module Fog
 
     def inspect_nested
       nested = ""
-      indent do
-        nested << map(&:inspect).join(", \n")
-        nested << "\n"
-      end
+      indent { nested << object.map(&:inspect).join(", \n") && nested << "\n" }
       nested << indentation
       nested
     end
