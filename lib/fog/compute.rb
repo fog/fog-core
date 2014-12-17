@@ -52,7 +52,11 @@ module Fog
         Fog::Compute::VcloudDirector.new(attributes)
       else
         if providers.include?(provider)
-          require "fog/#{provider}/compute"
+          begin
+            require "fog/#{provider}/compute"
+          rescue LoadError
+            require "fog/compute/#{provider}"
+          end
           begin
             Fog::Compute.const_get(Fog.providers[provider])
           rescue
