@@ -9,7 +9,7 @@ module Fog
       provider = attributes.delete(:provider).to_s.downcase.to_sym
 
       if providers.include?(provider)
-        require "fog/#{provider}/network"
+        require "fog/#{provider}/orchestration"
         return Fog::Orchestration.const_get(Fog.providers[provider]).new(attributes)
       end
 
