@@ -17,7 +17,7 @@ module Fog
     end
 
     def self.providers
-      Fog.services[:account]
+      Fog.services[:account] || []
     end
   end
 end
