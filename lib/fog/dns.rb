@@ -1,8 +1,6 @@
 module Fog
   module DNS
-    def self.[](provider)
-      new(:provider => provider)
-    end
+    extend Fog::Core::ServiceAbstraction
 
     def self.new(attributes)
       attributes = attributes.dup # prevent delete from having side effects
@@ -22,10 +20,6 @@ module Fog
           raise ArgumentError, "#{provider} is not a recognized dns provider"
         end
       end
-    end
-
-    def self.providers
-      Fog.services[:dns]
     end
 
     def self.zones

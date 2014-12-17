@@ -2,9 +2,7 @@ require "mime/types"
 
 module Fog
   module Storage
-    def self.[](provider)
-      new(:provider => provider)
-    end
+    extend Fog::Core::ServiceAbstraction
 
     def self.new(attributes)
       attributes = attributes.dup # prevent delete from having side effects
@@ -81,10 +79,6 @@ module Fog
           # "Content-MD5" => Base64.encode64(Digest::MD5.digest(metadata[:body])).strip
         }
       }
-    end
-
-    def self.providers
-      Fog.services[:storage]
     end
   end
 end

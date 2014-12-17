@@ -1,8 +1,6 @@
 module Fog
   module CDN
-    def self.[](provider)
-      new(:provider => provider)
-    end
+    extend Fog::Core::ServiceAbstraction
 
     def self.new(attributes)
       attributes = attributes.dup # prevent delete from having side effects
@@ -12,10 +10,6 @@ module Fog
         return Fog::CDN.const_get(Fog.providers[provider]).new(attributes)
       end
       raise ArgumentError, "#{provider} is not a recognized cdn provider"
-    end
-
-    def self.providers
-      Fog.services[:cdn]
     end
   end
 end

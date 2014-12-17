@@ -1,8 +1,6 @@
 module Fog
   module Network
-    def self.[](provider)
-      new(:provider => provider)
-    end
+    extend Fog::Core::ServiceAbstraction
 
     def self.new(attributes)
       attributes = attributes.dup # Prevent delete from having side effects
@@ -17,10 +15,6 @@ module Fog
       end
 
       raise ArgumentError, "#{provider} has no network service"
-    end
-
-    def self.providers
-      Fog.services[:network]
     end
   end
 end

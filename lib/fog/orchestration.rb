@@ -1,8 +1,6 @@
 module Fog
   module Orchestration
-    def self.[](provider)
-      new(:provider => provider)
-    end
+    extend Fog::Core::ServiceAbstraction
 
     def self.new(attributes)
       attributes = attributes.dup # Prevent delete from having side effects
@@ -14,10 +12,6 @@ module Fog
       end
 
       raise ArgumentError, "#{provider} has no orchestration service"
-    end
-
-    def self.providers
-      Fog.services[:orchestration]
     end
   end
 end

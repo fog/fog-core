@@ -1,8 +1,6 @@
 module Fog
   module Account
-    def self.[](provider)
-      new(:provider => provider)
-    end
+    extend Fog::Core::ServiceAbstraction
 
     def self.new(attributes)
       attributes = attributes.dup
@@ -14,10 +12,6 @@ module Fog
       else
         raise ArgumentError, "#{provider} has no account service"
       end
-    end
-
-    def self.providers
-      Fog.services[:account] || []
     end
   end
 end

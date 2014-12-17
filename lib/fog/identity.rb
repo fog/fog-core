@@ -1,8 +1,6 @@
 module Fog
   module Identity
-    def self.[](provider)
-      new(:provider => provider)
-    end
+    extend Fog::Core::ServiceAbstraction
 
     def self.new(attributes)
       attributes = attributes.dup # Prevent delete from having side effects
@@ -18,10 +16,6 @@ module Fog
       rescue
         Fog.const_get(Fog.providers[provider])::Identity
       end.new(attributes)
-    end
-
-    def self.providers
-      Fog.services[:identity]
     end
   end
 end

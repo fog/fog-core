@@ -1,8 +1,6 @@
 module Fog
   module Monitoring
-    def self.[](provider)
-      new(:provider => provider)
-    end
+    extend Fog::Core::ServiceAbstraction
 
     def self.new(attributes)
       attributes = attributes.dup
@@ -13,10 +11,6 @@ module Fog
       else
         raise ArgumentError, "#{provider} has no monitoring service"
       end
-    end
-
-    def self.providers
-      Fog.services[:monitoring]
     end
   end
 end
