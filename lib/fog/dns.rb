@@ -8,7 +8,7 @@ module Fog
       attributes = attributes.dup # prevent delete from having side effects
       case provider = attributes.delete(:provider).to_s.downcase.to_sym
       when :stormondemand
-        require "fog/storm_on_demand/dns"
+        require "fog/dns/storm_on_demand"
         Fog::DNS::StormOnDemand.new(attributes)
       else
         if providers.include?(provider)

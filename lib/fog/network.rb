@@ -9,7 +9,7 @@ module Fog
       provider = attributes.delete(:provider).to_s.downcase.to_sym
 
       if provider == :stormondemand
-        require "fog/storm_on_demand/network"
+        require "fog/network/storm_on_demand"
         return Fog::Network::StormOnDemand.new(attributes)
       elsif providers.include?(provider)
         require "fog/#{provider}/network"

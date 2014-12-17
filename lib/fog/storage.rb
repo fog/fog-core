@@ -13,7 +13,7 @@ module Fog
         require "fog/internet_archive/storage"
         Fog::Storage::InternetArchive.new(attributes)
       when :stormondemand
-        require "fog/storm_on_demand/storage"
+        require "fog/storage/storm_on_demand"
         Fog::Storage::StormOnDemand.new(attributes)
       else
         if providers.include?(provider)
