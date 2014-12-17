@@ -9,7 +9,7 @@ module Fog
       provider = attributes.delete(:provider).to_s.downcase.to_sym
 
       if provider == :stormondemand
-        require "fog/storm_on_demand/account"
+        require "fog/account/storm_on_demand"
         Fog::Account::StormOnDemand.new(attributes)
       else
         raise ArgumentError, "#{provider} has no account service"

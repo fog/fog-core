@@ -42,7 +42,7 @@ module Fog
           Fog::Compute::RackspaceV2.new(attributes)
         end
       when :stormondemand
-        require "fog/storm_on_demand/compute"
+        require "fog/compute/storm_on_demand"
         Fog::Compute::StormOnDemand.new(attributes)
       when :vcloud
         require "fog/vcloud/compute"
