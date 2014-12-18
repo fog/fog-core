@@ -2,26 +2,6 @@ module Fog
   module DNS
     extend Fog::Core::ServiceAbstraction
 
-    def self.new(attributes)
-      attributes = attributes.dup # prevent delete from having side effects
-      case provider = attributes.delete(:provider).to_s.downcase.to_sym
-      when :stormondemand
-        require "fog/dns/storm_on_demand"
-        Fog::DNS::StormOnDemand.new(attributes)
-      else
-        if providers.include?(provider)
-          require "fog/#{provider}/dns"
-          begin
-            Fog::DNS.const_get(Fog.providers[provider])
-          rescue
-            Fog.const_get(Fog.providers[provider])::DNS
-          end.new(attributes)
-        else
-          raise ArgumentError, "#{provider} is not a recognized dns provider"
-        end
-      end
-    end
-
     def self.zones
       zones = []
       providers.each do |provider|
