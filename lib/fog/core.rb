@@ -66,3 +66,6 @@ require "fog/storage"
 require "fog/support"
 require "fog/volume"
 require "fog/vpn"
+
+# Utility
+require 'fog/formatador'

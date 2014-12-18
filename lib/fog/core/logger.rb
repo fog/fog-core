@@ -31,9 +31,9 @@ module Fog
       channel = @channels[key]
       if channel
         message = if channel.tty?
-                    value.gsub(Formatador::PARSE_REGEX) { "\e[#{Formatador::STYLES[$1.to_sym]}m" }.gsub(Formatador::INDENT_REGEX, "")
+                    value.gsub(::Formatador::PARSE_REGEX) { "\e[#{::Formatador::STYLES[$1.to_sym]}m" }.gsub(::Formatador::INDENT_REGEX, "")
                   else
-                    value.gsub(Formatador::PARSE_REGEX, "").gsub(Formatador::INDENT_REGEX, "")
+                    value.gsub(::Formatador::PARSE_REGEX, "").gsub(::Formatador::INDENT_REGEX, "")
                   end
         channel.write(message)
       end
