@@ -39,7 +39,8 @@ module Fog
       end
       nil
     rescue ::Errno::EBADF
-      # Prevent issues with the console from preventing the main operation from finishing
+      # Prevent issues with the console from affecting the main operation
+      # Such as uploading an object to S3
       return nil if @channels[key] == ::STDERR
       raise
     end
