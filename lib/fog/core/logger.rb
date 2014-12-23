@@ -38,6 +38,10 @@ module Fog
         channel.write(message)
       end
       nil
+    rescue ::Errno::EBADF
+      # Prevent issues with the console from preventing the main operation from finishing
+      return nil if @channels[key] == ::STDERR
+      raise
     end
   end
 end
