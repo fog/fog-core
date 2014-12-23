@@ -41,12 +41,14 @@ module Fog
 
       def implementation_class_name(provider_code)
         provider_class = Fog.providers[provider_code]
-        class_name = "Fog::#{service_class}::#{provider_class}"
-        unless const_defined?(class_name)
-          class_name = "Fog::#{provider_class}::#{service_class}"
-        end
 
-        Inflecto.constantize(class_name)
+        begin
+          class_name = "Fog::#{service_class}::#{provider_class}"
+          Inflecto.constantize(class_name)
+        rescue NameError
+          class_name = "Fog::#{provider_class}::#{service_class}"
+          Inflecto.constantize(class_name)
+        end
       end
 
       # Returns the provider's name formatted for requiring.
