@@ -21,16 +21,7 @@ module Fog
     end
 
     def inspect
-      Thread.current[:formatador] ||= Formatador.new
-      data = "#{Thread.current[:formatador].indentation}<#{self.class.name}"
-      Thread.current[:formatador].indent do
-        unless self.class.attributes.empty?
-          data << "\n#{Thread.current[:formatador].indentation}"
-          data << self.class.attributes.map { |attribute| "#{attribute}=#{send(attribute).inspect}" }.join(",\n#{Thread.current[:formatador].indentation}")
-        end
-      end
-      data << "\n#{Thread.current[:formatador].indentation}>"
-      data
+      Fog::Formatador.format(self)
     end
 
     def reload

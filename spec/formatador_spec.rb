@@ -1,6 +1,6 @@
 require "spec_helper"
 
-class TestCase < Fog::Collection
+class CollectionTestCase < Fog::Collection
   def all
   end
   def map(*_args)
@@ -20,8 +20,11 @@ class TestCase < Fog::Collection
   end
 end
 
-test_case_str = <<-EOL
-  <TestCase
+class NonCollectionTestCase 
+end
+
+test_case_str1 = <<-EOL
+  <CollectionTestCase
     this=["this", "that"],
     that=["that", "this"]
     [
@@ -30,28 +33,40 @@ test_case_str = <<-EOL
     ]
   >
 EOL
+test_case_str1.chomp!
 
-test_case_str.chomp!
+test_case_str2 = <<-EOL
+  <CollectionTestCase
+    this=["this", "that"],
+    that=["that", "this"]
+  >
+EOL
+test_case_str2.chomp!
+
+test_case_str3 = <<-EOL
+  <NonCollectionTestCase
+  >
+EOL
+test_case_str3.chomp!
 
 describe Fog::Formatador do
 
   def setup
-    @formatador = Fog::Formatador.new(TestCase.new)
-  end
-
-  it "raises for missing required arguments" do
-    assert_raises(ArgumentError) { Fog::Formatador.new }
-  end
-
-  it "should instansiate" do
-    @formatador.must_be_instance_of Fog::Formatador
-  end
-
-  it "should respond to_s" do
-    @formatador.must_respond_to :to_s
+    @collection_test = CollectionTestCase.new
+    @collection_test << 'this'
+    @non_collection_test = NonCollectionTestCase.new
   end
 
   it "should give a string representation of object with proper indentation" do
-    "#{@formatador}".must_equal test_case_str
+    Fog::Formatador.format(@collection_test).must_equal test_case_str1
+  end
+
+  it 'should not include nested objects' do
+    opts = { :include_nested => false }
+    Fog::Formatador.format(@collection_test, opts).must_equal test_case_str2
+  end 
+
+  it 'should not raise if object does not response to :empty? or :map' do
+    Fog::Formatador.format(@non_collection_test).must_equal test_case_str3
   end
 end
