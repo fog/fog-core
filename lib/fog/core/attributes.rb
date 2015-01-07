@@ -155,7 +155,8 @@ module Fog
       end
 
       def requires_one(*args)
-        return unless missing_attributes(args).length == args.length
+        missing = missing_attributes(args)
+        return unless missing.length == args.length
         raise(ArgumentError, "#{missing[0...-1].join(", ")} or #{missing[-1]} are required for this operation")
       end
 
