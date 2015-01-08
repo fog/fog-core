@@ -59,6 +59,14 @@ class FogAttributeTestModel < Fog::Model
   def service
     Service.new
   end
+
+  def requires_one_test
+    requires_one :key, :time
+  end
+
+  def requires_test
+    requires :string, :integer
+  end
 end
 
 describe "Fog::Attributes" do
@@ -330,6 +338,37 @@ describe "Fog::Attributes" do
       it "should return an instance of that collection class" do
         model.objects = [FogMultipleAssociationsModel.new(:id => "456")]
         assert_instance_of FogMultipleAssociationsCollection, model.objects
+      end
+    end
+  end
+
+  describe "#requires_one" do
+    it "should require at least one attribute is supplied" do
+      FogAttributeTestModel.new(:key => :key, :time => Time.now).requires_one_test
+      FogAttributeTestModel.new(:time => Time.now).requires_one_test
+      FogAttributeTestModel.new(:key => :key).requires_one_test
+      FogAttributeTestModel.new(:key => :key, :integer => 1).requires_one_test
+
+      assert_raises ArgumentError do
+        FogAttributeTestModel.new(:integer => 1).requires_one_test
+      end
+    end
+  end
+
+  describe "#requires" do
+    it "should require all attributes are supplied" do
+      FogAttributeTestModel.new(:string => "string", :integer => 1).requires_test
+
+      assert_raises ArgumentError do
+        FogAttributeTestModel.new(:integer => 1).requires_test
+      end
+
+      assert_raises ArgumentError do
+        FogAttributeTestModel.new(:string => "string").requires_test
+      end
+
+      assert_raises ArgumentError do
+        FogAttributeTestModel.new(:key => :key).requires_test
       end
     end
   end
