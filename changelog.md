@@ -1,3 +1,10 @@
+1.27.3  12/01/2012
+==========================================================
+
+rubocop fixes for fog collection
+simpler ruby version checking/skipping
+fix requires_one
+
 1.27.2 18/12/2014
 ==========================================================
 
