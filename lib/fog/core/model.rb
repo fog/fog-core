@@ -21,7 +21,7 @@ module Fog
     end
 
     def inspect
-      Thread.current[:formatador] ||= Formatador.new
+      Thread.current[:formatador] ||= ::Formatador.new
       data = "#{Thread.current[:formatador].indentation}<#{self.class.name}"
       Thread.current[:formatador].indent do
         unless self.class.attributes.empty?
