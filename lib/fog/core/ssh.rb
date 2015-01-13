@@ -109,14 +109,14 @@ module Fog
       def display_stdout
         data = stdout.split("\r\n")
         if data.is_a?(String)
-          Formatador.display_line(data)
+          Fog::Formatador.display_line(data)
         elsif data.is_a?(Array)
-          Formatador.display_lines(data)
+          Fog::Formatador.display_lines(data)
         end
       end
 
       def display_stderr
-        Formatador.display_line(stderr.split("\r\n"))
+        Fog::Formatador.display_line(stderr.split("\r\n"))
       end
 
       def initialize(command)
