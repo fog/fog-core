@@ -19,6 +19,10 @@ module Fog
       ::Formatador.display_lines(data)
     end
 
+    def self.redisplay_progressbar(current, total, options = {})
+      ::Formatador.redisplay_progressbar(current, total, options = {})
+    end
+
     private
 
     def self.indent(&block)
