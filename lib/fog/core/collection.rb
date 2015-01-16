@@ -100,7 +100,7 @@ module Fog
     end
 
     def table(attributes = nil)
-      Formatador.display_table(map(&:attributes), attributes)
+      Fog::Formatador.display_table(map(&:attributes), attributes)
     end
 
     def to_json(_options = {})

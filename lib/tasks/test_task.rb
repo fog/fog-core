@@ -20,7 +20,7 @@ module Fog
       end
 
       def tests(mocked)
-        Formatador.display_line
+        Fog::Formatador.display_line
         start = Time.now.to_i
         threads = []
         Thread.main[:results] = []
@@ -33,9 +33,9 @@ module Fog
           end
         end
         threads.each(&:join)
-        Formatador.display_table(Thread.main[:results].sort { |x, y| x[:provider] <=> y[:provider] })
-        Formatador.display_line("[bold]FOG_MOCK=#{mocked}[/] tests completed in [bold]#{Time.now.to_i - start}[/] seconds")
-        Formatador.display_line
+        Fog::Formatador.display_table(Thread.main[:results].sort { |x, y| x[:provider] <=> y[:provider] })
+        Fog::Formatador.display_line("[bold]FOG_MOCK=#{mocked}[/] tests completed in [bold]#{Time.now.to_i - start}[/] seconds")
+        Fog::Formatador.display_line
       end
     end
   end

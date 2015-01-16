@@ -1,6 +1,10 @@
 module Fog
   # Fog::Formatador
   module Formatador
+    PARSE_REGEX   = ::Formatador::PARSE_REGEX
+    STYLES        = ::Formatador::STYLES
+    INDENT_REGEX  = ::Formatador::INDENT_REGEX
+
     def self.formatador
       Thread.current[:formatador] ||= ::Formatador.new
     end
@@ -10,6 +14,8 @@ module Fog
       indent { string << object_string(object, opts) }
       string << "#{indentation}>"
     end
+
+    
 
     def self.display_line(data)
       ::Formatador.display_line(data)
