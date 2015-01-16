@@ -19,6 +19,14 @@ module Fog
       ::Formatador.display_lines(data)
     end
 
+    def self.display_compact_table(hashes, keys = nil, &block)
+      ::Formatador.display_compact_table(hashes, keys, &block)
+    end
+
+    def self.display_table(hashes, keys = nil, &block)
+      ::Formatador.display_table(hashes, keys, &block)
+    end
+
     def self.redisplay_progressbar(current, total, options = {})
       ::Formatador.redisplay_progressbar(current, total, options = {})
     end
