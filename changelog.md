@@ -1,4 +1,10 @@
-1.27.3  12/01/2012
+1.27.4 01/26/2012
+==========================================================
+
+model fix for new formatador usage
+fixes around formatador delegation
+
+1.27.3 12/01/2012
 ==========================================================
 
 rubocop fixes for fog collection
