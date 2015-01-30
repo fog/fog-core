@@ -52,6 +52,7 @@ require "fog/core/whitelist_keys"
 
 # service wrappers
 require "fog/account"
+require "fog/baremetal"
 require "fog/billing"
 require "fog/cdn"
 require "fog/compute"
