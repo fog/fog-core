@@ -43,7 +43,7 @@ module Fog
     end
 
     def clear
-      @loaded = true && super
+      @loaded = super
     end
 
     def create(attributes = {})
