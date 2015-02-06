@@ -1,7 +1,5 @@
 module Fog
   module DNS
-    extend Fog::Core::ServiceAbstraction
-
     def self.zones
       zones = []
       providers.each do |provider|

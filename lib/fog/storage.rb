@@ -2,8 +2,6 @@ require "mime/types"
 
 module Fog
   module Storage
-    extend Fog::Core::ServiceAbstraction
-
     def self.directories
       directories = []
       providers.each do |provider|
