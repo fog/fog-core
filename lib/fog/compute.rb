@@ -1,7 +1,5 @@
 module Fog
   module Compute
-    extend Fog::Core::ServiceAbstraction
-
     def self.servers
       servers = []
       providers.each do |provider|
