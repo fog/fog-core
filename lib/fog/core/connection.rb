@@ -6,6 +6,26 @@ module Fog
     # modifications such as authentication or response object.
     #
     class Connection
+
+      class << self
+        @@user_agents = []
+
+        def add_user_agent(str)
+          if /\S+\/[\d|.]+/.match(str)
+            @@user_agents << str
+          else
+            raise "User Agent must be in <app name>/<app version> notation."
+          end
+        end
+
+        def user_agents
+          agents = @@user_agents.dup
+          agents << "fog/#{Fog::VERSION}" if defined?(Fog::VERSION)
+          agents << "fog-core/#{Fog::Core::VERSION}"
+          agents.uniq.compact.join(" ")
+        end
+      end
+
       # Prepares the connection and sets defaults for any future requests.
       #
       # @param [String] url The destination URL
@@ -34,10 +54,8 @@ module Fog
 
         params[:debug_response] = true unless params.key?(:debug_response)
         params[:headers] ||= {}
-        user_agent = "fog-core/#{Fog::Core::VERSION}"
-        user_agent = "fog/#{Fog::VERSION} #{user_agent}" if defined?(Fog::VERSION)
-        params[:headers]["User-Agent"] ||= user_agent
         params.merge!(:persistent => params.fetch(:persistent, persistent))
+        params[:headers]["User-Agent"] ||= user_agent
         @excon = Excon.new(url, params)
       end
 
@@ -76,6 +94,10 @@ module Fog
       end
 
       private
+
+      def user_agent
+        self.class.user_agents
+      end
 
       def handle_path_prefix_for(params)
         return params unless @path_prefix
