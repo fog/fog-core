@@ -2,32 +2,7 @@ require "mime/types"
 
 module Fog
   module Storage
-    def self.[](provider)
-      new(:provider => provider)
-    end
-
-    def self.new(attributes)
-      attributes = attributes.dup # prevent delete from having side effects
-      case provider = attributes.delete(:provider).to_s.downcase.to_sym
-      when :internetarchive
-        require "fog/internet_archive/storage"
-        Fog::Storage::InternetArchive.new(attributes)
-      when :stormondemand
-        require "fog/storage/storm_on_demand"
-        Fog::Storage::StormOnDemand.new(attributes)
-      else
-        if providers.include?(provider)
-          require "fog/#{provider}/storage"
-          begin
-            Fog::Storage.const_get(Fog.providers[provider])
-          rescue
-            Fog.const_get(Fog.providers[provider])::Storage
-          end.new(attributes)
-        else
-          raise ArgumentError, "#{provider} is not a recognized storage provider"
-        end
-      end
-    end
+    extend Fog::Core::ServiceAbstraction
 
     def self.directories
       directories = []
@@ -81,10 +56,6 @@ module Fog
           # "Content-MD5" => Base64.encode64(Digest::MD5.digest(metadata[:body])).strip
         }
       }
-    end
-
-    def self.providers
-      Fog.services[:storage]
     end
   end
 end
