@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency('builder')
-  spec.add_dependency('excon', '~>0.38')
+  spec.add_dependency('excon', '~>0.44')
   spec.add_dependency('formatador', '~>0.2')
   spec.add_dependency('mime-types')
   spec.add_dependency('net-scp', '~>1.1')
