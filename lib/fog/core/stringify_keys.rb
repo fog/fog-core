@@ -10,13 +10,8 @@ module Fog
     private
 
     # http://devblog.avdi.org/2009/11/20/hash-transforms-in-ruby/
-    def self.transform_hash(original, options = {}, &block)
+    def self.transform_hash(original, &block)
       original.reduce({}) do |result, (key, value)|
-        value = if options[:deep] && Hash === value
-                  transform_hash(value, options, &block)
-                else
-                  value
-                end
         block.call(result, key, value)
         result
       end

@@ -1,9 +1,3 @@
-require "minitest/autorun"
-require "minitest/spec"
-require "minitest/stub_const"
-
-$LOAD_PATH.unshift "lib"
-
 if ENV["COVERAGE"]
   require "coveralls"
   require "simplecov"
@@ -13,6 +7,11 @@ if ENV["COVERAGE"]
   end
 end
 
+require "minitest/autorun"
+require "minitest/spec"
+require "minitest/stub_const"
+
+$LOAD_PATH.unshift "lib"
 require "fog/core"
 
 Dir["spec/fake_app/**/*.rb"].each do |file|
