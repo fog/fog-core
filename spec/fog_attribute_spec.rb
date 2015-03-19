@@ -105,6 +105,16 @@ describe "Fog::Attributes" do
       assert_equal Time.parse(now.to_s), model.time
     end
 
+    it "returns a Time object when passed a string that is monkeypatched" do
+      now = Time.now
+      string = now.to_s
+      def string.to_time
+        "<3 <3 <3"
+      end
+      model.merge_attributes(:time => string)
+      assert_equal Time.parse(string), model.time
+    end
+
     it "returns a Time object when passed a XMLRPC::DateTime object" do
       now = XMLRPC::DateTime.new(2000, 7, 8, 10, 20, 34)
       model.merge_attributes(:time => now)
