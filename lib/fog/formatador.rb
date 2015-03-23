@@ -15,8 +15,6 @@ module Fog
       string << "#{indentation}>"
     end
 
-    
-
     def self.display_line(data)
       ::Formatador.display_line(data)
     end
@@ -69,7 +67,7 @@ module Fog
     def self.nested_objects_string(object)
       nested = ""
       return nested if object.respond_to?(:empty) and object.empty?
-      return nested unless object.respond_to?(:map)
+      return nested unless object.is_a?(Enumerable)
       nested = "#{indentation}[\n"
       indent { nested << indentation + inspect_object(object) }
       nested << "#{indentation}\n#{indentation}]\n"
@@ -83,7 +81,7 @@ module Fog
     end
 
     def self.inspect_object(object)
-      return "" unless object.respond_to?(:map)
+      return "" unless object.is_a?(Enumerable)
       object.map { |o| indentation + o.inspect }.join(", \n#{indentation}")
     end
   end

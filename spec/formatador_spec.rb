@@ -108,4 +108,47 @@ describe Fog::Formatador do
       Fog::Formatador.format(@subject).must_equal @expected
     end
   end
+
+  describe "when object responds to non-enumerable '#map'" do
+    before do
+      @member = Class.new(Fog::Model) do
+        def self.name
+          "IPAddress"
+        end
+
+        # This map action is unrelated to Enumerable (See GH-138)
+        def map
+          raise "Do not call me when inspecting!"
+        end
+      end
+
+      @collection_class = Class.new(Fog::Collection) do
+        model @member
+
+        def self.name
+          "IPAddressCollection"
+        end
+
+        def all
+          self
+        end
+      end
+
+      @collection = @collection_class.new
+      @collection << @member.new
+
+      @expected = <<-EOS.gsub(/^ {6}/, "").chomp!
+        <IPAddressCollection
+          [
+                        <IPAddress
+            >    
+          ]
+        >
+      EOS
+    end
+
+    it "returns formatted representation" do
+      Fog::Formatador.format(@collection).must_equal @expected
+    end
+  end
 end
