@@ -3,14 +3,12 @@ module Fog
     duration = 0
     start = Time.now
     retries = 0
-    until yield || duration > timeout
+    loop do
+      break if yield
+      raise Errors::TimeoutError, "The specified wait_for timeout (#{timeout} seconds) was exceeded" if duration > timeout
       sleep(interval.respond_to?(:call) ? interval.call(retries += 1).to_f : interval.to_f)
       duration = Time.now - start
     end
-    if duration > timeout
-      raise Errors::TimeoutError, "The specified wait_for timeout (#{timeout} seconds) was exceeded"
-    else
-      { :duration => duration }
-    end
+    { :duration => duration }
   end
 end
