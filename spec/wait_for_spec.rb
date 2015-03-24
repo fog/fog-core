@@ -11,6 +11,13 @@ describe "Fog#wait_for" do
     end
   end
 
+  it "does not raise if successful when the wait timeout is exceeded" do
+    timeout = 2
+    i = 0
+    ret = Fog.wait_for(timeout) { i = i + 1; i > 2 }
+    assert_operator(ret[:duration], :>, timeout)
+  end
+
   it "accepts a proc to determine the sleep interval" do
     i = 0
     ret = Fog.wait_for(1, lambda { |_t| 1 }) do
