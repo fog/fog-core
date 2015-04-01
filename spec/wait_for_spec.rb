@@ -24,6 +24,7 @@ describe "Fog#wait_for" do
       i += 1
       i > 1
     end
-    assert_equal({ :duration => 1 }, ret)
+    assert(1 <= ret[:duration])
+    assert(ret[:duration] < 2)
   end
 end

@@ -6,7 +6,7 @@ module Fog
     MONTHS = %w(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)
 
     def self.now
-      at((::Time.now - offset).to_i)
+      at(::Time.now - offset)
     end
 
     def self.now=(new_now)
