@@ -1,3 +1,21 @@
+1.30.0 04/02/2015
+==========================================================
+
+bump excon dep
+use float times, instead of integers for Fog::Time
+don't raise if final wait_for yield true
+fix bug around formatador and #map on models
+fix around `to_time` to avoid conflicts with Rails monkey patches
+update specs
+update style
+fix `WhitelistKeys` for 1.8.7
+remove unreachable code
+convert hash helpers to minispec
+fix require order for coverage
+fix ruby 2.2 warning
+bump excon dependency
+fix readme link
+
 1.29.0 02/19/2015
 ==========================================================
 
