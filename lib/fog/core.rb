@@ -11,62 +11,61 @@ require "timeout"
 require "ipaddr"
 
 # internal core dependencies
-require "fog/core/version"
+require File.expand_path('../core/version', __FILE__)
 
-require "fog/core/attributes"
-require "fog/core/attributes/default"
-require "fog/core/attributes/array"
-require "fog/core/attributes/boolean"
-require "fog/core/attributes/float"
-require "fog/core/attributes/integer"
-require "fog/core/attributes/string"
-require "fog/core/attributes/time"
-require "fog/core/attributes/timestamp"
-require "fog/core/associations/default"
-require "fog/core/associations/many_identities"
-require "fog/core/associations/many_models"
-require "fog/core/associations/one_model"
-require "fog/core/associations/one_identity"
-require "fog/core/collection"
-require "fog/core/association"
-require "fog/core/connection"
-require "fog/core/credentials"
-require "fog/core/current_machine"
-require "fog/core/deprecation"
-require "fog/core/errors"
-require "fog/core/hmac"
-require "fog/core/logger"
-require "fog/core/model"
-require "fog/core/mock"
-require "fog/core/provider"
-require "fog/core/service"
-require "fog/core/ssh"
-require "fog/core/scp"
-require "fog/core/time"
-require "fog/core/utils"
-require "fog/core/wait_for"
-require "fog/core/wait_for_defaults"
-require "fog/core/uuid"
-require "fog/core/stringify_keys"
-require "fog/core/whitelist_keys"
+require File.expand_path('../core/attributes', __FILE__)
+require File.expand_path('../core/attributes/default', __FILE__)
+require File.expand_path('../core/attributes/array', __FILE__)
+require File.expand_path('../core/attributes/boolean', __FILE__)
+require File.expand_path('../core/attributes/float', __FILE__)
+require File.expand_path('../core/attributes/integer', __FILE__)
+require File.expand_path('../core/attributes/string', __FILE__)
+require File.expand_path('../core/attributes/time', __FILE__)
+require File.expand_path('../core/attributes/timestamp', __FILE__)
+require File.expand_path('../core/associations/default', __FILE__)
+require File.expand_path('../core/associations/many_identities', __FILE__)
+require File.expand_path('../core/associations/many_models', __FILE__)
+require File.expand_path('../core/associations/one_model', __FILE__)
+require File.expand_path('../core/associations/one_identity', __FILE__)
+require File.expand_path('../core/collection', __FILE__)
+require File.expand_path('../core/association', __FILE__)
+require File.expand_path('../core/connection', __FILE__)
+require File.expand_path('../core/credentials', __FILE__)
+require File.expand_path('../core/current_machine', __FILE__)
+require File.expand_path('../core/deprecation', __FILE__)
+require File.expand_path('../core/errors', __FILE__)
+require File.expand_path('../core/hmac', __FILE__)
+require File.expand_path('../core/logger', __FILE__)
+require File.expand_path('../core/model', __FILE__)
+require File.expand_path('../core/mock', __FILE__)
+require File.expand_path('../core/provider', __FILE__)
+require File.expand_path('../core/service', __FILE__)
+require File.expand_path('../core/ssh', __FILE__)
+require File.expand_path('../core/scp', __FILE__)
+require File.expand_path('../core/time', __FILE__)
+require File.expand_path('../core/utils', __FILE__)
+require File.expand_path('../core/wait_for', __FILE__)
+require File.expand_path('../core/wait_for_defaults', __FILE__)
+require File.expand_path('../core/uuid', __FILE__)
+require File.expand_path('../core/stringify_keys', __FILE__)
+require File.expand_path('../core/whitelist_keys', __FILE__)
 
-# service wrappers
-require "fog/account"
-require "fog/baremetal"
-require "fog/billing"
-require "fog/cdn"
-require "fog/compute"
-require "fog/dns"
-require "fog/identity"
-require "fog/image"
-require "fog/metering"
-require "fog/monitoring"
-require "fog/network"
-require "fog/orchestration"
-require "fog/storage"
-require "fog/support"
-require "fog/volume"
-require "fog/vpn"
+require File.expand_path('../account', __FILE__)
+require File.expand_path('../billing', __FILE__)
+require File.expand_path('../cdn', __FILE__)
+require File.expand_path('../compute', __FILE__)
+require File.expand_path('../dns', __FILE__)
+require File.expand_path('../identity', __FILE__)
+require File.expand_path('../image', __FILE__)
+require File.expand_path('../metering', __FILE__)
+require File.expand_path('../monitoring', __FILE__)
+require File.expand_path('../network', __FILE__)
+require File.expand_path('../orchestration', __FILE__)
+require File.expand_path('../storage', __FILE__)
+require File.expand_path('../support', __FILE__)
+require File.expand_path('../volume', __FILE__)
+require File.expand_path('../vpn', __FILE__)
+
 
 # Utility
-require 'fog/formatador'
+require File.expand_path('../formatador', __FILE__)
