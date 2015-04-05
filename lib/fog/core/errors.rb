@@ -43,6 +43,8 @@ An alternate file may be used by placing its path in the FOG_RC environment vari
   :brightbox_secret:
   :clodo_api_key:
   :clodo_username:
+  :digitalocean_api_key:
+  :digitalocean_client_id:
   :go_grid_api_key:
   :go_grid_shared_secret:
   :google_client_email:
