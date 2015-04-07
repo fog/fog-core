@@ -51,6 +51,7 @@ require File.expand_path('../core/stringify_keys', __FILE__)
 require File.expand_path('../core/whitelist_keys', __FILE__)
 
 require File.expand_path('../account', __FILE__)
+require File.expand_path('../baremetal', __FILE__)
 require File.expand_path('../billing', __FILE__)
 require File.expand_path('../cdn', __FILE__)
 require File.expand_path('../compute', __FILE__)
