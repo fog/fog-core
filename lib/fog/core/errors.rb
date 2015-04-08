@@ -79,6 +79,11 @@ An alternate file may be used by placing its path in the FOG_RC environment vari
   :rage4_password:
   :riakcs_access_key_id:
   :riakcs_secret_access_key:
+  :softlayer_username:
+  :softlayer_api_key:
+  :softlayer_default_datacenter:
+  :softlayer_cluster:
+  :softlayer_default_domain:
   :stormondemand_username:
   :stormondemand_password:
   :terremark_username:
