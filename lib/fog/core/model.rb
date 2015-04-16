@@ -24,6 +24,14 @@ module Fog
       Fog::Formatador.format(self)
     end
 
+    def ==(o)
+      if (o.identity.nil? and self.identity.nil?)
+        o.object_id == self.object_id
+      else
+        o.class == self.class and o.identity == self.identity
+      end
+    end
+
     def reload
       requires :identity
 
