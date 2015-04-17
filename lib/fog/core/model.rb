@@ -25,10 +25,14 @@ module Fog
     end
 
     def ==(o)
-      if (o.identity.nil? and self.identity.nil?)
-        o.object_id == self.object_id
+      unless o.is_a?(Fog::Model)
+        super
       else
-        o.class == self.class and o.identity == self.identity
+        if (o.identity.nil? and self.identity.nil?)
+          o.object_id == self.object_id
+        else
+          o.class == self.class and o.identity == self.identity
+        end
       end
     end
 
