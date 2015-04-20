@@ -7,12 +7,19 @@ end
 
 describe Fog::Model do
   describe "#==" do
+    it "is not equal if one is not a Fog::Model" do
+      a = FogTestModel.new
+      b = 2
+      refute_equal a, b
+      refute_equal b, a
+    end
+
     it "is equal if it is the same object" do
       a = b = FogTestModel.new
       assert_equal a, b
     end
 
-    it "is equal if it has the same non-nil identity" do
+    it "is equal if it has the same non-nil identity and the same class" do
       id = SecureRandom.hex
       assert_equal FogTestModel.new(:id => id), FogTestModel.new(:id => id)
     end
