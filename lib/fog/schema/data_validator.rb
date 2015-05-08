@@ -64,10 +64,10 @@ module Fog
       # This returns the last message set by the validator
       #
       # @return [String]
-      attr_reader :message
+      attr_reader :message, :errors
 
       def initialize
-        @message = nil
+        @message, @errors = nil, []
       end
 
       # Checks if the data structure matches the schema passed in and
@@ -88,8 +88,9 @@ module Fog
         valid = validate_value(schema, data, options)
 
         unless valid
-          @message = "#{data.inspect} does not match #{schema.inspect}"
+          @message = "#{data.inspect} does not match #{schema.inspect} because #{@errors.inspect}"
         end
+
         valid
       end
 
@@ -105,25 +106,45 @@ module Fog
 
         case validator
         when Array
-          return false if value.is_a?(Hash)
+          if value.is_a?(Hash)
+            @errors << "Expected #{validator.inspect} got #{value.inspect}"
+            return false
+          end
           value.respond_to?(:all?) && value.all? { |x| validate_value(validator[0], x, options) }
         when Symbol
-          value.respond_to? validator
+          valid = value.respond_to?(validator)
+
+          unless valid
+            @errors << "Expected #{value.inspect} to respond to #{validator.inspect}"
+          end
+
+          valid
         when Hash
-          return false if value.is_a?(Array)
+          if value.is_a?(Array)
+            @errors << "Expected #{validator.inspect} got #{value.inspect}"
+            return false
+          end
 
           # When being strict values not specified in the schema are fails
           # Validator is empty but values are not
-          return false if !options[:allow_extra_keys] &&
-                          value.respond_to?(:empty?) &&
-                          !value.empty? &&
-                          validator.empty?
+          if !options[:allow_extra_keys] &&
+              value.respond_to?(:empty?) &&
+              !value.empty? &&
+              validator.empty?
+            @errors << "Extra key found: #{value.inspect}"
+
+            return false
+          end
 
           # Validator has rules left but no more values
-          return false if !options[:allow_optional_rules] &&
-                          value.respond_to?(:empty?) &&
-                          value.empty? &&
-                          !validator.empty?
+          if !options[:allow_optional_rules] &&
+              value.respond_to?(:empty?) &&
+              value.empty? &&
+              !validator.empty?
+            @errors << "Missing key: #{validator.inspect}"
+
+            return false
+          end
 
           validator.all? do |key, sub_validator|
             Fog::Logger.write :debug, "[blue][DEBUG] #{key.inspect} against #{sub_validator.inspect}[/]\n"
@@ -132,15 +153,22 @@ module Fog
         else
           result = validator == value
           result = validator === value unless result
+
           # Repeat unless we have a Boolean already
           unless result.is_a?(TrueClass) || result.is_a?(FalseClass)
             result = validate_value(result, value, options)
           end
+
+          unless result
+            @errors << "#{validator.inspect} != #{value.inspect}"
+          end
+
           if result
             Fog::Logger.write :debug, "[green][DEBUG] Validation passed: #{value.inspect} against #{validator.inspect}[/]\n"
           else
             Fog::Logger.write :debug, "[red][DEBUG] Validation failed: #{value.inspect} against #{validator.inspect}[/]\n"
           end
+
           result
         end
       end
