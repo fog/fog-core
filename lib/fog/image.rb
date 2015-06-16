@@ -9,9 +9,14 @@ module Fog
       provider = attributes.delete(:provider).to_s.downcase.to_sym
       if providers.include?(provider)
         require "fog/#{provider}/image"
-        return Fog::Image.const_get(Fog.providers[provider]).new(attributes)
+        begin
+          Fog::Image.const_get(Fog.providers[provider])
+        rescue
+          Fog.const_get(Fog.providers[provider])::Image
+        end.new(attributes)
+      else
+        raise ArgumentError, "#{provider} has no image service"
       end
-      raise ArgumentError, "#{provider} has no image service"
     end
 
     def self.providers

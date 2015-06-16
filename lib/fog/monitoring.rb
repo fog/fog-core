@@ -10,6 +10,13 @@ module Fog
       if provider == :stormondemand
         require "fog/monitoring/storm_on_demand"
         Fog::Monitoring::StormOnDemand.new(attributes)
+      elsif providers.include?(provider)
+        require "fog/#{provider}/monitoring"
+        begin
+          Fog::Monitoring.const_get(Fog.providers[provider])
+        rescue
+          Fog.const_get(Fog.providers[provider])::Monitoring
+        end.new(attributes)
       else
         raise ArgumentError, "#{provider} has no monitoring service"
       end

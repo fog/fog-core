@@ -13,7 +13,11 @@ module Fog
         Fog::Account::StormOnDemand.new(attributes)
       elsif providers.include?(provider)
         require "fog/#{provider}/account"
-        return Fog::Account.const_get(Fog.providers[provider]).new(attributes)
+        begin
+          Fog::Account.const_get(Fog.providers[provider])
+        rescue
+          Fog.const_get(Fog.providers[provider])::Account
+        end.new(attributes)
       else
         raise ArgumentError, "#{provider} has no account service"
       end
