@@ -9,9 +9,14 @@ module Fog
       provider = attributes.delete(:provider).to_s.downcase.to_sym
       if providers.include?(provider)
         require "fog/#{provider}/cdn"
-        return Fog::CDN.const_get(Fog.providers[provider]).new(attributes)
+        begin
+          Fog::CDN.const_get(Fog.providers[provider])
+        rescue
+          Fog.const_get(Fog.providers[provider])::CDN
+        end.new(attributes)
+      else
+        raise ArgumentError, "#{provider} has no cdn service"
       end
-      raise ArgumentError, "#{provider} is not a recognized cdn provider"
     end
 
     def self.providers

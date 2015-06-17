@@ -9,10 +9,14 @@ module Fog
       provider = attributes.delete(:provider).to_s.downcase.to_sym
       if providers.include?(provider)
         require "fog/#{provider}/volume"
-        return Fog::Volume.const_get(Fog.providers[provider]).new(attributes)
+        begin
+          Fog::Volume.const_get(Fog.providers[provider])
+        rescue
+          Fog.const_get(Fog.providers[provider])::Volume
+        end.new(attributes)
+      else
+        raise ArgumentError, "#{provider} has no volume service"
       end
-
-      raise ArgumentError, "#{provider} has no identity service"
     end
 
     def self.providers

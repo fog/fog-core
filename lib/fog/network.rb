@@ -13,10 +13,14 @@ module Fog
         return Fog::Network::StormOnDemand.new(attributes)
       elsif providers.include?(provider)
         require "fog/#{provider}/network"
-        return Fog::Network.const_get(Fog.providers[provider]).new(attributes)
+        begin
+          Fog::Network.const_get(Fog.providers[provider])
+        rescue
+          Fog.const_get(Fog.providers[provider])::Network
+        end.new(attributes)
+      else
+        raise ArgumentError, "#{provider} has no network service"
       end
-
-      raise ArgumentError, "#{provider} has no network service"
     end
 
     def self.providers
