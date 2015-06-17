@@ -1,3 +1,16 @@
+1.31.0 06/17/2015
+==========================================================
+
+use relative paths
+add digital ocean examples
+reinstate baremetal
+add softlayer examples
+add digital ocean v2 support
+setup fog model equality to check identities (if available)
+use Fog.interval in wait_for
+reduce memory footprint
+fix account handling
+
 1.30.0 04/02/2015
 ==========================================================
 
