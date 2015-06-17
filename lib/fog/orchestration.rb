@@ -8,14 +8,18 @@ module Fog
       attributes = attributes.dup # Prevent delete from having side effects
       provider = attributes.delete(:provider).to_s.downcase.to_sym
       if providers.include?(provider)
-        require "fog/#{provider}/orchestration"
         begin
-          Fog::Orchestration.const_get(Fog.providers[provider])
+          require "fog/#{provider}/orchestration"
+          begin
+            Fog::Orchestration.const_get(Fog.providers[provider])
+          rescue
+            Fog.const_get(Fog.providers[provider])::Orchestration
+          end.new(attributes)
         rescue
-          Fog.const_get(Fog.providers[provider])::Orchestration
-        end.new(attributes)
+          raise ArgumentError, "#{provider} has no orchestration service"
+        end
       else
-        raise ArgumentError, "#{provider} has no orchestration service"
+        raise ArgumentError, "#{provider} is not a recognized provider"
       end
     end
 

@@ -11,14 +11,18 @@ module Fog
         require "fog/monitoring/storm_on_demand"
         Fog::Monitoring::StormOnDemand.new(attributes)
       elsif providers.include?(provider)
-        require "fog/#{provider}/monitoring"
         begin
-          Fog::Monitoring.const_get(Fog.providers[provider])
+          require "fog/#{provider}/monitoring"
+          begin
+            Fog::Monitoring.const_get(Fog.providers[provider])
+          rescue
+            Fog.const_get(Fog.providers[provider])::Monitoring
+          end.new(attributes)
         rescue
-          Fog.const_get(Fog.providers[provider])::Monitoring
-        end.new(attributes)
+          raise ArgumentError, "#{provider} has no monitoring service"
+        end
       else
-        raise ArgumentError, "#{provider} has no monitoring service"
+        raise ArgumentError, "#{provider} is not a recognized provider"
       end
     end
 

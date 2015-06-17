@@ -12,14 +12,18 @@ module Fog
         require "fog/vpn/storm_on_demand"
         Fog::VPN::StormOnDemand.new(attributes)
       elsif providers.include?(provider)
-        require "fog/#{provider}/vpn"
         begin
-          Fog::VPN.const_get(Fog.providers[provider])
+          require "fog/#{provider}/vpn"
+          begin
+            Fog::VPN.const_get(Fog.providers[provider])
+          rescue
+            Fog.const_get(Fog.providers[provider])::VPN
+          end.new(attributes)
         rescue
-          Fog.const_get(Fog.providers[provider])::VPN
-        end.new(attributes)
+          raise ArgumentError, "#{provider} has no vpn service"
+        end
       else
-        raise ArgumentError, "#{provider} has no vpn service"
+        raise ArgumentError, "#{provider} is not a recognized provider"
       end
     end
 

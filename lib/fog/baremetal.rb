@@ -8,14 +8,18 @@ module Fog
       attributes = attributes.dup # Prevent delete from having side effects
       provider = attributes.delete(:provider).to_s.downcase.to_sym
       if providers.include?(provider)
-        require "fog/#{provider}/baremetal"
         begin
-          Fog::Baremetal.const_get(Fog.providers[provider])
+          require "fog/#{provider}/baremetal"
+          begin
+            Fog::Baremetal.const_get(Fog.providers[provider])
+          rescue
+            Fog.const_get(Fog.providers[provider])::Baremetal
+          end.new(attributes)
         rescue
-          Fog.const_get(Fog.providers[provider])::Baremetal
-        end.new(attributes)
+          raise ArgumentError, "#{provider} has no baremetal service"
+        end
       else
-        raise ArgumentError, "#{provider} has no baremetal service"
+        raise ArgumentError, "#{provider} is not a recognized provider"
       end
     end
 
