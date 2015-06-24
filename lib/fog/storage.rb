@@ -9,8 +9,8 @@ module Fog
   module Storage
     extend Fog::ServicesMixin
 
-    def self.new(attributes)
-      attributes = attributes.dup # prevent delete from having side effects
+    def self.new(orig_attributes)
+      attributes = orig_attributes.dup # prevent delete from having side effects
       case provider = attributes.delete(:provider).to_s.downcase.to_sym
       when :internetarchive
         require "fog/internet_archive/storage"
@@ -19,16 +19,7 @@ module Fog
         require "fog/storage/storm_on_demand"
         Fog::Storage::StormOnDemand.new(attributes)
       else
-        if providers.include?(provider)
-          require "fog/#{provider}/storage"
-          begin
-            Fog::Storage.const_get(Fog.providers[provider])
-          rescue
-            Fog.const_get(Fog.providers[provider])::Storage
-          end.new(attributes)
-        else
-          raise ArgumentError, "#{provider} is not a recognized storage provider"
-        end
+        super(orig_attributes)
       end
     end
 
