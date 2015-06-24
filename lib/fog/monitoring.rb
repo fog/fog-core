@@ -23,9 +23,5 @@ module Fog
         raise ArgumentError, "#{provider} is not a recognized provider"
       end
     end
-
-    def self.providers
-      Fog.services[:monitoring]
-    end
   end
 end

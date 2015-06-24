@@ -22,10 +22,6 @@ module Fog
       end
     end
 
-    def self.providers
-      Fog.services[:dns]
-    end
-
     def self.zones
       zones = []
       providers.each do |provider|

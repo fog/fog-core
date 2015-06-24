@@ -76,10 +76,6 @@ module Fog
       end
     end
 
-    def self.providers
-      Fog.services[:compute]
-    end
-
     def self.servers
       servers = []
       providers.each do |provider|

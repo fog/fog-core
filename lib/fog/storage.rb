@@ -85,9 +85,5 @@ module Fog
         }
       }
     end
-
-    def self.providers
-      Fog.services[:storage]
-    end
   end
 end

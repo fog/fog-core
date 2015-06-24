@@ -17,9 +17,5 @@ module Fog
         Fog.const_get(Fog.providers[provider])::Identity
       end.new(attributes)
     end
-
-    def self.providers
-      Fog.services[:identity]
-    end
   end
 end

@@ -20,9 +20,5 @@ module Fog
         raise ArgumentError, "#{provider} is not a recognized provider"
       end
     end
-
-    def self.providers
-      Fog.services[:metering]
-    end
   end
 end
