@@ -1,8 +1,6 @@
 module Fog
   module Monitoring
-    def self.[](provider)
-      new(:provider => provider)
-    end
+    extend Fog::ServicesMixin
 
     def self.new(attributes)
       attributes = attributes.dup

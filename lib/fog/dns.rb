@@ -1,8 +1,6 @@
 module Fog
   module DNS
-    def self.[](provider)
-      new(:provider => provider)
-    end
+    extend Fog::ServicesMixin
 
     def self.new(attributes)
       attributes = attributes.dup # prevent delete from having side effects
