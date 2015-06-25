@@ -13,6 +13,9 @@ require "ipaddr"
 # internal core dependencies
 require File.expand_path('../core/version', __FILE__)
 
+# Mixins
+require File.expand_path('../core/services_mixin', __FILE__)
+
 require File.expand_path('../core/attributes', __FILE__)
 require File.expand_path('../core/attributes/default', __FILE__)
 require File.expand_path('../core/attributes/array', __FILE__)

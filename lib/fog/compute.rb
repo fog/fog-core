@@ -1,11 +1,9 @@
 module Fog
   module Compute
-    def self.[](provider)
-      new(:provider => provider)
-    end
+    extend Fog::ServicesMixin
 
-    def self.new(attributes)
-      attributes = attributes.dup # prevent delete from having side effects
+    def self.new(orig_attributes)
+      attributes = orig_attributes.dup # prevent delete from having side effects
       provider = attributes.delete(:provider).to_s.downcase.to_sym
 
       case provider
@@ -61,25 +59,8 @@ module Fog
         require "fog/vcloud_director/compute"
         Fog::Compute::VcloudDirector.new(attributes)
       else
-        if providers.include?(provider)
-          begin
-            require "fog/#{provider}/compute"
-          rescue LoadError
-            require "fog/compute/#{provider}"
-          end
-          begin
-            Fog::Compute.const_get(Fog.providers[provider])
-          rescue
-            Fog.const_get(Fog.providers[provider])::Compute
-          end.new(attributes)
-        else
-          raise ArgumentError, "#{provider} is not a recognized compute provider"
-        end
+        super(orig_attributes)
       end
-    end
-
-    def self.providers
-      Fog.services[:compute]
     end
 
     def self.servers
