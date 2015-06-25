@@ -11,17 +11,9 @@ module Fog
 
       if providers.include?(provider)
         begin
-          begin
-            require "fog/#{provider}/#{service_name.downcase}"
-          rescue LoadError
-            require "fog/#{service_name.downcase}/#{provider}"
-          end
-
-          begin
-            Fog.const_get(service_name).const_get(provider_name)
-          rescue NameError  # Try to find the constant from in an alternate location
-            Fog.const_get(provider_name).const_get(service_name)
-          end.new(attributes)
+          require_service_provider_library(service_name.downcase, provider)
+          spc = service_provider_constant(service_name, provider_name)
+          spc.new(attributes)
         rescue
           raise ArgumentError, "#{provider} has no #{service_name.downcase} service"
         end
@@ -35,6 +27,18 @@ module Fog
     end
 
     private
+
+    def require_service_provider_library(service, provider)
+      require "fog/#{provider}/#{service}"
+    rescue LoadError  # Try to require the service provider in an alternate location
+      require "fog/#{service}/#{provider}"
+    end
+
+    def service_provider_constant(service_name, provider_name)
+      Fog.const_get(service_name).const_get(provider_name)
+    rescue NameError  # Try to find the constant from in an alternate location
+      Fog.const_get(provider_name).const_get(service_name)
+    end
 
     def service_name
       name.split("Fog::").last
