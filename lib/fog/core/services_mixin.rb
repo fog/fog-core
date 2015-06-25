@@ -9,17 +9,13 @@ module Fog
       provider      = attributes.delete(:provider).to_s.downcase.to_sym
       provider_name = Fog.providers[provider]
 
-      if providers.include?(provider)
-        begin
-          require_service_provider_library(service_name.downcase, provider)
-          spc = service_provider_constant(service_name, provider_name)
-          spc.new(attributes)
-        rescue
-          raise ArgumentError, "#{provider} has no #{service_name.downcase} service"
-        end
-      else
-        raise ArgumentError, "#{provider} is not a recognized provider"
-      end
+      raise ArgumentError, "#{provider} is not a recognized provider" unless providers.include?(provider)
+
+      require_service_provider_library(service_name.downcase, provider)
+      spc = service_provider_constant(service_name, provider_name)
+      spc.new(attributes)
+    rescue
+      raise ArgumentError, "#{provider} has no #{service_name.downcase} service"
     end
 
     def providers
