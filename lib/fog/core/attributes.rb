@@ -101,12 +101,16 @@ module Fog
         copy
       end
 
+      def identity_name
+        self.class.instance_variable_get("@identity")
+      end
+
       def identity
-        send(self.class.instance_variable_get("@identity"))
+        send(identity_name)
       end
 
       def identity=(new_identity)
-        send("#{self.class.instance_variable_get("@identity")}=", new_identity)
+        send("#{identity_name}=", new_identity)
       end
 
       def merge_attributes(new_attributes = {})
