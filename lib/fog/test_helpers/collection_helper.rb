@@ -30,7 +30,7 @@ def collection_tests(collection, params = {}, mocks_implemented = true)
     tests("Enumerable") do
       pending if Fog.mocking? && !mocks_implemented
 
-      methods = %w(all any? find detect collect map find_index flat_map
+      methods = %w(all? any? find detect collect map find_index flat_map
                    collect_concat group_by none? one?)
 
       # JRuby 1.7.5+ issue causes a SystemStackError: stack level too deep
