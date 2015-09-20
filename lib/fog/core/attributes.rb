@@ -130,6 +130,7 @@ module Fog
         end
 
         self.class.nested_aliases.each_pair do |key, value|
+          next if attributes[value]
           attributes[value] = _get_nested_value(new_attributes, key.split("."))
         end
 
