@@ -197,8 +197,7 @@ module Fog
 
       # Dig value from new_attributes recursively
       # Returns String or Array
-      def _get_nested_value(attributes = {}, keys)
-        return nil unless attributes
+      def _get_nested_value(attributes = {}, keys = [])
         return attributes unless attributes.is_a?(Hash)
         if keys.length > 1
           _get_nested_value(attributes[keys.first], keys.drop(1))
