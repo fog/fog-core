@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency("formatador", "~> 0.2")
   spec.add_dependency("mime-types")
   spec.add_dependency("net-scp", "~> 1.1")
-  spec.add_dependency("net-ssh", ">= 2.1.3")
+  spec.add_dependency("net-ssh", ">= 2.1.3", "< 3.0")
 
   spec.add_development_dependency("coveralls")
   spec.add_development_dependency("minitest")
