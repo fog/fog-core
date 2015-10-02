@@ -4,6 +4,13 @@ Shared classes and tests for fog providers and services.
 
 [![Build Status](https://secure.travis-ci.org/fog/fog-core.png?branch=master)](http://travis-ci.org/fog/fog-core)
 
+## Ruby version
+
+Fog-core requires Ruby `2.0.0` or later.
+
+Ruby `1.8` and `1.9` support was dropped in `fog-v2.0.0` as a backwards incompatible
+change. Please use the later fog `1.x` versions if you require `1.8.7` or `1.9.x` support.
+
 ## Installation
 
 Add this line to your application's Gemfile:
