@@ -65,7 +65,6 @@ module Fog
       end
 
       def scp(local_path, remote_path, upload_options = {})
-        require "net/scp"
         requires :ssh_ip_address, :username
 
         Fog::SCP.new(ssh_ip_address, username, ssh_options).upload(local_path, remote_path, upload_options)
@@ -74,14 +73,12 @@ module Fog
       alias_method :scp_upload, :scp
 
       def scp_download(remote_path, local_path, download_options = {})
-        require "net/scp"
         requires :ssh_ip_address, :username
 
         Fog::SCP.new(ssh_ip_address, username, ssh_options).download(remote_path, local_path, download_options)
       end
 
       def ssh(commands, options = {}, &blk)
-        require "net/ssh"
         requires :ssh_ip_address, :username
 
         options = ssh_options.merge(options)
