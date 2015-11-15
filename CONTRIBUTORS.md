@@ -1,6 +1,9 @@
 * Aaron Patterson <aaron.patterson@gmail.com>
 * Akira Matsuda <ronnie@dio.jp>
 * Anatol <anatol.pomozov@gmail.com>
+* Artem <temikus@google.com>
+* Artem Yakimenko <temikus@google.com>
+* Brandon Dunne <bdunne@redhat.com>
 * Bryan Paxton <starbelly@pobox.com>
 * Chris Johnson <wchrisjohnson@gmail.com>
 * Chris Sinjakli <chris@sinjakli.co.uk>
