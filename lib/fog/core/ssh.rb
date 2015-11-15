@@ -34,7 +34,12 @@ module Fog
 
     class Real
       def initialize(address, username, options)
-        require "net/ssh"
+        begin
+          require "net/ssh"
+        rescue LoadError
+          Fog::Logger.warning("'net/ssh' missing, please install and try again.")
+          exit(1)
+        end
 
         key_manager = Net::SSH::Authentication::KeyManager.new(nil, options)
 
