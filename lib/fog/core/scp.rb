@@ -43,7 +43,7 @@ module Fog
         begin
           require "net/scp"
         rescue LoadError
-          Fog::Logger.warning("'net/ssh' missing, please install and try again.")
+          Fog::Logger.warning("'net/scp' missing, please install and try again.")
           exit(1)
         end
 
