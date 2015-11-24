@@ -1,15 +1,20 @@
-begin
-  # Use mime/types/columnar if available, for reduced memory usage
-  require 'mime/types/columnar'
-rescue LoadError
-  require 'mime/types'
-end
-
 module Fog
   module Storage
     extend Fog::ServicesMixin
 
     def self.new(orig_attributes)
+      begin
+        # Use mime/types/columnar if available, for reduced memory usage
+        require 'mime/types/columnar'
+      rescue LoadError
+        begin
+          require 'mime/types'
+        rescue LoadError
+          Fog::Logger.warning("'mime-types' missing, please install and try again.")
+          exit(1)
+        end
+      end
+
       attributes = orig_attributes.dup # prevent delete from having side effects
       case provider = attributes.delete(:provider).to_s.downcase.to_sym
       when :internetarchive
