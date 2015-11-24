@@ -21,7 +21,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency("builder")
   spec.add_dependency("excon", "~> 0.45")
   spec.add_dependency("formatador", "~> 0.2")
-  spec.add_dependency("mime-types")
 
   spec.add_development_dependency("coveralls")
   spec.add_development_dependency("minitest")
