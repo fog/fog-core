@@ -58,6 +58,9 @@ module Fog
       when :vclouddirector
         require "fog/vcloud_director/compute"
         Fog::Compute::VcloudDirector.new(attributes)
+      when :cloudatcost
+        require "fog/cloudatcost/compute"
+        Fog::Compute::CloudAtCost.new(attributes)
       else
         super(orig_attributes)
       end
