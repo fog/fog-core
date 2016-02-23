@@ -24,10 +24,12 @@
 * Matt Eldridge <matt.eldridge@us.ibm.com>
 * Mike Hagedorn <mike@silverchairsolutions.com>
 * Naoto TAKAHASHI <tnaoto@gmail.com>
+* Patrick McAfee <PatrickMcAfee@users.noreply.github.com>
 * Paul Thornthwaite <paul@brightbox.co.uk>
 * Paul Thornthwaite <tokengeek@gmail.com>
 * Paulo Henrique Lopes Ribeiro <plribeiro3000@gmail.com>
 * Peter Drake <peter.drake@acquia.com>
+* Suraj Shirvankar <surajshirvankar@gmail.com>
 * Wesley Beary <geemus+github@gmail.com>
 * Wesley Beary <geemus@gmail.com>
 * cristhiano <cristhiano_figueira@yahoo.com.br>
