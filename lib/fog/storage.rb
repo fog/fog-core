@@ -11,7 +11,7 @@ module Fog
           require 'mime/types'
         rescue LoadError
           Fog::Logger.warning("'mime-types' missing, please install and try again.")
-          exit(1)
+          raise
         end
       end
 
