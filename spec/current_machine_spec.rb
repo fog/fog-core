@@ -19,10 +19,12 @@ describe Fog::CurrentMachine do
 
   describe "ip_address" do
     it "should be thread safe" do
-      Excon.stub({ :method => :get, :path => "/" }, { :body => "" })
 
       (1..10).map do
-        Thread.new { Fog::CurrentMachine.ip_address }
+        Thread.new do
+          Excon.stub({ :method => :get, :path => "/" }, { :body => "" })
+          Fog::CurrentMachine.ip_address
+        end
       end.each(&:join)
     end
 
