@@ -1,3 +1,11 @@
+1.37.0 03/31/2016
+==========================================================
+
+remove hp from providers
+re-raise mime-type error, rather than exiting
+fix tests
+add introspection module
+
 1.36.0 02/23/2016
 ==========================================================
 
