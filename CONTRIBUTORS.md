@@ -10,6 +10,8 @@
 * Dominic Cleal <dcleal@redhat.com>
 * Evan Light <evan@tripledogdare.net>
 * Frederick Cheung <frederick.cheung@gmail.com>
+* Gilles Dubreuil <gilles@redhat.com>
+* Griffin Smith <wildgriffin45@gmail.com>
 * Isaac Hollander McCreery <ihmccreery@google.com>
 * Jake Bell <jake@theunraveler.com>
 * Josh Kalderimis <josh.kalderimis@gmail.com>
