@@ -15,7 +15,7 @@ module Fog
       spc = service_provider_constant(service_name, provider_name)
       spc.new(attributes)
     rescue LoadError, NameError  # Only rescue errors in finding the libraries, allow connection errors through to the caller
-      raise NotFound, "#{provider} has no #{service_name.downcase} service"
+      raise ArgumentError, "#{provider} has no #{service_name.downcase} service"
     end
 
     def providers
