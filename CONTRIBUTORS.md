@@ -1,5 +1,6 @@
 * Aaron Patterson <aaron.patterson@gmail.com>
 * Akira Matsuda <ronnie@dio.jp>
+* Alexandru Calinoiu <calinoiu.alexandru@agilefreaks.com>
 * Anatol <anatol.pomozov@gmail.com>
 * Artem <temikus@google.com>
 * Artem Yakimenko <temikus@google.com>
@@ -40,3 +41,4 @@
 * ozroc <ozrocpablo@gmail.com>
 * schneems <richard.schneeman@gmail.com>
 * starbelly <starbelly@pobox.com>
+* zhitongLBN <z.liu@linkbynet.com>
