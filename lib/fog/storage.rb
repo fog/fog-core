@@ -16,7 +16,7 @@ module Fog
       end
 
       attributes = orig_attributes.dup # prevent delete from having side effects
-      case provider = attributes.delete(:provider).to_s.downcase.to_sym
+      case attributes.delete(:provider).to_s.downcase.to_sym
       when :internetarchive
         require "fog/internet_archive/storage"
         Fog::Storage::InternetArchive.new(attributes)
