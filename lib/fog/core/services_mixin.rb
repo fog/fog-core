@@ -31,9 +31,9 @@ module Fog
     end
 
     def service_provider_constant(service_name, provider_name)
-      Fog.const_get(service_name).const_get(provider_name)
+      Fog.const_get(service_name).const_get(provider_name, false)
     rescue NameError  # Try to find the constant from in an alternate location
-      Fog.const_get(provider_name).const_get(service_name)
+      Fog.const_get(provider_name).const_get(service_name, false)
     end
 
     def service_name
