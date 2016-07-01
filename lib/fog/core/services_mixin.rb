@@ -32,7 +32,7 @@ module Fog
 
     def service_provider_constant(service_name, provider_name)
       const_get_args = [provider_name]
-      const_get_args << false if RUBY_VERSION < '1.9'
+      const_get_args << false unless RUBY_VERSION < '1.9'
 
       Fog.const_get(service_name).const_get(*const_get_args)
     rescue NameError  # Try to find the constant from in an alternate location
@@ -41,7 +41,7 @@ module Fog
 
     def provider_service_constant(provider_name, service_name)
       const_get_args = [service_name]
-      const_get_args << false if RUBY_VERSION < '1.9'
+      const_get_args << false unless RUBY_VERSION < '1.9'
 
       Fog.const_get(provider_name).const_get(*const_get_args)
     end
