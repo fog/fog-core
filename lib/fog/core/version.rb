@@ -1,5 +1,5 @@
 module Fog
   module Core
-    VERSION = "1.40.1"
+    VERSION = "1.41.0"
   end
 end
