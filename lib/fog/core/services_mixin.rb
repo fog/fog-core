@@ -31,9 +31,18 @@ module Fog
     end
 
     def service_provider_constant(service_name, provider_name)
-      Fog.const_get(service_name).const_get(provider_name, false)
+      Fog.const_get(service_name).const_get(*const_get_args(provider_name))
     rescue NameError  # Try to find the constant from in an alternate location
-      Fog.const_get(provider_name).const_get(service_name, false)
+      Fog.const_get(provider_name).const_get(*const_get_args(service_name))
+    end
+
+    # Ruby 1.8 does not support the second 'inherit' argument to #const_get
+    def const_get_args(*args)
+      if RUBY_VERSION < '1.9'
+        args
+      else
+        args + [false]
+      end
     end
 
     def service_name
