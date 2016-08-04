@@ -28,16 +28,6 @@ module Fog
           require "fog/rackspace/compute_v2"
           Fog::Compute::RackspaceV2.new(attributes)
         end
-      when :digitalocean
-        version = attributes.delete(:version)
-        version = version.to_s.downcase.to_sym unless version.nil?
-        if version == :v1
-          error_message = "DigitalOcean V1 is deprecated.Please use `:version => :v2` attribute to use Next Gen Cloud Servers."
-          raise error_message
-        else
-          require "fog/digitalocean/compute_v2"
-          Fog::Compute::DigitalOceanV2.new(attributes)
-        end
       when :stormondemand
         require "fog/compute/storm_on_demand"
         Fog::Compute::StormOnDemand.new(attributes)
