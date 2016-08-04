@@ -2,7 +2,7 @@
 
 Shared classes and tests for fog providers and services.
 
-[![Build Status](https://secure.travis-ci.org/fog/fog-core.png?branch=master)](http://travis-ci.org/fog/fog-core)
+[![Build Status](https://travis-ci.org/fog/fog-core.svg?branch=master)](https://travis-ci.org/fog/fog-core)
 
 ## Ruby version
 
