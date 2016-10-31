@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/fog/fog-core"
   spec.license       = "MIT"
 
-  spec.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
+  spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency("formatador", "~> 0.2")
 
   spec.add_development_dependency("coveralls")
+  spec.add_development_dependency("fog-mock", "~> 0.1")
   spec.add_development_dependency("minitest")
   spec.add_development_dependency("minitest-stub-const")
   spec.add_development_dependency("pry")
