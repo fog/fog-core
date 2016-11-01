@@ -1,3 +1,5 @@
+require "fog/test_helpers/service"
+
 module Fog
   @mocking = false
 
