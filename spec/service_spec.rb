@@ -171,7 +171,7 @@ describe Fog::Service do
   end
 
   describe "when config object can configure the service itself" do
-    it "ignores the global and it's values" do
+    it "ignores the global and its values" do
       @config = MiniTest::Mock.new
       def @config.config_service?;  true; end
       def @config.==(other); object_id == other.object_id; end
