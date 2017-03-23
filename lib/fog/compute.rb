@@ -10,17 +10,6 @@ module Fog
       when :gogrid
         require "fog/go_grid/compute"
         Fog::Compute::GoGrid.new(attributes)
-      when :hp
-        version = attributes.delete(:version)
-        version = version.to_s.downcase.to_sym unless version.nil?
-        if version == :v2
-          require "fog/hp/compute_v2"
-          Fog::Compute::HPV2.new(attributes)
-        else
-          Fog::Logger.deprecation "HP Cloud Compute V1 service will be soon deprecated. Please use `:version => v2` attribute to use HP Cloud Compute V2 service."
-          require "fog/hp/compute"
-          Fog::Compute::HP.new(attributes)
-        end
       when :new_servers
         require "fog/bare_metal_cloud/compute"
         Fog::Logger.deprecation "`new_servers` is deprecated. Please use `bare_metal_cloud` instead."
@@ -42,11 +31,11 @@ module Fog
       when :digitalocean
         version = attributes.delete(:version)
         version = version.to_s.downcase.to_sym unless version.nil?
-        if version == :v2
-          require "fog/digitalocean/compute_v2"
-          Fog::Compute::DigitalOceanV2.new(attributes)
+        if version == :v1
+          error_message = 'DigitalOcean V1 is deprecated.Please use `:version => :v2` attribute to use Next Gen Cloud Servers.'
+          raise error_message
         else
-          require "fog/digitalocean/compute"
+          require 'fog/digitalocean/compute'
           Fog::Compute::DigitalOcean.new(attributes)
         end
       when :stormondemand
@@ -58,6 +47,9 @@ module Fog
       when :vclouddirector
         require "fog/vcloud_director/compute"
         Fog::Compute::VcloudDirector.new(attributes)
+      when :cloudatcost
+        require "fog/cloudatcost/compute"
+        Fog::Compute::CloudAtCost.new(attributes)
       else
         super(orig_attributes)
       end

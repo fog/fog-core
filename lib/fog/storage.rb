@@ -1,17 +1,22 @@
-begin
-  # Use mime/types/columnar if available, for reduced memory usage
-  require 'mime/types/columnar'
-rescue LoadError
-  require 'mime/types'
-end
-
 module Fog
   module Storage
     extend Fog::ServicesMixin
 
     def self.new(orig_attributes)
+      begin
+        # Use mime/types/columnar if available, for reduced memory usage
+        require 'mime/types/columnar'
+      rescue LoadError
+        begin
+          require 'mime/types'
+        rescue LoadError
+          Fog::Logger.warning("'mime-types' missing, please install and try again.")
+          raise
+        end
+      end
+
       attributes = orig_attributes.dup # prevent delete from having side effects
-      case provider = attributes.delete(:provider).to_s.downcase.to_sym
+      case attributes.delete(:provider).to_s.downcase.to_sym
       when :internetarchive
         require "fog/internet_archive/storage"
         Fog::Storage::InternetArchive.new(attributes)
@@ -37,7 +42,8 @@ module Fog
     def self.get_body_size(body)
       if body.respond_to?(:encoding)
         original_encoding = body.encoding
-        body.force_encoding('BINARY')
+        body = body.dup if body.frozen?
+        body = body.force_encoding('BINARY')
       end
 
       size = if body.respond_to?(:bytesize)

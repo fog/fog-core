@@ -19,11 +19,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency("builder")
-  spec.add_dependency("excon", "~> 0.45")
+  spec.add_dependency("excon", "~> 0.49")
   spec.add_dependency("formatador", "~> 0.2")
-  spec.add_dependency("mime-types")
-  spec.add_dependency("net-scp", "~> 1.1")
-  spec.add_dependency("net-ssh", ">= 2.1.3")
 
   spec.add_development_dependency("coveralls")
   spec.add_development_dependency("minitest")

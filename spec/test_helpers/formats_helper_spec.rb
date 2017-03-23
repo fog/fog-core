@@ -1,5 +1,6 @@
 require "spec_helper"
 require "fog/test_helpers/formats_helper"
+require "fog/test_helpers/types_helper"
 
 module Shindo
   class Tests

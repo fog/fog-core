@@ -1,3 +1,74 @@
+1.43.0 09/28/2016
+==========================================================
+
+fix digitalocean compatibility
+update README badges
+
+1.42.0 07/05/2016
+==========================================================
+
+make namespace detection fix 1.8.x compatible
+
+1.41.0 07/01/2016
+==========================================================
+
+bump as 1.40.1 is not showing up in some cases
+
+1.40.1 06/28/2016
+==========================================================
+
+fix namespace constant detection
+
+1.40.0 05/19/2016
+==========================================================
+
+add minitest helpers for schema (parity to shindo)
+
+1.39.0 05/11/2016
+==========================================================
+
+cleanup warnings
+add NFV module
+only dup frozen strings
+
+1.38.0 04/20/2016
+==========================================================
+
+more specific service not found error
+fix string freeze issue for ruby 2.3
+bump excon dep
+
+1.37.0 03/31/2016
+==========================================================
+
+remove hp from providers
+re-raise mime-type error, rather than exiting
+fix tests
+add introspection module
+
+1.36.0 02/23/2016
+==========================================================
+
+default digitalocean to v2
+fix eager/auto-loading
+add cloud-at-cost
+
+1.35.0 11/24/2015
+==========================================================
+
+make mime/types require optional
+fix warnings about net-ssh vs net-cp
+
+1.34.0 11/16/2015
+==========================================================
+
+make net/ssh and net/scp requires optional
+
+1.33.0 11/15/2015
+==========================================================
+
+relax net/ssh and net/scp requirement
+
 1.32.1 08/12/2015
 ==========================================================
 

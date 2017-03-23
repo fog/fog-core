@@ -91,10 +91,13 @@ module Fog
     def self.reset
       mocked_services = []
       Fog.constants.map do |x|
+        next if Fog.autoload?(x)
         x_const = Fog.const_get(x)
         x_const.respond_to?(:constants) && x_const.constants.map do |y|
+          next if x_const.autoload?(y)
           y_const = x_const.const_get(y)
           y_const.respond_to?(:constants) && y_const.constants.map do |z|
+            next if y_const.autoload?(z)
             mocked_services << y_const.const_get(z) if z.to_sym == :Mock
           end
         end

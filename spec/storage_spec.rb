@@ -67,6 +67,7 @@ describe "Fog::Storage" do
       module Storage
         class BothWays
           attr_reader :args
+
           def initialize(args)
             @args = args
           end
@@ -101,6 +102,15 @@ describe "Fog::Storage" do
         Fog::Storage.get_body_size(body)
 
         assert_equal("UTF-8", body.encoding.to_s)
+      else
+        skip
+      end
+    end
+
+    it "respects frozen strings" do
+      if RUBY_VERSION >= "2.3.0"
+        body = "foo".freeze
+        Fog::Storage.get_body_size(body)
       else
         skip
       end

@@ -1,6 +1,7 @@
 language: ruby
 
 rvm:
+  - 1.9.3
   - 2.0.0
   - 2.1.7
   - 2.2.3
@@ -27,6 +28,7 @@ matrix:
 
   allow_failures:
     - rvm: jruby-head
+    - rvm: jruby9k
 
 notifications:
   email: false
