@@ -25,6 +25,17 @@ Or install it yourself as:
 
     $ gem install fog-core
 
+### Ruby 1.9.3
+
+Some of `fog-core`'s dependencies have dropped support for Ruby 1.9.3 in later
+versions. Rather than limit all `fog` users to older but compatible versions,
+if you are using 1.9.3 you will need to declare a compatible version in your
+application's `Gemfile` like:
+
+    gem "net-ssh", "< 3.0"
+
+See `Gemfile.1.9.3` for the definitive list as tested by Travis.
+
 ## Usage
 
 TODO: Write usage instructions here
