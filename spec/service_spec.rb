@@ -174,6 +174,7 @@ describe Fog::Service do
     it "ignores the global and its values" do
       @config = MiniTest::Mock.new
       def @config.config_service?;  true; end
+      def @config.nil?; false; end
       def @config.==(other); object_id == other.object_id; end
 
       unexpected_usage = lambda { raise "Accessing global!" }
