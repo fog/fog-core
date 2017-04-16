@@ -275,6 +275,13 @@ describe "Fog::Attributes" do
     end
   end
 
+  describe ":as => :Badname" do
+    it "accepts Badname in attributes" do
+      model.merge_attributes(:Badname => "value")
+      assert_equal model.good_name, "value"
+    end
+  end
+
   describe ".has_one" do
     it "should create an instance_variable to save the association object" do
       assert_equal model.one_object, nil

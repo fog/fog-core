@@ -120,6 +120,8 @@ module Fog
             send("#{self.class.aliases[key]}=", value)
           elsif self.respond_to?("#{key}=", true)
             send("#{key}=", value)
+          elsif self.respond_to?("#{self.masks.key(key)}=", true)
+            send("#{self.masks.key(key)}=", value)
           else
             attributes[key] = value
           end
