@@ -153,9 +153,11 @@ module Fog
     end
 
     def self.sandbox
+      raise CacheDir.new("Must set an explicit sandbox for this cache. Example: 'serviceX-regionY'") unless sandbox_name
+
       @sandbox = if @sandbox_name
                    safe_path(File.expand_path("#{SANDBOX_PREFIX}/#{@sandbox_name}"))
-                 end || (raise CacheDir.new("Must set an explicit sandbox for this cache. Example: 'serviceX-regionY'"))
+                 end
     end
 
     def self.sandbox_name=(name)
@@ -166,11 +168,10 @@ module Fog
       @sandbox_name
     end
 
-
     # The path/namespace where the cache is stored for a specific +model_klass+ and +@service+.
     def self.namespace(model_klass, service)
-      name = File.join(self.sandbox, service.class.to_s, model_klass.to_s)
-      name = safe_path(name)
+      ns = File.join(self.sandbox, service.class.to_s, model_klass.to_s)
+      ns = safe_path(ns)
     end
 
     def self.safe_path(klass)
