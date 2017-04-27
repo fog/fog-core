@@ -14,7 +14,7 @@ module Fog
   #
   # set the namespace where this cache will be stored:
   #
-  # Fog::Cache.sandbox_name = "service-account-foo-region-bar"
+  # Fog::Cache.namespace_prefix = "service-account-foo-region-bar"
   #
   # cache to disk:
   #
@@ -35,7 +35,7 @@ module Fog
   #
   #   # note this is necessary in order to segregate usage of cache between various providers regions and accounts.
   #   # if you are using one account/region/etc only, you still must set it. 'default' will do.
-  #   Fog::Cache.sandbox_name = "prod-emea-eu-west-1"
+  #   Fog::Cache.namespace_prefix = "prod-emea-eu-west-1"
   #
   #   s = security_groups.sample; s.name # => "default"
   #   s.cache.dump # => 2371
@@ -53,7 +53,7 @@ module Fog
   #
   # Note that when loading cache from disk, you need to pass the appropriate model class, and service associated with it.
   # +Service+ is passed in is so that the service/connection details can be loaded into the loaded instances so they can be re-queried, etc.
-  # +Model+ is passed in so we can find the cache data associated to that model in the sandbox of cache this session is using:
+  # +Model+ is passed in so we can find the cache data associated to that model in the namespace of cache this session is using:
   # Will try to load all resources associated to those. If you had 1 yml file, or 100, it would load whatever it could find.
   # As such, the normal usage of dumping would be do it on a collection:
   #
@@ -90,8 +90,8 @@ module Fog
     class CacheDir < StandardError; end
 
     # where different caches per +service+ api keys, regions etc, are stored
-    # see the +sandbox=+ method.
-    SANDBOX_PREFIX = "~/.fog-cache"
+    # see the +namespace_prefix=+ method.
+    SANDBOX = "~/.fog-cache"
 
     # when a resource is used such as `server.cache.dump` the model klass is passed in
     # so that it can be identified from a different session.
@@ -152,25 +152,20 @@ module Fog
       @cache[path] = YAML.load(File.read(path))
     end
 
-    def self.sandbox
-      raise CacheDir.new("Must set an explicit sandbox for this cache. Example: 'serviceX-regionY'") unless sandbox_name
-
-      @sandbox = if @sandbox_name
-                   safe_path(File.expand_path("#{SANDBOX_PREFIX}/#{@sandbox_name}"))
-                 end
+    def self.namespace_prefix=(name)
+      @namespace_prefix = name
     end
 
-    def self.sandbox_name=(name)
-      @sandbox_name = name
-    end
-
-    def self.sandbox_name
-      @sandbox_name
+    def self.namespace_prefix
+      @namespace_prefix
     end
 
     # The path/namespace where the cache is stored for a specific +model_klass+ and +@service+.
     def self.namespace(model_klass, service)
-      ns = File.join(self.sandbox, service.class.to_s, model_klass.to_s)
+
+      raise CacheDir.new("Must set an explicit identifier/name for this cache. Example: 'serviceX-regionY'") unless namespace_prefix
+
+      ns = File.join(SANDBOX, namespace_prefix, service.class.to_s, model_klass.to_s)
       ns = safe_path(ns)
     end
 

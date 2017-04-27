@@ -25,17 +25,23 @@ describe Fog::Cache do
   before(:each) do
     Fog.mock!
     @service = Fog::SubFogTestService.new
-    Fog::Cache.sandbox_name = "test-dir"
+    Fog::Cache.namespace_prefix = "test-dir"
   end
 
-  it "has a sandbox configurable" do
-    Fog::Cache.sandbox_name = "for-service-user-region-foo"
+  it "has a namespace_prefix configurable" do
+    Fog::Cache.namespace_prefix = "for-service-user-region-foo"
+
     # Expand path does not downcase. case insensitive platform tests.
-    assert_equal Fog::Cache.sandbox.downcase, File.expand_path("~/.fog-cache/for-service-user-region-foo").downcase
+    example_cache = File.expand_path(Fog::Cache.namespace(Fog::SubFogTestModel, @service)).downcase
+    expected_namespace = File.expand_path("~/.fog-cache/for-service-user-region-foo").downcase
+
+    puts example_cache
+    puts expected_namespace
+    assert_equal example_cache.include?(expected_namespace), true
   end
 
-  it "must have a sandbox configurable" do
-    Fog::Cache.sandbox_name = nil
+  it "must have a namespace_prefix configurable" do
+    Fog::Cache.namespace_prefix = nil
     assert_raises Fog::Cache::CacheDir do
       Fog::Cache.load(Fog::SubFogTestModel, @service)
     end
