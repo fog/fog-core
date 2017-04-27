@@ -6,7 +6,6 @@ module Fog
     extend Fog::Attributes::ClassMethods
     include Fog::Attributes::InstanceMethods
     include Fog::Core::DeprecatedConnectionAccessors
-    
 
     attr_reader :service
 

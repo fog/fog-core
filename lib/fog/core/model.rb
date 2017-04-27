@@ -1,4 +1,5 @@
 require "fog/core/deprecated_connection_accessors"
+require "fog/core/cache"
 
 module Fog
   class Model
@@ -18,6 +19,10 @@ module Fog
         @service = attribs[:connection]
       end
       merge_attributes(attribs)
+    end
+
+    def cache
+      Fog::Cache.new(self)
     end
 
     def inspect
