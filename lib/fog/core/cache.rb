@@ -131,6 +131,9 @@ module Fog
         Fog::Logger.warning("Found duplicate items in the cache. Expire all & refresh cache soon.")
       end
 
+      # Fog models created, free memory of cached data used for creation.
+      @memoized = nil
+
       uniq_loaded
     end
 
@@ -145,11 +148,12 @@ module Fog
       FileUtils.rm_rf(namespace(model_klass, service))
     end
 
-    # loads yml cache from path on disk
+    # loads yml cache from path on disk, used
+    # to initialize Fog models.
     def self.load_cache(path)
-      @cache ||= {}
-      return @cache[path] if @cache[path]
-      @cache[path] = YAML.load(File.read(path))
+      @memoized ||= {}
+      return @memoized[path] if @memoized[path]
+      @memoized[path] = YAML.load(File.read(path))
     end
 
     def self.namespace_prefix=(name)
