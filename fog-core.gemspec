@@ -21,7 +21,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency("builder")
   spec.add_dependency("excon", "~> 0.49")
   spec.add_dependency("formatador", "~> 0.2")
-  spec.add_dependency("xmlrpc") if RUBY_VERSION.to_s >= "2.4"
+
+  # https://github.com/fog/fog-core/issues/206
+  # spec.add_dependency("xmlrpc") if RUBY_VERSION.to_s >= "2.4"
 
   spec.add_development_dependency("tins") if RUBY_VERSION.to_s > "2.0"
   spec.add_development_dependency("coveralls")
