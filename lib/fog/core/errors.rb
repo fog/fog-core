@@ -11,8 +11,6 @@ module Fog
       end
     end
 
-    class MockNotImplemented < Fog::Errors::Error; end
-
     class NotFound < Fog::Errors::Error; end
 
     class LoadError < Fog::Errors::Error; end

@@ -13,6 +13,7 @@ require "minitest/stub_const"
 
 $LOAD_PATH.unshift "lib"
 require "fog/core"
+require "fog/mock"
 
 Dir["spec/fake_app/**/*.rb"].each do |file|
   require File.join(File.dirname(__FILE__), "..", file)
