@@ -109,34 +109,73 @@ module Fog
 
       raise CacheNotFound if cache_files.empty?
 
-      attributes = cache_files.map do |path|
-        load_cache(path)[:attrs]
+      # collection_klass and model_klass should be the same across all instances
+      # choose a valid cache record from the dump to use as a sample to deterine
+      # which collection/model to instantiate.
+
+      path = cache_files.detect{ |path| valid_for_load?(path) }
+      model_klass = const_get_compat(load_cache(path)[:model_klass])
+      collection_klass = if valid_for_load?(path) && load_cache(path)[:collection_klass]
+                           const_get_compat(load_cache(path)[:collection_klass])
+                         end
+
+      loaded = cache_files.map do |path|
+          model_klass.new(load_cache(path)[:attrs]) if valid_for_load?(path)
+      end.compact
+
+      # Load collection and service so they can be reloaded/connection is set properly.
+      # See https://github.com/fog/fog-aws/issues/354#issuecomment-286789702
+      loaded.each do |i|
+        i.collection = collection_klass.new(:service => service) if collection_klass
+        i.instance_variable_set(:@service, service)
       end
+
       # uniqe-ify based on the total of attributes. duplicate cache can exist due to
       # `model#identity` not being unique. but if all attributes match, they are unique
       # and shouldn't be loaded again.
-      uniq_attributes = attributes.uniq
-      if uniq_attributes.size != attributes.size
+      uniq_loaded = uniq_w_block(loaded) { |i| i.attributes }
+      if uniq_loaded.size != loaded.size
         Fog::Logger.warning("Found duplicate items in the cache. Expire all & refresh cache soon.")
-      end
-
-      loaded = uniq_attributes.map do |attrs|
-        model_klass.new(attrs)
-      end
-
-      collection_klass = load_cache(cache_files.first)[:collection_klass] &&
-                         const_split_and_get(load_cache(cache_files.first)[:collection_klass])
-
-      loaded.each do |i|
-        # See https://github.com/fog/fog-aws/issues/354#issuecomment-286789702
-        i.collection = collection_klass.new(:service => service) if collection_klass
-        i.instance_variable_set(:@service, service)
       end
 
       # Fog models created, free memory of cached data used for creation.
       @memoized = nil
 
-      loaded
+      uniq_loaded
+    end
+
+    # :nodoc: compatability for 1.8.7 1.9.3
+    def self.const_get_compat(strklass)
+      # https://stackoverflow.com/questions/3163641/get-a-class-by-name-in-ruby
+      strklass.split('::').inject(Object) do |mod, class_name|
+        mod.const_get(class_name)
+      end
+    end
+
+    # :nodoc: compatability for 1.8.7 1.9.3
+    def self.uniq_w_block(arr)
+      ret, keys = [], []
+      arr.each do |x|
+        key = block_given? ? yield(x) : x
+        unless keys.include? key
+          ret << x
+          keys << key
+        end
+      end
+      ret
+    end
+
+    # method to determine if a path can be loaded and is valid fog cache format.
+    def self.valid_for_load?(path)
+      data = load_cache(path)
+      if data && data.is_a?(Hash)
+        if [:identity, :model_klass, :collection_klass, :attrs].all? { |k| data.keys.include?(k) }
+          return true
+        else
+          Fog::Logger.warning("Found corrupt items in the cache: #{path}. Expire all & refresh cache soon.\n\nData:#{File.read(path)}")
+          return false
+        end
+      end
     end
 
     # creates on-disk cache of this specific +model_klass+ and +@service+
@@ -148,6 +187,12 @@ module Fog
     # Instead, this will remove all on-disk cache of this specific +model_klass+ and and +@service+
     def self.expire_cache!(model_klass, service)
       FileUtils.rm_rf(namespace(model_klass, service))
+    end
+
+    # cleans the `SANDBOX` - specific any resource cache of any namespace,
+    # and any metadata associated to any.
+    def self.clean!
+      FileUtils.rm_rf(SANDBOX)
     end
 
     # loads yml cache from path on disk, used
@@ -166,8 +211,44 @@ module Fog
       @namespace_prefix
     end
 
+    # write any metadata - +hash+ information - specific to the namespaced cache in the session.
+    #
+    # you can retrieve this in other sessions, as long as +namespace_prefix+ is set
+    # you can overwrite metadata over time. see test cases as examples.
+    def self.write_metadata(h)
+      if namespace_prefix.nil?
+        raise CacheDir.new("Must set an explicit identifier/name for this cache. Example: 'serviceX-regionY'") unless namespace_prefix
+      elsif !h.is_a?(Hash)
+        raise CacheDir.new("metadta must be a hash of information like {:foo => 'bar'}")
+      end
+
+      mpath = File.join(SANDBOX, namespace_prefix, "metadata.yml")
+      to_write = if File.exist?(mpath)
+                YAML.dump(YAML.load(File.read(mpath)).merge!(h))
+              else
+                YAML.dump(h)
+              end
+
+      mdir = File.join(SANDBOX, namespace_prefix)
+      FileUtils.mkdir_p(mdir) if !File.exist?(mdir)
+
+      File.open(mpath, "w") { |f| f.write(to_write) }
+    end
+
+    # retrive metadata for this +namespace+ of cache. returns empty {} if none found.
+    def self.metadata
+      mpath = File.join(SANDBOX, namespace_prefix, "metadata.yml")
+      if File.exist?(mpath)
+        metadata = YAML.load(File.read(mpath))
+        return metadata
+      else
+        return {}
+      end
+    end
+
     # The path/namespace where the cache is stored for a specific +model_klass+ and +@service+.
     def self.namespace(model_klass, service)
+
       raise CacheDir.new("Must set an explicit identifier/name for this cache. Example: 'serviceX-regionY'") unless namespace_prefix
 
       ns = File.join(SANDBOX, namespace_prefix, service.class.to_s, model_klass.to_s)
@@ -176,12 +257,6 @@ module Fog
 
     def self.safe_path(klass)
       klass.to_s.gsub("::", "_").downcase
-    end
-
-    def self.const_split_and_get(const)
-      const.split("::").inject(Object) do |obj, str|
-        obj.const_get(str)
-      end
     end
 
     def initialize(model)
@@ -196,12 +271,10 @@ module Fog
         self.class.create_namespace(model.class, model.service)
       end
 
-      data = {
-        :attrs            => model.attributes,
-        :collection_klass => model.collection && model.collection.class.to_s,
-        :identity         => model.identity,
-        :model_klass      => model.class.to_s
-      }
+      data = { :identity => model.identity,
+                     :model_klass => model.class.to_s,
+                     :collection_klass => model.collection && model.collection.class.to_s,
+                     :attrs => model.attributes }
 
       File.open(dump_to, "w") { |f| f.write(YAML.dump(data)) }
     end
