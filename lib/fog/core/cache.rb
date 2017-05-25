@@ -91,7 +91,7 @@ module Fog
 
     # where different caches per +service+ api keys, regions etc, are stored
     # see the +namespace_prefix=+ method.
-    SANDBOX = File.expand_path("~/.fog-cache")
+    SANDBOX = ENV["HOME"] ? File.expand_path("~/.fog-cache") : File.expand_path(".fog-cache")
 
     # when a resource is used such as `server.cache.dump` the model klass is passed in
     # so that it can be identified from a different session.
