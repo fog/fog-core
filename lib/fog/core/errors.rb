@@ -11,6 +11,7 @@ module Fog
       end
     end
 
+    # TODO: move to Mock section once Mock classes have been fully moved to test_helpers
     class MockNotImplemented < Fog::Errors::Error; end
 
     class NotFound < Fog::Errors::Error; end

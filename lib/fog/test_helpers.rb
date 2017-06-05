@@ -11,3 +11,6 @@ require "fog/test_helpers/succeeds_helper"
 require "fog/test_helpers/compute/flavors_helper"
 require "fog/test_helpers/compute/server_helper"
 require "fog/test_helpers/compute/servers_helper"
+
+# Load Service class for Mocks
+require "fog/test_helpers/mock"
