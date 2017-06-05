@@ -5,7 +5,7 @@ module Fog
     # This class handles the attributes without a type force.
     # The attributes returned from the provider will keep its original values.
     class Default
-      attr_reader :model, :name, :squash, :aliases, :default, :as
+      attr_reader :model, :name, :squash, :aliases, :default, :as, :nested_aliases
 
       def initialize(model, name, options)
         @model = model
@@ -13,11 +13,13 @@ module Fog
         @name = name
         @squash = options.fetch(:squash, false)
         @aliases = options.fetch(:aliases, [])
+        @nested_aliases = options.fetch(:nested_aliases, [])
         @default = options[:default]
         @as = options.fetch(:as, name)
         create_setter
         create_getter
         create_aliases
+        create_nested_aliases
         set_defaults
         create_mask
       end
@@ -63,6 +65,12 @@ module Fog
       def create_aliases
         Array(aliases).each do |alias_name|
           model.aliases[alias_name] = name
+        end
+      end
+
+      def create_nested_aliases
+        Array(nested_aliases).each do |alias_name|
+          model.nested_aliases[alias_name] = name
         end
       end
 

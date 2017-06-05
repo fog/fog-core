@@ -9,6 +9,10 @@ module Fog
         @aliases ||= {}
       end
 
+      def nested_aliases
+        @nested_aliases ||= {}
+      end
+
       def associations
         @associations ||= {}
       end
@@ -124,6 +128,12 @@ module Fog
             attributes[key] = value
           end
         end
+
+        self.class.nested_aliases.each_pair do |key, value|
+          next if attributes[value]
+          attributes[value] = _get_nested_value(new_attributes, key.split("."))
+        end
+
         self
       end
 
@@ -183,6 +193,17 @@ module Fog
       def remap_attributes(attributes, mapping)
         mapping.each_pair do |key, value|
           attributes[value] = attributes.delete(key) if attributes.key?(key)
+        end
+      end
+
+      # Dig value from new_attributes recursively
+      # Returns String or Array
+      def _get_nested_value(attributes = {}, keys = [])
+        return attributes unless attributes.is_a?(Hash)
+        if keys.length > 1
+          _get_nested_value(attributes[keys.first], keys.drop(1))
+        else
+          attributes[keys.first]
         end
       end
     end
