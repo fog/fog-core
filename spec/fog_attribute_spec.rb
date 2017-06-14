@@ -1,5 +1,4 @@
 require "spec_helper"
-require "xmlrpc/datetime"
 
 class Service
   def single_associations
@@ -113,12 +112,6 @@ describe "Fog::Attributes" do
       end
       model.merge_attributes(:time => string)
       assert_equal Time.parse(string), model.time
-    end
-
-    it "returns a Time object when passed a XMLRPC::DateTime object" do
-      now = XMLRPC::DateTime.new(2000, 7, 8, 10, 20, 34)
-      model.merge_attributes(:time => now)
-      assert_equal now.to_time, model.time
     end
   end
 
