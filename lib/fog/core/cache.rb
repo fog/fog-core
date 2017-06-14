@@ -109,9 +109,19 @@ module Fog
 
       raise CacheNotFound if cache_files.empty?
 
-      loaded = cache_files.map do |path|
-        model_klass = const_split_and_get(load_cache(path)[:model_klass])
-        model_klass.new(load_cache(path)[:attrs])
+      attributes = cache_files.map do |path|
+        load_cache(path)[:attrs]
+      end
+      # uniqe-ify based on the total of attributes. duplicate cache can exist due to
+      # `model#identity` not being unique. but if all attributes match, they are unique
+      # and shouldn't be loaded again.
+      uniq_attributes = attributes.uniq
+      if uniq_attributes.size != attributes.size
+        Fog::Logger.warning("Found duplicate items in the cache. Expire all & refresh cache soon.")
+      end
+
+      loaded = uniq_attributes.map do |attrs|
+        model_klass.new(attrs)
       end
 
       collection_klass = load_cache(cache_files.first)[:collection_klass] &&
@@ -123,18 +133,10 @@ module Fog
         i.instance_variable_set(:@service, service)
       end
 
-      # uniqe-ify based on the total of attributes. duplicate cache can exist due to
-      # `model#identity` not being unique. but if all attributes match, they are unique
-      # and shouldn't be loaded again.
-      uniq_loaded = loaded.uniq { |i| i.attributes }
-      if uniq_loaded.size != loaded.size
-        Fog::Logger.warning("Found duplicate items in the cache. Expire all & refresh cache soon.")
-      end
-
       # Fog models created, free memory of cached data used for creation.
       @memoized = nil
 
-      uniq_loaded
+      loaded
     end
 
     # creates on-disk cache of this specific +model_klass+ and +@service+
@@ -194,10 +196,12 @@ module Fog
         self.class.create_namespace(model.class, model.service)
       end
 
-      data = { :identity => model.identity,
-                     :model_klass => model.class.to_s,
-                     :collection_klass => model.collection && model.collection.class.to_s,
-                     :attrs => model.attributes }
+      data = {
+        :attrs            => model.attributes,
+        :collection_klass => model.collection && model.collection.class.to_s,
+        :identity         => model.identity,
+        :model_klass      => model.class.to_s
+      }
 
       File.open(dump_to, "w") { |f| f.write(YAML.dump(data)) }
     end

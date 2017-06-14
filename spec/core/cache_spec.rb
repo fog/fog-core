@@ -103,7 +103,7 @@ describe Fog::Cache do
 
     id = SecureRandom.hex
 
-    # security gruops on aws for eg can have the same identity group name 'default'.
+    # security groups on aws for eg can have the same identity group name 'default'.
     # there are no restrictions on `identity` fog attributes to be uniq.
     a = Fog::SubFogTestModel.new(:id => id, :service => @service, :bar => 'bar')
     b = Fog::SubFogTestModel.new(:id => id, :service => @service, :foo => 'foo')
