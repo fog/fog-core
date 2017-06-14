@@ -114,8 +114,8 @@ module Fog
         model_klass.new(load_cache(path)[:attrs])
       end
 
-      collection_klass = load_cache(cache_files.sample)[:collection_klass] &&
-                         const_split_and_get(load_cache(cache_files.sample)[:collection_klass])
+      collection_klass = load_cache(cache_files.first)[:collection_klass] &&
+                         const_split_and_get(load_cache(cache_files.first)[:collection_klass])
 
       loaded.each do |i|
         # See https://github.com/fog/fog-aws/issues/354#issuecomment-286789702
