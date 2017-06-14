@@ -35,8 +35,6 @@ describe Fog::Cache do
     example_cache = File.expand_path(Fog::Cache.namespace(Fog::SubFogTestModel, @service)).downcase
     expected_namespace = File.expand_path("~/.fog-cache/for-service-user-region-foo").downcase
 
-    puts example_cache
-    puts expected_namespace
     assert_equal example_cache.include?(expected_namespace), true
   end
 
