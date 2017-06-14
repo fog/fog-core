@@ -110,12 +110,12 @@ module Fog
       raise CacheNotFound if cache_files.empty?
 
       loaded = cache_files.map do |path|
-        model_klass = Object.const_get(load_cache(path)[:model_klass])
+        model_klass = const_split_and_get(load_cache(path)[:model_klass])
         model_klass.new(load_cache(path)[:attrs])
       end
 
       collection_klass = load_cache(cache_files.sample)[:collection_klass] &&
-                         Object.const_get(load_cache(cache_files.sample)[:collection_klass])
+                         const_split_and_get(load_cache(cache_files.sample)[:collection_klass])
 
       loaded.each do |i|
         # See https://github.com/fog/fog-aws/issues/354#issuecomment-286789702
@@ -166,7 +166,6 @@ module Fog
 
     # The path/namespace where the cache is stored for a specific +model_klass+ and +@service+.
     def self.namespace(model_klass, service)
-
       raise CacheDir.new("Must set an explicit identifier/name for this cache. Example: 'serviceX-regionY'") unless namespace_prefix
 
       ns = File.join(SANDBOX, namespace_prefix, service.class.to_s, model_klass.to_s)
@@ -175,6 +174,12 @@ module Fog
 
     def self.safe_path(klass)
       klass.to_s.gsub("::", "_").downcase
+    end
+
+    def self.const_split_and_get(const)
+      const.split("::").inject(Object) do |obj, str|
+        obj.const_get(str)
+      end
     end
 
     def initialize(model)
