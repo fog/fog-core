@@ -23,7 +23,7 @@ matrix:
       gemfile: Gemfile.1.9.3
     - rvm: jruby-19mode
       gemfile: Gemfile.1.9.3
-    - rvm: 2.1.0
+    - rvm: 2.1
       gemfile: Gemfile
       env: COVERAGE=true
     - rvm: jruby-head
