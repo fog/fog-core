@@ -112,18 +112,16 @@ module Fog
       # collection_klass and model_klass should be the same across all instances
       # choose a valid cache record from the dump to use as a sample to deterine
       # which collection/model to instantiate.
+      sample_path = cache_files.detect{ |path| valid_for_load?(path) }
+      model_klass = const_get_compat(load_cache(sample_path)[:model_klass])
+      collection_klass = const_get_compat(load_cache(sample_path)[:collection_klass]) if load_cache(sample_path)[:collection_klass]
 
-      path = cache_files.detect{ |path| valid_for_load?(path) }
-      model_klass = const_get_compat(load_cache(path)[:model_klass])
-      collection_klass = if valid_for_load?(path) && load_cache(path)[:collection_klass]
-                           const_get_compat(load_cache(path)[:collection_klass])
-                         end
-
+      # Load the cache data into actual ruby instances
       loaded = cache_files.map do |path|
           model_klass.new(load_cache(path)[:attrs]) if valid_for_load?(path)
       end.compact
 
-      # Load collection and service so they can be reloaded/connection is set properly.
+      # Set the collection and service so they can be reloaded/connection is set properly.
       # See https://github.com/fog/fog-aws/issues/354#issuecomment-286789702
       loaded.each do |i|
         i.collection = collection_klass.new(:service => service) if collection_klass
@@ -286,7 +284,7 @@ module Fog
       # this means cache duplication is possible.
       #
       # see "dumping two models that have duplicate identity" test case.
-      name = "#{self.class.namespace(model.class, model.service)}/#{model.identity}-#{SecureRandom.hex}.yml"
+      "#{self.class.namespace(model.class, model.service)}/#{model.identity}-#{SecureRandom.hex}.yml"
     end
   end
 end
