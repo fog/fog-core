@@ -3,6 +3,8 @@ require "fog/core/model"
 module Fog
   module Compute
     class Server < Fog::Model
+      INITIAL_SSHABLE_TIMEOUT = 8
+
       attr_writer :username, :private_key, :private_key_path, :public_key, :public_key_path, :ssh_port, :ssh_options
       # Sets the proc used to determine the IP Address used for ssh/scp interactions.
       # @example
@@ -87,9 +89,26 @@ module Fog
       end
 
       def sshable?(options = {})
-        ready? && !ssh_ip_address.nil? && !!Timeout.timeout(8) { ssh("pwd", options) }
+        result = ready? && !ssh_ip_address.nil? && !!Timeout.timeout(sshable_timeout) { ssh("pwd", options) }
+        @sshable_timeout = nil
+        result
       rescue SystemCallError, Net::SSH::AuthenticationFailed, Net::SSH::Disconnect, Timeout::Error
         false
+      end
+
+
+      private
+
+      def sshable_timeout
+        if @sshable_timeout
+          if @sshable_timeout >= 40
+            @sshable_timeout = 60
+          else
+            @sshable_timeout *= 1.5
+          end
+        else
+          @sshable_timeout = INITIAL_SSHABLE_TIMEOUT
+        end
       end
     end
   end
