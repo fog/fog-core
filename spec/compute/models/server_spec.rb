@@ -47,7 +47,7 @@ describe Fog::Compute::Server do
           it "is false" do
             @server.stub(:ready?, true) do
               @server.stub(:ssh_ip_address, "10.0.0.1") do
-                raises_timeout = -> (_time) { raise Timeout::Error.new }
+                raises_timeout = lambda { |_time| raise Timeout::Error.new }
                 Timeout.stub(:timeout, raises_timeout) do
                   refute @server.sshable?
                 end
@@ -60,7 +60,7 @@ describe Fog::Compute::Server do
           it "is false" do
             @server.stub(:ready?, true) do
               @server.stub(:ssh_ip_address, "10.0.0.1") do
-                raises_timeout = -> (_cmd, _options) { raise Net::SSH::AuthenticationFailed.new }
+                raises_timeout = lambda { |_cmd, _options| raise Net::SSH::AuthenticationFailed.new }
                 @server.stub(:ssh, raises_timeout) do
                   refute @server.sshable?
                 end
@@ -73,7 +73,7 @@ describe Fog::Compute::Server do
           it "is false" do
             @server.stub(:ready?, true) do
               @server.stub(:ssh_ip_address, "10.0.0.1") do
-                raises_timeout = -> (_cmd, _options) { raise Net::SSH::Disconnect.new }
+                raises_timeout = lambda { |_cmd, _options| raise Net::SSH::Disconnect.new }
                 @server.stub(:ssh, raises_timeout) do
                   refute @server.sshable?
                 end
@@ -86,7 +86,7 @@ describe Fog::Compute::Server do
           it "is false" do
             @server.stub(:ready?, true) do
               @server.stub(:ssh_ip_address, "10.0.0.1") do
-                raises_timeout = -> (_cmd, _options) { raise SystemCallError.new("message, 0") }
+                raises_timeout = lambda { |_cmd, _options| raise SystemCallError.new("message, 0") }
                 @server.stub(:ssh, raises_timeout) do
                   refute @server.sshable?
                 end
@@ -112,15 +112,17 @@ describe Fog::Compute::Server do
             it "increases the timeout factor by 1.5" do
               @server.stub(:ready?, true) do
                 @server.stub(:ssh_ip_address, "10.0.0.1") do
-                  raises_timeout = -> (time) do
-                    assert(time == 8); raise Timeout::Error.new
+                  raises_timeout = lambda do |time|
+                    assert(time == 8)
+                    raise Timeout::Error.new
                   end
                   Timeout.stub(:timeout, raises_timeout) do
                     refute @server.sshable?
                   end
 
-                  raises_timeout = -> (time) do
-                    assert_equal(12, time); raise Timeout::Error.new
+                  raises_timeout = lambda do |time|
+                    assert_equal(12, time)
+                    raise Timeout::Error.new
                   end
                   Timeout.stub(:timeout, raises_timeout) do
                     refute @server.sshable?
@@ -132,20 +134,22 @@ describe Fog::Compute::Server do
             it "does not increase timeout beyond 60s" do
               @server.stub(:ready?, true) do
                 @server.stub(:ssh_ip_address, "10.0.0.1") do
-                  raises_timeout = -> (_time) { raise Timeout::Error.new }
+                  raises_timeout = lambda { |_time| raise Timeout::Error.new }
                   Timeout.stub(:timeout, raises_timeout) do
                     5.times { refute @server.sshable? }
                   end
 
-                  raises_timeout = -> (time) do
-                    assert_equal(60, time); raise Timeout::Error.new
+                  raises_timeout = lambda do |time|
+                    assert_equal(60, time)
+                    raise Timeout::Error.new
                   end
                   Timeout.stub(:timeout, raises_timeout) do
                     refute @server.sshable?
                   end
 
-                  raises_timeout = -> (time) do
-                    assert_equal(60, time); raise Timeout::Error.new
+                  raises_timeout = lambda do |time|
+                    assert_equal(60, time)
+                    raise Timeout::Error.new
                   end
                   Timeout.stub(:timeout, raises_timeout) do
                     refute @server.sshable?
@@ -158,8 +162,9 @@ describe Fog::Compute::Server do
               it "resets the timeout to the initial value" do
                 @server.stub(:ready?, true) do
                   @server.stub(:ssh_ip_address, "10.0.0.1") do
-                    raises_timeout = -> (time) do
-                      assert(time == 8); raise Timeout::Error.new
+                    raises_timeout = lambda do |time|
+                      assert(time == 8)
+                      raise Timeout::Error.new
                     end
                     Timeout.stub(:timeout, raises_timeout) do
                       refute @server.sshable?
@@ -169,8 +174,9 @@ describe Fog::Compute::Server do
                       assert @server.sshable?
                     end
 
-                    raises_timeout = -> (time) do
-                      assert_equal(8, time); raise Timeout::Error.new
+                    raises_timeout = lambda do |time|
+                      assert_equal(8, time)
+                      raise Timeout::Error.new
                     end
                     Timeout.stub(:timeout, raises_timeout) do
                       refute @server.sshable?
