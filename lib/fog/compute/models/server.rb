@@ -92,7 +92,13 @@ module Fog
         result = ready? && !ssh_ip_address.nil? && !!Timeout.timeout(sshable_timeout) { ssh("pwd", options) }
         @sshable_timeout = nil
         result
-      rescue SystemCallError, Net::SSH::AuthenticationFailed, Net::SSH::Disconnect, Timeout::Error
+      rescue SystemCallError
+        false
+      rescue Net::SSH::AuthenticationFailed, Net::SSH::Disconnect
+        @sshable_timeout = nil
+        false
+      rescue Timeout::Error
+        increase_sshable_timeout
         false
       end
 
@@ -100,7 +106,11 @@ module Fog
       private
 
       def sshable_timeout
-        if @sshable_timeout
+        @sshable_timeout ||= increase_sshable_timeout
+      end
+
+      def increase_sshable_timeout
+        if defined?(@sshable_timeout) && @sshable_timeout
           if @sshable_timeout >= 40
             @sshable_timeout = 60
           else
