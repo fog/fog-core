@@ -49,7 +49,7 @@ describe Fog::Cache do
 
     # diff namespace, diff metadata
     Fog::Cache.namespace_prefix = "different-namespace"
-    assert_equal Fog::Cache.metadata[:last_dumped], nil
+    assert_nil Fog::Cache.metadata[:last_dumped]
     # still accessible per namespace
     Fog::Cache.namespace_prefix = "for-service-user-region-foo"
     assert_equal Fog::Cache.metadata[:last_dumped],  "Tuesday, November 8, 2016"
