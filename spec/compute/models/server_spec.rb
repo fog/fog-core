@@ -7,11 +7,6 @@ describe Fog::Compute::Server do
   end
 
   describe "#sshable?" do
-    before do
-      # I'm not sure why #sshable? depends on a method that's not defined except in implementing classes
-      def @server.ready?;end
-    end
-
     describe "when the server is not ready" do
       it "is false" do
         @server.stub(:ready?, false) do
