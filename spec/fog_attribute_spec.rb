@@ -231,7 +231,7 @@ describe "Fog::Attributes" do
 
   describe ":default => 'default_value'" do
     it "should return nil when default is not defined on a new object" do
-      assert_equal model.bool, nil
+      assert_nil model.bool
     end
 
     it "should return the value of the object when default is not defined" do
@@ -259,18 +259,18 @@ describe "Fog::Attributes" do
 
     it "should return nil on a persisted object without a value" do
       model.merge_attributes(:id => "some-crazy-id")
-      assert_equal model.default, nil
+      assert_nil model.default
     end
 
     it "should return nil when an attribute with default value is setted to nil" do
       model.default = nil
-      assert_equal model.default, nil
+      assert_nil model.default
     end
   end
 
   describe ".has_one" do
     it "should create an instance_variable to save the association object" do
-      assert_equal model.one_object, nil
+      assert_nil model.one_object
     end
 
     it "should create a getter to save the association model" do
@@ -292,7 +292,7 @@ describe "Fog::Attributes" do
 
   describe ".has_one_identity" do
     it "should create an instance_variable to save the association identity" do
-      assert_equal model.one_identity, nil
+      assert_nil model.one_identity
     end
 
     it "should create a getter to load the association model" do
