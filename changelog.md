@@ -1,3 +1,21 @@
+1.45.0 08/01/2017
+==========================================================
+
+remove xmlrpc requirement/usage
+fix for nested const across ruby versions
+remove array#sample usage for legacy ruby compatibility
+simplify uniq for cache and fix for legacy ruby
+remove debugging puts from cache
+tweak tins version for 1.9
+loosen 2.1.x travis config to 2.1
+add 1.9 compatible term-ansicolor
+fix rubocop for 1.9.3
+enable metadata for cache
+add specs for server#sshable
+add exponential backoff for server#sshable?
+add server#ready? to base server for clarity
+bump excon dependency
+
 1.44.3 05/25/2017
 ==========================================================
 
