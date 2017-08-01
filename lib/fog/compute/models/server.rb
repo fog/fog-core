@@ -104,7 +104,7 @@ module Fog
 
       # Is the server ready to receive connections?
       #
-      # Returns default.
+      # Returns false by default.
       #
       # Subclasses should implement #ready? appropriately.
       def ready?
