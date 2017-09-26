@@ -127,6 +127,11 @@ module Fog
         self
       end
 
+      def merge_associations(new_associations = {})
+        associations.update(new_associations)
+        self
+      end
+
       # Returns true if a remote resource has been assigned an
       # identity and we can assume it has been persisted.
       #

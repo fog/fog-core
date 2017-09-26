@@ -54,6 +54,7 @@ module Fog
 
       new_attributes = data.attributes
       merge_attributes(new_attributes)
+      merge_associations(data.associations)
       self
     end
 
