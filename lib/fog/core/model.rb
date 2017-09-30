@@ -44,17 +44,13 @@ module Fog
     def reload
       requires :identity
 
-      data = begin
-        collection.get(identity)
-      rescue Excon::Errors::SocketError
-        nil
-      end
+      object = collection.get(identity)
 
-      return unless data
+      merge_attributes(object.all_associations_and_attributes)
 
-      new_attributes = data.attributes
-      merge_attributes(new_attributes)
       self
+    rescue Excon::Errors::SocketError
+      nil
     end
 
     def to_json(_options = {})
