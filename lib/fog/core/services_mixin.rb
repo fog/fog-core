@@ -36,13 +36,8 @@ module Fog
       Fog.const_get(provider_name).const_get(*const_get_args(service_name))
     end
 
-    # Ruby 1.8 does not support the second 'inherit' argument to #const_get
     def const_get_args(*args)
-      if RUBY_VERSION < '1.9'
-        args
-      else
-        args + [false]
-      end
+      args + [false]
     end
 
     def service_name
