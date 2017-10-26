@@ -96,15 +96,10 @@ describe "Fog::Storage" do
 
   describe ".get_body_size" do
     it "doesn't alter the encoding of the string passed to it" do
-      # Ruby 1.8 doesn't support string encodings, so we can't test that
-      if RUBY_VERSION >= "1.9.3"
-        body = "foo".encode("UTF-8")
-        Fog::Storage.get_body_size(body)
+      body = "foo".encode("UTF-8")
+      Fog::Storage.get_body_size(body)
 
-        assert_equal("UTF-8", body.encoding.to_s)
-      else
-        skip
-      end
+      assert_equal("UTF-8", body.encoding.to_s)
     end
 
     it "respects frozen strings" do
