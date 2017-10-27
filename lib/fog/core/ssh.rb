@@ -58,7 +58,7 @@ module Fog
 
         @address  = address
         @username = username
-        @options  = { :paranoid => false }.merge(options)
+        @options  = { :paranoid => false, :verify_host_key => false }.merge(options)
       end
 
       def run(commands, &blk)
