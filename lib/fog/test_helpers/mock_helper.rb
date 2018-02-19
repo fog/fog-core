@@ -91,6 +91,9 @@ if Fog.mock?
     :libvirt_username                 => "root",
     :libvirt_password                 => "password",
     :cloudsigma_username              => "csuname",
-    :cloudsigma_password              => "cspass"
+    :cloudsigma_password              => "cspass",
+    :kubevirt_token                   => "[TOKEN]",
+    :kubevirt_hostname                => "localhost",
+    :kubevirt_port                    => "6443"
   }.merge(Fog.credentials)
 end
