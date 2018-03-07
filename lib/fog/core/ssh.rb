@@ -59,6 +59,7 @@ module Fog
         @address  = address
         @username = username
         @options  = { :paranoid => false, :verify_host_key => false }.merge(options)
+        @options.delete(:paranoid) if Net::SSH::VALID_OPTIONS.include? :verify_host_key
       end
 
       def run(commands, &blk)
