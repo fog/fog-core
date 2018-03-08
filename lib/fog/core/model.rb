@@ -46,6 +46,8 @@ module Fog
 
       object = collection.get(identity)
 
+      return unless object
+
       merge_attributes(object.all_associations_and_attributes)
 
       self
