@@ -1,4 +1,13 @@
-2.0.0 01/03/2017
+2.1.0 03/10/2018
+==========================================================
+
+remove libvirt_uri duplication
+fix dnsimple auth variables
+add kubevirt provider
+fix net-ssh paranoid deprecation
+fix nil fetch on object reload
+
+2.0.0 01/03/2018
 ==========================================================
 
 fix association reload
