@@ -6,7 +6,7 @@ module Fog
 
     def new(attributes)
       attributes    = attributes.dup # Prevent delete from having side effects
-      provider      = attributes.delete(:provider).to_s.downcase.to_sym
+      provider      = check_provider_alias(attributes.delete(:provider).to_s.downcase.to_sym)
       provider_name = Fog.providers[provider]
 
       raise ArgumentError, "#{provider} is not a recognized provider" unless providers.include?(provider)
@@ -42,6 +42,30 @@ module Fog
 
     def service_name
       name.split("Fog::").last
+    end
+
+    def check_provider_alias(provider)
+      case provider
+      when :baremetalcloud
+        Fog::Logger.deprecation(':baremetalcloud is deprecated. Use :bare_metal_cloud instead!')
+        :bare_metal_cloud
+      when :gogrid
+        Fog::Logger.deprecation(':gogrid is deprecated. Use :go_grid instead!')
+        :go_grid
+      when :internetarchive
+        Fog::Logger.deprecation(':internetarchive is deprecated. Use :internet_archive instead!')
+        :internet_archive
+      when :new_servers
+        Fog::Logger.deprecation(':new_servers is deprecated. Use :bare_metal_cloud instead!')
+        :bare_metal_cloud
+      when :stormondemand
+        Fog::Logger.deprecation(':stormondemand is deprecated. Use :storm_on_demand instead!')
+        :storm_on_demand
+      when :vclouddirector
+        Fog::Logger.deprecation(':vclouddirector is deprecated. Use :vcloud_director instead!')
+        :vcloud_director
+      else provider
+      end
     end
   end
 end

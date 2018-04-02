@@ -7,16 +7,6 @@ module Fog
       provider = attributes.delete(:provider).to_s.downcase.to_sym
 
       case provider
-      when :gogrid
-        require "fog/go_grid/compute"
-        Fog::Compute::GoGrid.new(attributes)
-      when :new_servers
-        require "fog/bare_metal_cloud/compute"
-        Fog::Logger.deprecation "`new_servers` is deprecated. Please use `bare_metal_cloud` instead."
-        Fog::Compute::BareMetalCloud.new(attributes)
-      when :baremetalcloud
-        require "fog/bare_metal_cloud/compute"
-        Fog::Compute::BareMetalCloud.new(attributes)
       when :rackspace
         version = attributes.delete(:version)
         version = version.to_s.downcase.to_sym unless version.nil?
@@ -38,18 +28,6 @@ module Fog
           require 'fog/digitalocean/compute'
           Fog::Compute::DigitalOcean.new(attributes)
         end
-      when :stormondemand
-        require "fog/compute/storm_on_demand"
-        Fog::Compute::StormOnDemand.new(attributes)
-      when :vcloud
-        require "fog/vcloud/compute"
-        Fog::Vcloud::Compute.new(attributes)
-      when :vclouddirector
-        require "fog/vcloud_director/compute"
-        Fog::Compute::VcloudDirector.new(attributes)
-      when :cloudatcost
-        require "fog/cloudatcost/compute"
-        Fog::Compute::CloudAtCost.new(attributes)
       else
         super(orig_attributes)
       end
