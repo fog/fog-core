@@ -16,27 +16,7 @@ describe "Fog::Storage" do
     end
 
     module Fog
-      module Storage
-        class TheRightWay
-          def initialize(_args); end
-        end
-      end
-    end
-
-    it "instantiates an instance of Fog::Storage::<Provider> from the :provider keyword arg" do
-      compute = Fog::Storage.new(:provider => :therightway)
-      assert_instance_of(Fog::Storage::TheRightWay, compute)
-    end
-
-    module Fog
-      module TheWrongWay
-        extend Provider
-        service(:storage, "Storage")
-      end
-    end
-
-    module Fog
-      module TheWrongWay
+      module TheRightWay
         class Storage
           def initialize(_args); end
         end
@@ -44,8 +24,26 @@ describe "Fog::Storage" do
     end
 
     it "instantiates an instance of Fog::<Provider>::Storage from the :provider keyword arg" do
+      compute = Fog::Storage.new(:provider => :therightway)
+      assert_instance_of(Fog::TheRightWay::Storage, compute)
+    end
+
+    module Fog
+      module TheWrongWay
+        extend Provider
+        service(:storage, "Storage")
+      end
+
+      module Storage
+        class TheWrongWay
+          def initialize(_args); end
+        end
+      end
+    end
+
+    it "instantiates an instance of Fog::Storage::<Provider> from the :provider keyword arg" do
       compute = Fog::Storage.new(:provider => :thewrongway)
-      assert_instance_of(Fog::TheWrongWay::Storage, compute)
+      assert_instance_of(Fog::Storage::TheWrongWay, compute)
     end
 
     module Fog
@@ -58,14 +56,6 @@ describe "Fog::Storage" do
     module Fog
       module BothWays
         class Storage
-          def initialize(_args); end
-        end
-      end
-    end
-
-    module Fog
-      module Storage
-        class BothWays
           attr_reader :args
 
           def initialize(args)
@@ -75,10 +65,18 @@ describe "Fog::Storage" do
       end
     end
 
+    module Fog
+      module Storage
+        class BothWays
+          def initialize(_args); end
+        end
+      end
+    end
+
     describe "when both Fog::Storage::<Provider> and Fog::<Provider>::Storage exist" do
       it "prefers Fog::Storage::<Provider>" do
         compute = Fog::Storage.new(:provider => :bothways)
-        assert_instance_of(Fog::Storage::BothWays, compute)
+        assert_instance_of(Fog::BothWays::Storage, compute)
       end
     end
 

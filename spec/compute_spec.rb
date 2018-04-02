@@ -16,8 +16,8 @@ describe "Fog::Compute" do
     end
 
     module Fog
-      module Compute
-        class TheRightWay
+      module TheRightWay
+        class Compute
           def initialize(_args); end
         end
       end
@@ -25,7 +25,7 @@ describe "Fog::Compute" do
 
     it "instantiates an instance of Fog::Compute::<Provider> from the :provider keyword arg" do
       compute = Fog::Compute.new(:provider => :therightway)
-      assert_instance_of(Fog::Compute::TheRightWay, compute)
+      assert_instance_of(Fog::TheRightWay::Compute, compute)
     end
 
     module Fog
@@ -36,8 +36,8 @@ describe "Fog::Compute" do
     end
 
     module Fog
-      module TheWrongWay
-        class Compute
+      module Compute
+        class TheWrongWay
           def initialize(_args); end
         end
       end
@@ -45,7 +45,7 @@ describe "Fog::Compute" do
 
     it "instantiates an instance of Fog::<Provider>::Compute from the :provider keyword arg" do
       compute = Fog::Compute.new(:provider => :thewrongway)
-      assert_instance_of(Fog::TheWrongWay::Compute, compute)
+      assert_instance_of(Fog::Compute::TheWrongWay, compute)
     end
 
     module Fog
@@ -58,14 +58,6 @@ describe "Fog::Compute" do
     module Fog
       module BothWays
         class Compute
-          def initialize(_args); end
-        end
-      end
-    end
-
-    module Fog
-      module Compute
-        class BothWays
           attr_reader :args
           def initialize(args)
             @args = args
@@ -74,10 +66,18 @@ describe "Fog::Compute" do
       end
     end
 
+    module Fog
+      module Compute
+        class BothWays
+          def initialize(_args); end
+        end
+      end
+    end
+
     describe "when both Fog::Compute::<Provider> and Fog::<Provider>::Compute exist" do
-      it "prefers Fog::Compute::<Provider>" do
+      it "prefers Fog::<Provider>::Compute" do
         compute = Fog::Compute.new(:provider => :bothways)
-        assert_instance_of(Fog::Compute::BothWays, compute)
+        assert_instance_of(Fog::BothWays::Compute, compute)
       end
     end
 

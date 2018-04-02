@@ -16,8 +16,8 @@ describe "Fog::Identity" do
     end
 
     module Fog
-      module Identity
-        class TheRightWay
+      module TheRightWay
+        class Identity
           def initialize(_args); end
         end
       end
@@ -25,27 +25,27 @@ describe "Fog::Identity" do
 
     it "instantiates an instance of Fog::Identity::<Provider> from the :provider keyword arg" do
       identity = Fog::Identity.new(:provider => :therightway)
-      assert_instance_of(Fog::Identity::TheRightWay, identity)
+      assert_instance_of(Fog::TheRightWay::Identity, identity)
     end
 
     module Fog
-      module Rackspace
+      module TheWrongWay
         extend Provider
         service(:identity, "Identity")
       end
     end
 
     module Fog
-      module Rackspace
-        class Identity
+      module Identity
+        class TheWrongWay
           def initialize(_args); end
         end
       end
     end
 
     it "instantiates an instance of Fog::<Provider>::Identity from the :provider keyword arg" do
-      identity = Fog::Identity.new(:provider => :rackspace)
-      assert_instance_of(Fog::Rackspace::Identity, identity)
+      identity = Fog::Identity.new(:provider => :thewrongway)
+      assert_instance_of(Fog::Identity::TheWrongWay, identity)
     end
 
     module Fog
@@ -58,14 +58,6 @@ describe "Fog::Identity" do
     module Fog
       module BothWays
         class Identity
-          def initialize(_args); end
-        end
-      end
-    end
-
-    module Fog
-      module Identity
-        class BothWays
           attr_reader :args
           def initialize(args)
             @args = args
@@ -74,10 +66,18 @@ describe "Fog::Identity" do
       end
     end
 
+    module Fog
+      module Identity
+        class BothWays
+          def initialize(_args); end
+        end
+      end
+    end
+
     describe "when both Fog::Identity::<Provider> and Fog::<Provider>::Identity exist" do
       it "prefers Fog::Identity::<Provider>" do
         identity = Fog::Identity.new(:provider => :bothways)
-        assert_instance_of(Fog::Identity::BothWays, identity)
+        assert_instance_of(Fog::BothWays::Identity, identity)
       end
     end
 
