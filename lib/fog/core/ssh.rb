@@ -34,32 +34,10 @@ module Fog
 
     class Real
       def initialize(address, username, options)
-        begin
-          require "net/ssh"
-        rescue LoadError
-          Fog::Logger.warning("'net/ssh' missing, please install and try again.")
-          exit(1)
-        end
-
-        key_manager = Net::SSH::Authentication::KeyManager.new(nil, options)
-
-        unless options[:key_data] || options[:keys] || options[:password] || key_manager.agent
-          raise ArgumentError, ":key_data, :keys, :password or a loaded ssh-agent is required to initialize SSH"
-        end
-
-        options[:timeout] ||= 30
-        if options[:key_data] || options[:keys]
-          options[:keys_only] = true
-          # Explicitly set these so net-ssh doesn"t add the default keys
-          # as seen at https://github.com/net-ssh/net-ssh/blob/master/lib/net/ssh/authentication/session.rb#L131-146
-          options[:keys] = [] unless options[:keys]
-          options[:key_data] = [] unless options[:key_data]
-        end
-
+        assert_net_ssh_loaded
         @address  = address
         @username = username
-        @options  = { :paranoid => false, :verify_host_key => false }.merge(options)
-        @options.delete(:paranoid) if Net::SSH::VALID_OPTIONS.include? :verify_host_key
+        @options = build_options(options)
       end
 
       def run(commands, &blk)
@@ -106,6 +84,50 @@ module Fog
           retry
         end
         results
+      end
+
+      private
+
+      def assert_net_ssh_loaded
+        begin
+          require "net/ssh"
+        rescue LoadError
+          Fog::Logger.warning("'net/ssh' missing, please install and try again.")
+          exit(1)
+        end
+      end
+
+      # Modifies the given `options` hash AND returns a new hash.
+      # TODO: Probably shouldn't modify the given hash.
+      def build_options(options)
+        validate_options(options)
+        merge_default_options_into(options)
+      end
+
+      def merge_default_options_into(options)
+        options[:timeout] ||= 30
+        if options[:key_data] || options[:keys]
+          options[:keys_only] = true
+          # Explicitly set these so net-ssh doesn"t add the default keys
+          # as seen at https://github.com/net-ssh/net-ssh/blob/master/lib/net/ssh/authentication/session.rb#L131-146
+          options[:keys] = [] unless options[:keys]
+          options[:key_data] = [] unless options[:key_data]
+        end
+
+        # net-ssh has deprecated :paranoid in favor of :verify_host_key
+        # https://github.com/net-ssh/net-ssh/pull/524
+        opts = { :paranoid => false, :verify_host_key => false }.merge(options)
+        if Net::SSH::VALID_OPTIONS.include? :verify_host_key
+          otps.delete(:paranoid)
+        end
+        opts
+      end
+
+      def validate_options(options)
+        key_manager = Net::SSH::Authentication::KeyManager.new(nil, options)
+        unless options[:key_data] || options[:keys] || options[:password] || key_manager.agent
+          raise ArgumentError, ":key_data, :keys, :password or a loaded ssh-agent is required to initialize SSH"
+        end
       end
     end
 

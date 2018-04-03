@@ -8,7 +8,11 @@ New contributors are always welcome, when it doubt please ask questions. We stri
   * Offer feedback on open [pull requests](https://github.com/fog/fog-core/pulls).
   * Review open [issues](https://github.com/fog/fog-core/issues) for things to help on.
   * [Create an issue](https://github.com/fog/fog-core/issues/new) to start a discussion on additions or features.
-* Fork the project, add your changes and tests to cover them in a topic branch.
+* Fork the project
+* Setup
+  * bundle install
+  * bundle exec rake
+* Add your changes and tests to cover them in a topic branch.
 * Commit your changes and rebase against `fog/fog-core` to ensure everything is up to date.
 * [Submit a pull request](https://github.com/fog/fog-core/compare/)
 
