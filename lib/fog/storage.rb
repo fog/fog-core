@@ -9,20 +9,6 @@ module Fog
   module Storage
     extend Fog::ServicesMixin
 
-    def self.new(orig_attributes)
-      attributes = orig_attributes.dup # prevent delete from having side effects
-      case attributes.delete(:provider).to_s.downcase.to_sym
-      when :internetarchive
-        require "fog/internet_archive/storage"
-        Fog::Storage::InternetArchive.new(attributes)
-      when :stormondemand
-        require "fog/storage/storm_on_demand"
-        Fog::Storage::StormOnDemand.new(attributes)
-      else
-        super(orig_attributes)
-      end
-    end
-
     def self.directories
       directories = []
       providers.each do |provider|
