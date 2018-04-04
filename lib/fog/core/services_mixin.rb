@@ -24,16 +24,24 @@ module Fog
 
     private
 
+    # This method should be removed once all providers are extracted.
+    # Bundler will correctly require all dependencies automatically and thus
+    # fog-core wont need to know any specifics providers. Each provider will
+    # have to load its dependencies.
     def require_service_provider_library(service, provider)
       require "fog/#{provider}/#{service}"
     rescue LoadError  # Try to require the service provider in an alternate location
+      Fog::Logger.deprecation("Unable to require fog/#{provider}/#{service}")
+      Fog::Logger.deprecation("The format fog/#{service}/#{provider} is deprecated")
       require "fog/#{service}/#{provider}"
     end
 
     def service_provider_constant(service_name, provider_name)
-      Fog.const_get(service_name).const_get(*const_get_args(provider_name))
-    rescue NameError  # Try to find the constant from in an alternate location
       Fog.const_get(provider_name).const_get(*const_get_args(service_name))
+    rescue NameError  # Try to find the constant from in an alternate location
+      Fog::Logger.deprecation("Unable to load Fog::#{provider_name}::#{service_name}")
+      Fog::Logger.deprecation("The format Fog::#{service_name}::#{provider_name} is deprecated")
+      Fog.const_get(service_name).const_get(*const_get_args(provider_name))
     end
 
     def const_get_args(*args)
