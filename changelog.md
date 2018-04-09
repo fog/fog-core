@@ -10,10 +10,16 @@
 2.0.0 01/03/2018
 ==========================================================
 
-- fix association reload
-- drop ruby <2 support
-- fix net-ssh usage
-- add mime-type dependency
+- Breaking Changes
+  - Association reload - model#reload now resets the model
+    to the current remote state. See discussion in
+    https://github.com/fog/fog-aws/pull/433,
+    particularly 24ea4675bfd28c93d1344bf666ebafd0f4826b8f
+  - drop ruby <2 support
+- Added
+  - add mime-type dependency
+- Fixed
+  - fix deprecation warning from net-ssh
 
 1.45.0 08/01/2017
 ==========================================================
