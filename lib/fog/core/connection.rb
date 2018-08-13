@@ -44,12 +44,10 @@ module Fog
       # @option params [Class] :instrumentor Responds to #instrument as in ActiveSupport::Notifications
       # @option params [String] :instrumentor_name Name prefix for #instrument events.  Defaults to 'excon'
       def initialize(url, persistent = false, params = {})
-        if params[:path_prefix]
-          if params[:path]
-            raise ArgumentError, "optional arg 'path' is invalid when 'path_prefix' is provided"
-          end
+        @path_prefix = params.delete(:path_prefix)
 
-          @path_prefix = params.delete(:path_prefix)
+        if @path_prefix && params[:path]
+          raise ArgumentError, "optional arg 'path' is invalid when 'path_prefix' is provided"
         end
 
         params[:debug_response] = true unless params.key?(:debug_response)
