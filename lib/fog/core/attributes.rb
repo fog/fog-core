@@ -79,14 +79,26 @@ module Fog
 
       def all_attributes
         self.class.attributes.reduce({}) do |hash, attribute|
-          hash[masks[attribute]] = send(attribute)
+          if masks[attribute].nil?
+            Fog::Logger.deprecation("Please define #{attribute} using the Fog DSL")
+            hash[attribute] = send(attribute)
+          else
+            hash[masks[attribute]] = send(attribute)
+          end
+
           hash
         end
       end
 
       def all_associations
         self.class.associations.keys.reduce({}) do |hash, association|
-          hash[masks[association]] = associations[association] || send(association)
+          if masks[association].nil?
+            Fog::Logger.deprecation("Please define #{association} using the Fog DSL")
+            hash[association] = associations[association] || send(association)
+          else
+            hash[masks[association]] = associations[association] || send(association)
+          end
+
           hash
         end
       end
