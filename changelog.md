@@ -1,3 +1,18 @@
+2.1.2 09/04/2018
+==========================================================
+
+fix typo in ssh options handling
+
+2.1.1 09/04/2018
+==========================================================
+
+deprecate attributes not defined by DSL
+fix path_prefix warnings
+update to enforce best practices
+extract parts of ssh to private methods
+deprecate wrong provider names
+
+
 2.1.0 03/10/2018
 ==========================================================
 
