@@ -118,7 +118,7 @@ module Fog
         # https://github.com/net-ssh/net-ssh/pull/524
         opts = { :paranoid => false, :verify_host_key => false }.merge(options)
         if Net::SSH::VALID_OPTIONS.include? :verify_host_key
-          otps.delete(:paranoid)
+          opts.delete(:paranoid)
         end
         opts
       end
