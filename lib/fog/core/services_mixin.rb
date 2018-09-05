@@ -1,5 +1,18 @@
 module Fog
   module ServicesMixin
+    E_SERVICE_PROVIDER_CONSTANT = <<-EOS.gsub(/\s+/, ' ').strip.freeze
+      Falling back to deprecated constant Fog::%<service>s::%<provider>s. The
+      preferred format of service provider constants has changed from
+      service::provider to provider::service. Please update this service
+      provider to use the preferred format.
+    EOS
+    E_SERVICE_PROVIDER_PATH = <<-EOS.gsub(/\s+/, ' ').strip.freeze
+      Falling back to deprecated path fog/%<service>s/%<provider>s. The
+      preferred file path format has changed from service/provider to
+      provider/service. Please update this service provider to use the preferred
+      format.
+    EOS
+
     def [](provider)
       new(:provider => provider)
     end
@@ -32,7 +45,9 @@ module Fog
       require "fog/#{provider}/#{service}"
     rescue LoadError  # Try to require the service provider in an alternate location
       Fog::Logger.deprecation("Unable to require fog/#{provider}/#{service}")
-      Fog::Logger.deprecation("The format fog/#{service}/#{provider} is deprecated")
+      Fog::Logger.deprecation(
+        format(E_SERVICE_PROVIDER_PATH, service: service, provider: provider)
+      )
       require "fog/#{service}/#{provider}"
     end
 
@@ -40,7 +55,9 @@ module Fog
       Fog.const_get(provider_name).const_get(*const_get_args(service_name))
     rescue NameError  # Try to find the constant from in an alternate location
       Fog::Logger.deprecation("Unable to load Fog::#{provider_name}::#{service_name}")
-      Fog::Logger.deprecation("The format Fog::#{service_name}::#{provider_name} is deprecated")
+      Fog::Logger.deprecation(
+        format(E_SERVICE_PROVIDER_CONSTANT, service: service_name, provider: provider_name)
+      )
       Fog.const_get(service_name).const_get(*const_get_args(provider_name))
     end
 
