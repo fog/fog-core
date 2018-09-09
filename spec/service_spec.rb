@@ -58,10 +58,16 @@ describe Fog::Service do
       refute_includes service.options.keys, :generic_user
     end
 
-    it "converts number String values with to_i" do
+    it "handles number String as numbers" do
       service = TestService.new :generic_api_key => "3421"
+      assert_equal "3421", service.options[:generic_api_key]
+    end
+
+    it "handles number as number" do
+      service = TestService.new :generic_api_key => 3421
       assert_equal 3421, service.options[:generic_api_key]
     end
+
 
     it "converts 'true' String values to TrueClass" do
       service = TestService.new :generic_api_key => "true"
