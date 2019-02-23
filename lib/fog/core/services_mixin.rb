@@ -27,7 +27,9 @@ module Fog
       require_service_provider_library(service_name.downcase, provider)
       spc = service_provider_constant(service_name, provider_name)
       spc.new(attributes)
-    rescue LoadError, NameError  # Only rescue errors in finding the libraries, allow connection errors through to the caller
+    rescue LoadError, NameError => e  # Only rescue errors in finding the libraries, allow connection errors through to the caller
+      Fog::Logger.warning("Error while loading provider #{provider}: #{e.message}")
+      Fog::Logger.debug("backtrace: #{e.backtrace.join("\n")}")
       raise Fog::Service::NotFound, "#{provider} has no #{service_name.downcase} service"
     end
 
