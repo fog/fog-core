@@ -1,3 +1,12 @@
+2.2.0 12/17/2019
+==========================================================
+
+- Add explanation for service/provider format deprecation.
+- Fix formatting of changelog
+- Better logging around required providers for easier debugging.
+- bump excon version
+- add bundler gem tasks
+
 2.1.2 09/04/2018
 ==========================================================
 
