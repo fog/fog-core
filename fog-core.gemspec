@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency("builder")
   spec.add_dependency("mime-types")
-  spec.add_dependency("excon", "~> 0.58")
+  spec.add_dependency("excon", "~> 0.71")
   spec.add_dependency("formatador", "~> 0.2")
 
   # https://github.com/fog/fog-core/issues/206
