@@ -116,10 +116,11 @@ module Fog
 
         # net-ssh has deprecated :paranoid in favor of :verify_host_key
         # https://github.com/net-ssh/net-ssh/pull/524
-        opts = { :paranoid => false, :verify_host_key => false }.merge(options)
+        opts = { :paranoid => false, :verify_host_key => :never }.merge(options)
         if Net::SSH::VALID_OPTIONS.include? :verify_host_key
           opts.delete(:paranoid)
         end
+        opts[:verify_host_key] = false unless Net::SSH::Verifiers.const_defined?(:Never)
         opts
       end
 
