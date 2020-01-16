@@ -64,8 +64,9 @@ module Fog
 
         @address  = address
         @username = username
-        @options  = { :paranoid => false, :verify_host_key => false }.merge(options)
+        @options  = { :paranoid => false, :verify_host_key => :never }.merge(options)
         @options.delete(:paranoid) if Net::SSH::VALID_OPTIONS.include? :verify_host_key
+        @options[:verify_host_key] = false unless Net::SSH::Verifiers.const_defined?(:Never)
       end
 
       def upload(local_path, remote_path, upload_options = {}, &block)
