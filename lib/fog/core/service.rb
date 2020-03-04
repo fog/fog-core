@@ -163,6 +163,8 @@ module Fog
           value_string = value.to_s.downcase
           if value.nil?
             options.delete(key)
+         elsif key.end_with? 'name'
+            options[key] = value.to_s
           elsif value_string.to_i.to_s == value
             options[key] = value.to_i
           else
