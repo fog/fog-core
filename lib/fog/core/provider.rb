@@ -11,6 +11,7 @@ module Fog
     def self.extended(base)
       provider = base.to_s.split("::").last
       Fog.providers[provider.downcase.to_sym] = provider
+      Fog.providers[underscore_name(provider)] = provider
     end
 
     def [](service_key)
@@ -45,6 +46,16 @@ module Fog
         )
       )
       ['Fog', constant_string, provider].join("::")
+    end
+
+    private
+
+    def underscore_name(string)
+      string.gsub(/::/, '/').
+        gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+        gsub(/([a-z\d])([A-Z])/,'\1_\2').
+        tr("-", "_").
+        downcase
     end
   end
 end
