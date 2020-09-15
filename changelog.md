@@ -1,3 +1,9 @@
+2.2.1 09/15/2020
+==========================================================
+
+- Change to verify_host_key never in ssh/scp if supported
+- Allow either downcased and underscored provider names for broader compatability
+
 2.2.0 12/17/2019
 ==========================================================
 
