@@ -12,7 +12,7 @@ module Fog
       def extended(base)
         provider = base.to_s.split("::").last
         Fog.providers[provider.downcase.to_sym] = provider
-        Fog.providers[underscore_name(provider)] = provider
+        Fog.providers[underscore_name(provider).to_sym] = provider
       end
     
       private
