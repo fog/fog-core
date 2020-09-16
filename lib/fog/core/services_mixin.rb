@@ -18,19 +18,20 @@ module Fog
     end
 
     def new(attributes)
-      attributes    = attributes.dup # Prevent delete from having side effects
-      provider      = check_provider_alias(attributes.delete(:provider).to_s.downcase.to_sym)
-      provider_name = Fog.providers[provider]
+      attributes     = attributes.dup # Prevent delete from having side effects
+      provider       = attributes.delete(:provider).to_s.downcase.to_sym
+      provider_alias = check_provider_alias(provider)
+      provider_name  = Fog.providers[provider_alias]
 
-      raise ArgumentError, "#{provider} is not a recognized provider" unless providers.include?(provider)
+      raise ArgumentError, "#{provider_alias} is not a recognized provider" unless providers.include?(provider) || providers.include?(provider_alias)
 
-      require_service_provider_library(service_name.downcase, provider)
+      require_service_provider_library(service_name.downcase, provider_alias)
       spc = service_provider_constant(service_name, provider_name)
       spc.new(attributes)
     rescue LoadError, NameError => e  # Only rescue errors in finding the libraries, allow connection errors through to the caller
-      Fog::Logger.warning("Error while loading provider #{provider}: #{e.message}")
+      Fog::Logger.warning("Error while loading provider #{provider_alias}: #{e.message}")
       Fog::Logger.debug("backtrace: #{e.backtrace.join("\n")}")
-      raise Fog::Service::NotFound, "#{provider} has no #{service_name.downcase} service"
+      raise Fog::Service::NotFound, "#{provider_alias} has no #{service_name.downcase} service"
     end
 
     def providers
