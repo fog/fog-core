@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.0.0'
 
   spec.add_dependency("builder")
-  spec.add_dependency("mime-types")
+  spec.add_dependency('mini_mime', '>= 0.1.1')
   spec.add_dependency("excon", "~> 0.71")
   spec.add_dependency("formatador", "~> 0.2")
 

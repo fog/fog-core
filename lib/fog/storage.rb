@@ -1,9 +1,4 @@
-begin
-  # Use mime/types/columnar if available, for reduced memory usage
-  require 'mime/types/columnar'
-rescue LoadError
-  require 'mime/types'
-end
+require 'mini_mime'
 
 module Fog
   module Storage
@@ -47,9 +42,8 @@ module Fog
     def self.get_content_type(data)
       if data.respond_to?(:path) && !data.path.nil?
         filename = ::File.basename(data.path)
-        unless (mime_types = MIME::Types.of(filename)).empty?
-          mime_types.first.content_type
-        end
+        mime = MiniMime.lookup_by_filename(filename)
+        mime ? mime.content_type : 'text/plain'
       end
     end
 
