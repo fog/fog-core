@@ -2,7 +2,7 @@
 
 Shared classes and tests for fog providers and services.
 
-[![Build Status](https://github.com/fog/fog-core/actions/workflows/ruby.yml/badge.svg)](https://github.com/fog/fog-core/actions/workflows/ruby.yml):W
+[![Build Status](https://github.com/fog/fog-core/actions/workflows/ruby.yml/badge.svg)](https://github.com/fog/fog-core/actions/workflows/ruby.yml)
 [![Build Status](https://travis-ci.org/fog/fog-core.svg?branch=master)](https://travis-ci.org/fog/fog-core)
 
 ## Ruby version
