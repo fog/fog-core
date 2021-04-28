@@ -1,3 +1,10 @@
+2.2.4 04/28/2020
+==========================================================
+
+Add FOG_DEBUG in addition to DEBUG to allow avoiding namespace collisions
+Add github actions configuration
+Update succeeds helper to expected syntax for ruby 3+
+
 2.2.3 09/16/2020
 ==========================================================
 
