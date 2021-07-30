@@ -10,16 +10,16 @@ describe "Fog::Storage" do
   describe "#new" do
     module Fog
       module TheRightWay
-        extend Provider
-        service(:storage, "Storage")
+        class Storage
+          def initialize(_args); end
+        end
       end
     end
 
     module Fog
       module TheRightWay
-        class Storage
-          def initialize(_args); end
-        end
+        extend Provider
+        service(:storage, "Storage")
       end
     end
 
@@ -29,28 +29,21 @@ describe "Fog::Storage" do
     end
 
     module Fog
-      module TheWrongWay
-        extend Provider
-        service(:storage, "Storage")
-      end
-
       module Storage
         class TheWrongWay
           def initialize(_args); end
         end
+      end
+
+      module TheWrongWay
+        extend Provider
+        service(:storage, "Storage")
       end
     end
 
     it "instantiates an instance of Fog::Storage::<Provider> from the :provider keyword arg" do
       compute = Fog::Storage.new(:provider => :thewrongway)
       assert_instance_of(Fog::Storage::TheWrongWay, compute)
-    end
-
-    module Fog
-      module BothWays
-        extend Provider
-        service(:storage, "Storage")
-      end
     end
 
     module Fog
@@ -70,6 +63,13 @@ describe "Fog::Storage" do
         class BothWays
           def initialize(_args); end
         end
+      end
+    end
+
+    module Fog
+      module BothWays
+        extend Provider
+        service(:storage, "Storage")
       end
     end
 
