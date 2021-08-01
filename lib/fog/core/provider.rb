@@ -45,19 +45,20 @@ module Fog
     # "provider::service" is defined (the preferred format) then it returns that
     # string, otherwise it returns the deprecated string "service::provider".
     def service_klass(constant_string)
-      eval([to_s, constant_string].join("::"))
-      [to_s, constant_string].join("::")
-    rescue NameError
-      provider = to_s.split("::").last
-      Fog::Logger.deprecation("Unable to load #{[to_s, constant_string].join("::")}")
-      Fog::Logger.deprecation(
-        format(
-          Fog::ServicesMixin::E_SERVICE_PROVIDER_CONSTANT,
-          service: constant_string,
-          provider: provider
+      if const_defined?([to_s, constant_string].join("::"))
+        [to_s, constant_string].join("::")
+      else
+        provider = to_s.split("::").last
+        Fog::Logger.deprecation("Unable to load #{[to_s, constant_string].join("::")}")
+        Fog::Logger.deprecation(
+          format(
+            Fog::ServicesMixin::E_SERVICE_PROVIDER_CONSTANT,
+            service: constant_string,
+            provider: provider
+          )
         )
-      )
-      ['Fog', constant_string, provider].join("::")
+        ['Fog', constant_string, provider].join("::")
+      end
     end
   end
 end

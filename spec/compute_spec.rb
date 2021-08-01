@@ -10,29 +10,22 @@ describe "Fog::Compute" do
   describe "#new" do
     module Fog
       module TheRightWay
-        extend Provider
-        service(:compute, "Compute")
-      end
-    end
-
-    module Fog
-      module TheRightWay
         class Compute
           def initialize(_args); end
         end
       end
     end
 
-    it "instantiates an instance of Fog::Compute::<Provider> from the :provider keyword arg" do
-      compute = Fog::Compute.new(:provider => :therightway)
-      assert_instance_of(Fog::TheRightWay::Compute, compute)
-    end
-
     module Fog
-      module TheWrongWay
+      module TheRightWay
         extend Provider
         service(:compute, "Compute")
       end
+    end
+
+    it "instantiates an instance of Fog::Compute::<Provider> from the :provider keyword arg" do
+      compute = Fog::Compute.new(:provider => :therightway)
+      assert_instance_of(Fog::TheRightWay::Compute, compute)
     end
 
     module Fog
@@ -43,16 +36,16 @@ describe "Fog::Compute" do
       end
     end
 
-    it "instantiates an instance of Fog::<Provider>::Compute from the :provider keyword arg" do
-      compute = Fog::Compute.new(:provider => :thewrongway)
-      assert_instance_of(Fog::Compute::TheWrongWay, compute)
-    end
-
     module Fog
-      module BothWays
+      module TheWrongWay
         extend Provider
         service(:compute, "Compute")
       end
+    end
+
+    it "instantiates an instance of Fog::<Provider>::Compute from the :provider keyword arg" do
+      compute = Fog::Compute.new(:provider => :thewrongway)
+      assert_instance_of(Fog::Compute::TheWrongWay, compute)
     end
 
     module Fog
@@ -71,6 +64,13 @@ describe "Fog::Compute" do
         class BothWays
           def initialize(_args); end
         end
+      end
+    end
+
+    module Fog
+      module BothWays
+        extend Provider
+        service(:compute, "Compute")
       end
     end
 
