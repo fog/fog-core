@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency("builder")
   spec.add_dependency("mime-types")
   spec.add_dependency("excon", "~> 0.71")
-  spec.add_dependency("formatador", "~> 0.2")
+  spec.add_dependency("formatador", ">= 0.2", "< 2.0")
 
   # https://github.com/fog/fog-core/issues/206
   # spec.add_dependency("xmlrpc") if RUBY_VERSION.to_s >= "2.4"
