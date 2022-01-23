@@ -15,21 +15,5 @@ on:
 
 jobs:
   test:
-
-    continue-on-error: ${{ matrix.ruby-version == 'head' }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        ruby-version: ['2.4', '2.5', '2.6', '2.7', '3.0', 'truffleruby-head', 'head']
-
-    steps:
-    - uses: actions/checkout@v2.4.0
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby-version }}
-        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-    - name: Install dependencies
-      run: bundle install
-    - name: Run tests
-      run: bundle exec rake
+    uses:
+      fog/.github/.github/workflows/ruby.yml@v1.0.0
