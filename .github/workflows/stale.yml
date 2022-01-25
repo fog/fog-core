@@ -7,4 +7,4 @@ on:
 jobs:
   stale:
     uses:
-      fog/.github/.github/workflows/stale.yml@v1.0.0
+      fog/.github/.github/workflows/stale.yml@v1.1.0
