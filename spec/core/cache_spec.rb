@@ -87,7 +87,7 @@ describe Fog::Cache do
       f.write(data)
     }
 
-    assert_equal false, Fog::Cache.load_cache(path)
+    assert !Fog::Cache.load_cache(path)
   end
 
   it "must have a namespace_prefix configurable" do
