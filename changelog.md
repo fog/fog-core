@@ -1,3 +1,19 @@
+2.3.0 03/08/2022
+==========================================================
+
+- fix v2.2.4 changelog
+- bump actions/stale
+- bump actions/checkout
+- avoid loading unnecessary service via autoload
+- update ruby.yml
+- continue tests dispite head errors
+- bump actions/checkout
+- bump formatador requirement
+- utilize reusable actions workflows
+- bump reusable actions
+- fix cache test for ruby 3.1+
+- tweak format of reusable workflows
+
 2.2.4 04/28/2020
 ==========================================================
 
