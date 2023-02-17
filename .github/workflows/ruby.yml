@@ -15,4 +15,4 @@ on:
 
 jobs:
   test:
-    uses: fog/.github/.github/workflows/ruby.yml@v1.1.0
+    uses: fog/.github/.github/workflows/ruby.yml@v1.2.0
