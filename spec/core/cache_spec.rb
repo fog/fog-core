@@ -9,6 +9,14 @@ module Fog
 end
 
 module Fog
+  class SubFogTestCollection < Fog::Collection
+    model Fog::SubFogTestModel
+
+    attribute :spec_attribute
+  end
+end
+
+module Fog
   class SubFogTestService < Fog::Service
 
     class Mock
@@ -187,5 +195,20 @@ describe Fog::Cache do
 
     # unique-ify based on the attributes...
     assert_equal instances.size, 2
+  end
+
+  it "dumps model with collection attributes and reloads them" do
+    Fog::Cache.expire_cache!(Fog::SubFogTestModel, @service)
+
+    c = Fog::SubFogTestCollection.new(:service => @service, :spec_attribute => 42)
+
+    id = SecureRandom.hex
+    a = Fog::SubFogTestModel.new(:id => id, :service => @service, :collection => c)
+
+    a.cache.dump
+
+    instances = Fog::Cache.load(Fog::SubFogTestModel, @service)
+    assert_equal instances.first.id, id
+    assert_equal instances.first.collection.spec_attribute, 42
   end
 end

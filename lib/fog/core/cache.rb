@@ -93,6 +93,9 @@ module Fog
     # see the +namespace_prefix=+ method.
     SANDBOX = ENV["HOME"] ? File.expand_path("~/.fog-cache") : File.expand_path(".fog-cache")
 
+    # required attributes to load model from cache
+    REQUIRED_ATTRIBUTES = [:identity, :collection_klass, :collection_attrs, :model_klass, :model_attrs]
+
     # when a resource is used such as `server.cache.dump` the model klass is passed in
     # so that it can be identified from a different session.
     attr_reader :model
@@ -112,21 +115,29 @@ module Fog
       # collection_klass and model_klass should be the same across all instances
       # choose a valid cache record from the dump to use as a sample to deterine
       # which collection/model to instantiate.
-      sample_path = cache_files.detect{ |path| valid_for_load?(path) }
+      sample_path = cache_files.detect { |path| valid_for_load?(path) }
       model_klass = const_get_compat(load_cache(sample_path)[:model_klass])
       collection_klass = const_get_compat(load_cache(sample_path)[:collection_klass]) if load_cache(sample_path)[:collection_klass]
 
       # Load the cache data into actual ruby instances
       loaded = cache_files.map do |path|
-          model_klass.new(load_cache(path)[:attrs]) if valid_for_load?(path)
-      end.compact
+        next unless valid_for_load?(path)
 
-      # Set the collection and service so they can be reloaded/connection is set properly.
-      # See https://github.com/fog/fog-aws/issues/354#issuecomment-286789702
-      loaded.each do |i|
-        i.collection = collection_klass.new(:service => service) if collection_klass
-        i.instance_variable_set(:@service, service)
-      end
+        cache = load_cache(path)
+
+        # make sure attributes are not nil
+        cache[:collection_attrs] ||= {}
+        cache[:model_attrs] ||= {}
+
+        m = model_klass.new(cache[:model_attrs])
+
+        # Set the collection and service so they can be reloaded/connection is set properly.
+        # See https://github.com/fog/fog-aws/issues/354#issuecomment-286789702
+        m.instance_variable_set(:@service, service)
+        m.collection = collection_klass.new(cache[:collection_attrs].merge(:service => service)) if collection_klass
+
+        m
+      end.compact
 
       # uniqe-ify based on the total of attributes. duplicate cache can exist due to
       # `model#identity` not being unique. but if all attributes match, they are unique
@@ -167,13 +178,14 @@ module Fog
     def self.valid_for_load?(path)
       data = load_cache(path)
       if data && data.is_a?(Hash)
-        if [:identity, :model_klass, :collection_klass, :attrs].all? { |k| data.keys.include?(k) }
-          return true
-        else
-          Fog::Logger.warning("Found corrupt items in the cache: #{path}. Expire all & refresh cache soon.\n\nData:#{File.read(path)}")
-          return false
-        end
+        missing_attrs = REQUIRED_ATTRIBUTES.reject { |k| data.keys.include?(k) }
+        return true if missing_attrs.empty?
+
+        Fog::Logger.warning("Found corrupt items in the cache: #{path}. Expire all & refresh cache soon.\n\nMissing: #{missing_attrs}.\nData:\n#{File.read(path)}")
+        return false
       end
+
+      false
     end
 
     # creates on-disk cache of this specific +model_klass+ and +@service+
@@ -269,10 +281,13 @@ module Fog
         self.class.create_namespace(model.class, model.service)
       end
 
-      data = { :identity => model.identity,
-                     :model_klass => model.class.to_s,
-                     :collection_klass => model.collection && model.collection.class.to_s,
-                     :attrs => model.attributes }
+      data = {
+        :identity => model.identity,
+        :model_klass => model.class.to_s,
+        :collection_klass => model.collection && model.collection.class.to_s,
+        :collection_attrs => model.collection && model.collection.attributes,
+        :model_attrs => model.attributes
+      }
 
       File.open(dump_to, "w") { |f| f.write(YAML.dump(data)) }
     end

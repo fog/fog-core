@@ -55,7 +55,7 @@ describe Fog::Compute::Server do
           it "is false" do
             @server.stub(:ready?, true) do
               @server.stub(:ssh_ip_address, "10.0.0.1") do
-                raise_error = lambda { |_cmd, _options| raise Net::SSH::AuthenticationFailed.new }
+                raise_error = lambda { |_cmd, _options={}| raise Net::SSH::AuthenticationFailed.new }
                 @server.stub(:ssh, raise_error) do
                   refute @server.sshable?
                 end
@@ -67,7 +67,7 @@ describe Fog::Compute::Server do
             @server.instance_variable_set(:@sshable_timeout, 8)
             @server.stub(:ready?, true) do
               @server.stub(:ssh_ip_address, "10.0.0.1") do
-                raise_error = lambda { |_cmd, _options| raise Net::SSH::AuthenticationFailed.new }
+                raise_error = lambda { |_cmd, _options={}| raise Net::SSH::AuthenticationFailed.new }
                 @server.stub(:ssh, raise_error) do
                   @server.sshable?
                   assert_nil @server.instance_variable_get(:@sshable_timeout), nil
@@ -81,7 +81,7 @@ describe Fog::Compute::Server do
           it "is false" do
             @server.stub(:ready?, true) do
               @server.stub(:ssh_ip_address, "10.0.0.1") do
-                raise_error = lambda { |_cmd, _options| raise Net::SSH::Disconnect.new }
+                raise_error = lambda { |_cmd, _options={}| raise Net::SSH::Disconnect.new }
                 @server.stub(:ssh, raise_error) do
                   refute @server.sshable?
                 end
@@ -93,7 +93,7 @@ describe Fog::Compute::Server do
             @server.instance_variable_set(:@sshable_timeout, 8)
             @server.stub(:ready?, true) do
               @server.stub(:ssh_ip_address, "10.0.0.1") do
-                raise_error = lambda { |_cmd, _options| raise Net::SSH::Disconnect.new }
+                raise_error = lambda { |_cmd, _options={}| raise Net::SSH::Disconnect.new }
                 @server.stub(:ssh, raise_error) do
                   @server.sshable?
                   assert_nil @server.instance_variable_get(:@sshable_timeout), nil
@@ -107,7 +107,7 @@ describe Fog::Compute::Server do
           it "is false" do
             @server.stub(:ready?, true) do
               @server.stub(:ssh_ip_address, "10.0.0.1") do
-                raise_error = lambda { |_cmd, _options| raise SystemCallError.new("message, 0") }
+                raise_error = lambda { |_cmd, _options={}| raise SystemCallError.new("message, 0") }
                 @server.stub(:ssh, raise_error) do
                   refute @server.sshable?
                 end
@@ -118,7 +118,7 @@ describe Fog::Compute::Server do
           it "does not increase SSH timeout" do
             @server.stub(:ready?, true) do
               @server.stub(:ssh_ip_address, "10.0.0.1") do
-                raise_error = lambda { |_cmd, _options| raise SystemCallError.new("message, 0") }
+                raise_error = lambda { |_cmd, _options={}| raise SystemCallError.new("message, 0") }
                 @server.stub(:ssh, raise_error) do
                   @server.sshable?
                   assert_equal @server.instance_variable_get(:@sshable_timeout), 8
