@@ -21,6 +21,33 @@ module Fog
       merge_attributes(attribs)
     end
 
+    # Creates new or updates existing model
+    # @return [self]
+    def save
+      persisted? ? update : create
+    end
+
+    # Creates new entity from model
+    # @raise [Fog::Errors::NotImplemented] you must implement #create method in child class and return self
+    # @return [self]
+    def create
+      raise Fog::Errors::NotImplemented, "Implement method #create for #{self.class}. Method must return self"
+    end
+
+    # Updates new entity with model
+    # @raise [Fog::Errors::NotImplemented] you must implement #update method in child class and return self
+    # @return [self]
+    def update
+      raise Fog::Errors::NotImplemented, "Implement method #update for #{self.class}. Method must return self"
+    end
+
+    # Destroys entity by model identity
+    # @raise [Fog::Errors::NotImplemented] you must implement #destroy method in child class and return self
+    # @return [self]
+    def destroy
+      raise Fog::Errors::NotImplemented, "Implement method #destroy for #{self.class}. Method must return self"
+    end
+
     def cache
       Fog::Cache.new(self)
     end
@@ -41,6 +68,8 @@ module Fog
       end
     end
 
+    # @return [self] if model successfully reloaded
+    # @return [nil] if something went wrong or model was not found
     def reload
       requires :identity
 
