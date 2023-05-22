@@ -1,20 +1,24 @@
-Metrics/LineLength:
-  Enabled: false
+inherit_from: .rubocop_todo.yml
 
-Style/EachWithObject:
-  Enabled: false
+AllCops:
+  TargetRubyVersion: 2.0
+  NewCops: enable
 
-Style/Encoding:
-  EnforcedStyle: when_needed
+require:
+  - rubocop-rake
+  - rubocop-minitest
 
-Style/FormatString:
-  Enabled: false
+Gemspec/DevelopmentDependencies:
+  EnforcedStyle: gemspec
+
+Layout/LineLength:
+  Enabled: 120
 
 Style/HashSyntax:
-  EnforcedStyle: hash_rockets
-
-Style/SignalException:
-  EnforcedStyle: only_raise
+  EnforcedStyle: ruby19_no_mixed_keys
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: single_quotes
