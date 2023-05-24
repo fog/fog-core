@@ -7,6 +7,10 @@ if ENV["COVERAGE"]
   end
 end
 
+# Set home outside of real user
+require 'tmpdir'
+ENV["HOME"] = Dir.mktmpdir('foghome')
+
 require "minitest/autorun"
 require "minitest/spec"
 require "minitest/stub_const"
