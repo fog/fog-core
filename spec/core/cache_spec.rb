@@ -5,6 +5,22 @@ require "tmpdir"
 module Fog
   class SubFogTestModel < Fog::Model
     identity  :id
+
+    attribute :config
+    attribute :subconfig
+
+    def initialize(new_attributes = {})
+      super
+
+      # This way we make YAML to use aliases
+      self.config = {
+        "users" => [
+          { "user1" => "user1@email" },
+          { "user2" => "user2@email" }
+        ]
+      }
+      self.subconfig = config['users'][0]
+    end
   end
 end
 
@@ -75,8 +91,7 @@ describe Fog::Cache do
       Fog::Cache.namespace_prefix = nil
       Fog::Cache.write_metadata({:a => "b"})
     end
-
- end
+  end
 
   it "can load cache data from disk" do
     path = File.expand_path("~/.fog-cache-test-#{Time.now.to_i}.yml")
