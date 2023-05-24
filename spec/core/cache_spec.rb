@@ -1,6 +1,5 @@
 require "spec_helper"
 require "securerandom"
-require "tmpdir"
 
 module Fog
   class SubFogTestModel < Fog::Model
