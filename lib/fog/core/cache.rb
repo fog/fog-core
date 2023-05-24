@@ -205,12 +205,22 @@ module Fog
       FileUtils.rm_rf(SANDBOX)
     end
 
+    # Load YAML file with aliases
+    # @note Starting from Ruby 3.1 we must explicitly tell Psych to allow aliases
+    def self.yaml_load(path)
+      if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new("3.1.0")
+        YAML.load(path, aliases: true)
+      else
+        YAML.load(path)
+      end
+    end
+
     # loads yml cache from path on disk, used
     # to initialize Fog models.
     def self.load_cache(path)
       @memoized ||= {}
       return @memoized[path] if @memoized[path]
-      @memoized[path] = YAML.load(File.read(path))
+      @memoized[path] = yaml_load(File.read(path))
     end
 
     def self.namespace_prefix=(name)
@@ -234,7 +244,7 @@ module Fog
 
       mpath = File.join(SANDBOX, namespace_prefix, "metadata.yml")
       to_write = if File.exist?(mpath)
-                YAML.dump(YAML.load(File.read(mpath)).merge!(h))
+                YAML.dump(yaml_load(File.read(mpath)).merge!(h))
               else
                 YAML.dump(h)
               end
@@ -249,7 +259,7 @@ module Fog
     def self.metadata
       mpath = File.join(SANDBOX, namespace_prefix, "metadata.yml")
       if File.exist?(mpath)
-        metadata = YAML.load(File.read(mpath))
+        metadata = yaml_load(File.read(mpath))
         return metadata
       else
         return {}
