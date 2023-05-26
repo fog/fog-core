@@ -25,6 +25,14 @@ module Fog
         @masks ||= {}
       end
 
+      # Defines a new attribute
+      # @param [Symbol] name attribute name
+      # @param [Hash] options (see {Default#initialize})
+      # @option options [Symbol, ::String] :type attribute type (see {Attributes})
+      # @option options [Symbol] :squash
+      # @option options [::Array] :aliases
+      # @option options [Object] :default
+      # @option options [Object] :as
       def attribute(name, options = {})
         type = options.fetch(:type, "default").to_s.capitalize
         Fog::Attributes.const_get(type).new(self, name, options)
@@ -125,6 +133,9 @@ module Fog
         send("#{identity_name}=", new_identity)
       end
 
+      # Merges attributes into self
+      # @note Ignored attributes are not merged (see {ClassMethods.ignored_attributes})
+      # @return [self]
       def merge_attributes(new_attributes = {})
         new_attributes.each_pair do |key, value|
           next if self.class.ignored_attributes.include?(key)
@@ -137,6 +148,18 @@ module Fog
           end
         end
         self
+      end
+
+      # Filters attributes by selected attribute names
+      # @note In some cases we want to easily get subset of model attributes
+      # @note Hash#slice requires Ruby >= 2.5.0
+      # @param [Symbol] selected attribute names
+      # @return [Hash] new hash with selected attributes
+      def filter_attributes(*selected)
+        filtered = attributes.select { |a, _| selected.include?(a) }
+
+        # we should use getters instead of direct accessing attributes hash
+        filtered.each_key { |k| filtered[k] = send(k) }
       end
 
       # Returns true if a remote resource has been assigned an

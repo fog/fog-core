@@ -47,6 +47,7 @@ class FogAttributeTestModel < Fog::Model
   attribute :default, :default => "default_value", :aliases => :some_name
   attribute :another_default, :default => false
   attribute :good_name, :as => :Badname
+  attribute :custom_getter, :type => :integer
 
   has_one :one_object, :single_associations, :aliases => :single
   has_many :many_objects, :multiple_associations
@@ -65,6 +66,10 @@ class FogAttributeTestModel < Fog::Model
 
   def requires_test
     requires :string, :integer
+  end
+
+  def custom_getter
+    (attributes[:custom_getter] || 0) + 10
   end
 end
 
@@ -435,7 +440,8 @@ describe "Fog::Attributes" do
                                              :array => [],
                                              :default => nil,
                                              :another_default => nil,
-                                             :Badname => nil
+                                             :Badname => nil,
+                                             :custom_getter => 10
       end
     end
 
@@ -454,7 +460,8 @@ describe "Fog::Attributes" do
                                              :array => [],
                                              :default => "default_value",
                                              :another_default => false,
-                                             :Badname => nil
+                                             :Badname => nil,
+                                             :custom_getter => 10
       end
     end
   end
@@ -508,6 +515,7 @@ describe "Fog::Attributes" do
                                                              :default => nil,
                                                              :another_default => nil,
                                                              :Badname => nil,
+                                                             :custom_getter => 10,
                                                              :one_object => @one_object,
                                                              :many_objects => @many_objects,
                                                              :objects => [],
@@ -537,6 +545,7 @@ describe "Fog::Attributes" do
                                                              :default => "default_value",
                                                              :another_default => false,
                                                              :Badname => nil,
+                                                             :custom_getter => 10,
                                                              :one_object => @one_object,
                                                              :many_objects => @many_objects,
                                                              :objects => [],
@@ -544,6 +553,17 @@ describe "Fog::Attributes" do
                                                              :Crazyname => "XYZ",
                                                              :many_identities => %w(ABC)
       end
+    end
+  end
+
+  describe "#filter_attributes" do
+    it "should return filtered attributes using model getters" do
+      model.merge_attributes(:id => 2, :float => 3.2, :integer => 55_555_555, :bool => nil, :custom_getter => 66)
+      filtered = model.filter_attributes(:id, :float, :bool, :custom_getter)
+      assert_equal filtered, :id => 2,
+                             :float => 3.2,
+                             :bool => nil,
+                             :custom_getter => 76
     end
   end
 end

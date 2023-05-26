@@ -7,6 +7,13 @@ module Fog
     class Default
       attr_reader :model, :name, :squash, :aliases, :default, :as
 
+      # @param [Klass] model model class
+      # @param [Symbol] name name of the attribute
+      # @param [Hash] options attribute options
+      # @option options [Symbol] :squash
+      # @option options [::Array] :aliases
+      # @option options [Object] :default
+      # @option options [Object] :as
       def initialize(model, name, options)
         @model = model
         @model.attributes << name
