@@ -156,7 +156,7 @@ module Fog
     # :nodoc: compatability for 1.8.7 1.9.3
     def self.const_get_compat(strklass)
       # https://stackoverflow.com/questions/3163641/get-a-class-by-name-in-ruby
-      strklass.split('::').inject(Object) do |mod, class_name|
+      strklass.split("::").inject(Object) do |mod, class_name|
         mod.const_get(class_name)
       end
     end

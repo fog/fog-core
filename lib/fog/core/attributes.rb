@@ -189,14 +189,14 @@ module Fog
         if missing.length == 1
           raise(ArgumentError, "#{missing.first} is required for this operation")
         elsif missing.any?
-          raise(ArgumentError, "#{missing[0...-1].join(", ")} and #{missing[-1]} are required for this operation")
+          raise(ArgumentError, "#{missing[0...-1].join(', ')} and #{missing[-1]} are required for this operation")
         end
       end
 
       def requires_one(*args)
         missing = missing_attributes(args)
         return unless missing.length == args.length
-        raise(ArgumentError, "#{missing[0...-1].join(", ")} or #{missing[-1]} are required for this operation")
+        raise(ArgumentError, "#{missing[0...-1].join(', ')} or #{missing[-1]} are required for this operation")
       end
 
       protected

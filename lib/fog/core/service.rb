@@ -11,7 +11,7 @@ module Fog
 
     module NoLeakInspector
       def inspect
-        "#<#{self.class}:#{object_id} #{(instance_variables - service.secrets).map { |iv| [iv, instance_variable_get(iv).inspect].join("=") }.join(" ")}>"
+        "#<#{self.class}:#{object_id} #{(instance_variables - service.secrets).map { |iv| [iv, instance_variable_get(iv).inspect].join('=') }.join(' ')}>"
       end
     end
 
@@ -241,13 +241,13 @@ module Fog
         missing = requirements - keys
 
         unless missing.empty?
-          raise ArgumentError, "Missing required arguments: #{missing.join(", ")}"
+          raise ArgumentError, "Missing required arguments: #{missing.join(', ')}"
         end
 
         unless recognizes.empty?
           unrecognized = options.keys - requirements - recognized
           unless unrecognized.empty?
-            Fog::Logger.warning("Unrecognized arguments: #{unrecognized.join(", ")}")
+            Fog::Logger.warning("Unrecognized arguments: #{unrecognized.join(', ')}")
           end
         end
       end

@@ -1,4 +1,4 @@
-require 'bundler/gem_tasks'
+require "bundler/gem_tasks"
 
 task :default => [:test]
 
@@ -11,11 +11,11 @@ Rake::TestTask.new do |t|
 end
 
 task :travis do
-  mock = 'true' || ENV['FOG_MOCK']
+  mock = "true" || ENV["FOG_MOCK"]
   sh("export FOG_MOCK=#{mock} && rake")
 
-  if ENV['COVERAGE']
-    require 'coveralls/rake/task'
+  if ENV["COVERAGE"]
+    require "coveralls/rake/task"
 
     Coveralls::RakeTask.new
     Rake::Task["coveralls:push"].invoke

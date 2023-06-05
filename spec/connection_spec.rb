@@ -15,7 +15,7 @@ describe Fog::Core::Connection do
   end
 
   it "adds custom user-agents to Fog requests" do
-    Fog::VERSION = 'Version'
+    Fog::VERSION = "Version"
     Fog::Core::Connection.add_user_agent("my-app/1.2")
 
     connection = Fog::Core::Connection.new("http://example.com")

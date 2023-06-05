@@ -18,7 +18,7 @@ module Fog
       private
 
       def underscore_name(string)
-        string.gsub(/::/, '/').
+        string.gsub(/::/, "/").
           gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
           gsub(/([a-z\d])([A-Z])/,'\1_\2').
           tr("-", "_").
@@ -49,7 +49,7 @@ module Fog
         [to_s, constant_string].join("::")
       else
         provider = to_s.split("::").last
-        Fog::Logger.deprecation("Unable to load #{[to_s, constant_string].join("::")}")
+        Fog::Logger.deprecation("Unable to load #{[to_s, constant_string].join('::')}")
         Fog::Logger.deprecation(
           format(
             Fog::ServicesMixin::E_SERVICE_PROVIDER_CONSTANT,
@@ -57,7 +57,7 @@ module Fog
             provider: provider
           )
         )
-        ['Fog', constant_string, provider].join("::")
+        ["Fog", constant_string, provider].join("::")
       end
     end
   end
