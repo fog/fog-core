@@ -572,13 +572,6 @@ Style/EvalWithLocation:
     - 'lib/fog/core/deprecation.rb'
     - 'lib/fog/core/service.rb'
 
-# Offense count: 58
-# This cop supports safe autocorrection (--autocorrect).
-Style/ExpandPathArguments:
-  Exclude:
-    - 'lib/fog/core.rb'
-    - 'lib/fog/test_helpers/helper.rb'
-
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
 Style/ExplicitBlockArgument:
