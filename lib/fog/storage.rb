@@ -1,8 +1,8 @@
 begin
   # Use mime/types/columnar if available, for reduced memory usage
-  require 'mime/types/columnar'
+  require "mime/types/columnar"
 rescue LoadError
-  require 'mime/types'
+  require "mime/types"
 end
 
 module Fog
@@ -24,7 +24,7 @@ module Fog
       if body.respond_to?(:encoding)
         original_encoding = body.encoding
         body = body.dup if body.frozen?
-        body = body.force_encoding('BINARY')
+        body = body.force_encoding("BINARY")
       end
 
       size = if body.respond_to?(:bytesize)

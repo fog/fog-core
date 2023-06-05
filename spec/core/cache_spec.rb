@@ -18,7 +18,7 @@ module Fog
           { "user2" => "user2@email" }
         ]
       }
-      self.subconfig = config['users'][0]
+      self.subconfig = config["users"][0]
     end
   end
 end
@@ -177,8 +177,8 @@ describe Fog::Cache do
 
     # security groups on aws for eg can have the same identity group name 'default'.
     # there are no restrictions on `identity` fog attributes to be uniq.
-    a = Fog::SubFogTestModel.new(:id => id, :service => @service, :bar => 'bar')
-    b = Fog::SubFogTestModel.new(:id => id, :service => @service, :foo => 'foo')
+    a = Fog::SubFogTestModel.new(:id => id, :service => @service, :bar => "bar")
+    b = Fog::SubFogTestModel.new(:id => id, :service => @service, :foo => "foo")
 
     a.cache.dump
     b.cache.dump
@@ -195,8 +195,8 @@ describe Fog::Cache do
 
     # security groups on aws for eg can have the same identity group name 'default'.
     # there are no restrictions on `identity` fog attributes to be uniq.
-    a = Fog::SubFogTestModel.new(:id => id, :service => @service, :bar => 'bar')
-    b = Fog::SubFogTestModel.new(:id => id, :service => @service, :foo => 'foo')
+    a = Fog::SubFogTestModel.new(:id => id, :service => @service, :bar => "bar")
+    b = Fog::SubFogTestModel.new(:id => id, :service => @service, :foo => "foo")
 
     a.cache.dump
     b.cache.dump

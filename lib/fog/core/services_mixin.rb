@@ -1,12 +1,12 @@
 module Fog
   module ServicesMixin
-    E_SERVICE_PROVIDER_CONSTANT = <<-EOS.gsub(/\s+/, ' ').strip.freeze
+    E_SERVICE_PROVIDER_CONSTANT = <<-EOS.gsub(/\s+/, " ").strip.freeze
       Falling back to deprecated constant Fog::%<service>s::%<provider>s. The
       preferred format of service provider constants has changed from
       service::provider to provider::service. Please update this service
       provider to use the preferred format.
     EOS
-    E_SERVICE_PROVIDER_PATH = <<-EOS.gsub(/\s+/, ' ').strip.freeze
+    E_SERVICE_PROVIDER_PATH = <<-EOS.gsub(/\s+/, " ").strip.freeze
       Falling back to deprecated path fog/%<service>s/%<provider>s. The
       preferred file path format has changed from service/provider to
       provider/service. Please update this service provider to use the preferred
@@ -75,22 +75,22 @@ module Fog
     def check_provider_alias(provider)
       case provider
       when :baremetalcloud
-        Fog::Logger.deprecation(':baremetalcloud is deprecated. Use :bare_metal_cloud instead!')
+        Fog::Logger.deprecation(":baremetalcloud is deprecated. Use :bare_metal_cloud instead!")
         :bare_metal_cloud
       when :gogrid
-        Fog::Logger.deprecation(':gogrid is deprecated. Use :go_grid instead!')
+        Fog::Logger.deprecation(":gogrid is deprecated. Use :go_grid instead!")
         :go_grid
       when :internetarchive
-        Fog::Logger.deprecation(':internetarchive is deprecated. Use :internet_archive instead!')
+        Fog::Logger.deprecation(":internetarchive is deprecated. Use :internet_archive instead!")
         :internet_archive
       when :new_servers
-        Fog::Logger.deprecation(':new_servers is deprecated. Use :bare_metal_cloud instead!')
+        Fog::Logger.deprecation(":new_servers is deprecated. Use :bare_metal_cloud instead!")
         :bare_metal_cloud
       when :stormondemand
-        Fog::Logger.deprecation(':stormondemand is deprecated. Use :storm_on_demand instead!')
+        Fog::Logger.deprecation(":stormondemand is deprecated. Use :storm_on_demand instead!")
         :storm_on_demand
       when :vclouddirector
-        Fog::Logger.deprecation(':vclouddirector is deprecated. Use :vcloud_director instead!')
+        Fog::Logger.deprecation(":vclouddirector is deprecated. Use :vcloud_director instead!")
         :vcloud_director
       else provider
       end

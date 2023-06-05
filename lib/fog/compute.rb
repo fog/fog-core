@@ -22,10 +22,10 @@ module Fog
         version = attributes.delete(:version)
         version = version.to_s.downcase.to_sym unless version.nil?
         if version == :v1
-          error_message = 'DigitalOcean V1 is deprecated.Please use `:version => :v2` attribute to use Next Gen Cloud Servers.'
+          error_message = "DigitalOcean V1 is deprecated.Please use `:version => :v2` attribute to use Next Gen Cloud Servers."
           raise error_message
         else
-          require 'fog/digitalocean/compute'
+          require "fog/digitalocean/compute"
           Fog::Compute::DigitalOcean.new(attributes)
         end
       else
