@@ -152,7 +152,6 @@ describe Fog::Cache do
     assert_equal 1, Fog::Cache.load(Fog::SubFogTestModel, @service).size
   end
 
-
   it "can be dumped and reloaded back in" do
 
     Fog::Cache.expire_cache!(Fog::SubFogTestModel, @service)

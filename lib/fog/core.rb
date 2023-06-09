@@ -72,6 +72,5 @@ require File.expand_path("support", __dir__)
 require File.expand_path("volume", __dir__)
 require File.expand_path("vpn", __dir__)
 
-
 # Utility
 require File.expand_path("formatador", __dir__)

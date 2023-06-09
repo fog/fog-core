@@ -26,7 +26,6 @@ describe Fog::Compute::Server do
         end
       end
 
-
       describe "when the ssh_ip_address exists" do
         # Define these constants which would be imported by net-ssh once loaded
         module Net
