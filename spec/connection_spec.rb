@@ -60,6 +60,7 @@ describe Fog::Core::Connection do
           def params
             @params
           end
+
           def new(_, params)
             @params = params
           end
@@ -78,6 +79,7 @@ describe Fog::Core::Connection do
           spy.instance_eval do
             def new(*_args); self; end
             def params; @params; end
+
             def request(params)
               @params = params
             end

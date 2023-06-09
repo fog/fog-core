@@ -33,6 +33,7 @@ describe Fog::Compute::Server do
           module SSH
             class AuthenticationFailed  < RuntimeError
             end
+
             class Disconnect < RuntimeError
             end
           end

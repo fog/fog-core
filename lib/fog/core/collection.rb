@@ -114,6 +114,7 @@ module Fog
       all
     end
   end
+
   # Base class for collection classes whose 'all' method returns only a single
   # page of results and passes the 'Marker' option along as
   # self.filters[:marker]
