@@ -53,6 +53,7 @@ module Fog
       def ssh_ip_address
         return public_ip_address unless @ssh_ip_address
         return @ssh_ip_address.call(self) if @ssh_ip_address.is_a?(Proc)
+
         @ssh_ip_address
       end
 

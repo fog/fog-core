@@ -25,6 +25,7 @@ module Fog
 
     def self.delay=(new_delay)
       raise ArgumentError, "delay must be non-negative" unless new_delay >= 0
+
       @delay = new_delay
     end
 
@@ -92,12 +93,15 @@ module Fog
       mocked_services = []
       Fog.constants.map do |x|
         next if Fog.autoload?(x)
+
         x_const = Fog.const_get(x)
         x_const.respond_to?(:constants) && x_const.constants.map do |y|
           next if x_const.autoload?(y)
+
           y_const = x_const.const_get(y)
           y_const.respond_to?(:constants) && y_const.constants.map do |z|
             next if y_const.autoload?(z)
+
             mocked_services << y_const.const_get(z) if z.to_sym == :Mock
           end
         end
@@ -105,6 +109,7 @@ module Fog
 
       mocked_services.each do |mocked_service|
         next unless mocked_service.respond_to?(:reset)
+
         mocked_service.reset
       end
     end

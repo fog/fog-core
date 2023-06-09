@@ -7,6 +7,7 @@ module Fog
 
     def load(associations)
       return unless associations.kind_of?(Array)
+
       associations.each do |association|
         self << association
       end

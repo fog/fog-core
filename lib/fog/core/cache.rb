@@ -220,6 +220,7 @@ module Fog
     def self.load_cache(path)
       @memoized ||= {}
       return @memoized[path] if @memoized[path]
+
       @memoized[path] = yaml_load(File.read(path))
     end
 

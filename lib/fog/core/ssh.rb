@@ -61,6 +61,7 @@ module Fog
 
                   channel.on_extended_data do |_ch, type, data|
                     next unless type == 1
+
                     result.stderr << data
                     yield ["", data] if blk
                   end

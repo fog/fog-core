@@ -35,6 +35,7 @@ def collection_tests(collection, params = {}, mocks_implemented = true)
 
       methods.each do |enum_method|
         next unless collection.respond_to?(enum_method)
+
         tests("##{enum_method}").succeeds do
           block_called = false
           collection.send(enum_method) { block_called = true }
@@ -44,6 +45,7 @@ def collection_tests(collection, params = {}, mocks_implemented = true)
 
       %w(max_by min_by).each do |enum_method|
         next unless collection.respond_to?(enum_method)
+
         tests("##{enum_method}").succeeds do
           block_called = false
           collection.send(enum_method) do
