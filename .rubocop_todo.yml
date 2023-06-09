@@ -33,14 +33,6 @@ Layout/EmptyLineAfterMagicComment:
   Exclude:
     - 'lib/fog/core/cache.rb'
 
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-Layout/EmptyLines:
-  Exclude:
-    - 'lib/fog/core.rb'
-    - 'spec/compute/models/server_spec.rb'
-    - 'spec/core/cache_spec.rb'
-
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AllowAliasSyntax, AllowedMethods.
