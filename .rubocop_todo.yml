@@ -27,24 +27,6 @@ Layout/ElseAlignment:
     - 'lib/fog/core/cache.rb'
     - 'lib/fog/storage.rb'
 
-# Offense count: 24
-# This cop supports safe autocorrection (--autocorrect).
-Layout/EmptyLineAfterGuardClause:
-  Exclude:
-    - 'lib/fog/compute/models/server.rb'
-    - 'lib/fog/core/association.rb'
-    - 'lib/fog/core/attributes.rb'
-    - 'lib/fog/core/cache.rb'
-    - 'lib/fog/core/collection.rb'
-    - 'lib/fog/core/mock.rb'
-    - 'lib/fog/core/model.rb'
-    - 'lib/fog/core/ssh.rb'
-    - 'lib/fog/core/wait_for.rb'
-    - 'lib/fog/core/wait_for_defaults.rb'
-    - 'lib/fog/formatador.rb'
-    - 'lib/fog/schema/data_validator.rb'
-    - 'lib/fog/test_helpers/collection_helper.rb'
-
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
 Layout/EmptyLineAfterMagicComment:

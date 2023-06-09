@@ -90,6 +90,7 @@ module Fog
 
     def symbolize_keys(hash)
       return nil if hash.nil?
+
       hash.reduce({}) do |options, (key, value)|
         options[(key.to_sym rescue key) || key] = value
         options

@@ -57,6 +57,7 @@ module Fog
 
     def self.attribute_string(object)
       return "" unless object.class.respond_to?(:attributes)
+
       if object.class.attributes.empty?
         ""
       else
@@ -68,6 +69,7 @@ module Fog
       nested = ""
       return nested if object.respond_to?(:empty) and object.empty?
       return nested unless object.is_a?(Enumerable)
+
       nested = "#{indentation}[\n"
       indent { nested << indentation + inspect_object(object) }
       nested << "#{indentation}\n#{indentation}]\n"
@@ -82,6 +84,7 @@ module Fog
 
     def self.inspect_object(object)
       return "" unless object.is_a?(Enumerable)
+
       object.map { |o| indentation + o.inspect }.join(", \n#{indentation}")
     end
   end

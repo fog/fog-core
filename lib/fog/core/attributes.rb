@@ -139,6 +139,7 @@ module Fog
       def merge_attributes(new_attributes = {})
         new_attributes.each_pair do |key, value|
           next if self.class.ignored_attributes.include?(key)
+
           if self.class.aliases[key]
             send("#{self.class.aliases[key]}=", value)
           elsif self.respond_to?("#{key}=", true)
@@ -196,6 +197,7 @@ module Fog
       def requires_one(*args)
         missing = missing_attributes(args)
         return unless missing.length == args.length
+
         raise(ArgumentError, "#{missing[0...-1].join(', ')} or #{missing[-1]} are required for this operation")
       end
 

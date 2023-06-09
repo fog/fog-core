@@ -11,6 +11,7 @@ module Fog
 
     Array.public_instance_methods(false).each do |method|
       next if [:reject, :select, :slice, :clear, :inspect].include?(method.to_sym)
+
       class_eval <<-EOS, __FILE__, __LINE__
         def #{method}(*args)
           unless @loaded
@@ -85,6 +86,7 @@ module Fog
       unless attributes.is_a?(::Hash)
         raise ArgumentError, "Initialization parameters must be an attributes hash, got #{attributes.class} #{attributes.inspect}"
       end
+
       model.new(
         {
           :collection => self,
@@ -120,6 +122,7 @@ module Fog
       if block_given?
         Kernel.loop do
           break unless filters[:marker]
+
           page = all(collection_filters)
           # We need to explicitly use the base 'each' method here on the page,
           #  otherwise we get infinite recursion

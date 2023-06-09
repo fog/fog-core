@@ -106,6 +106,7 @@ module Fog
         case validator
         when Array
           return false if value.is_a?(Hash)
+
           value.respond_to?(:all?) && value.all? { |x| validate_value(validator[0], x, options) }
         when Symbol
           value.respond_to? validator
