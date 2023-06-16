@@ -33,7 +33,7 @@ module Fog
       raise Fog::Errors::MockNotImplemented, message
     end
 
-    def self.random_ip(opts = { :version => :v4 })
+    def self.random_ip(opts = { version: :v4 })
       version = opts[:version]
       if version == :v6
         bit_length = 128

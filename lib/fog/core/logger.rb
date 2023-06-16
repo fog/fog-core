@@ -1,8 +1,8 @@
 module Fog
   class Logger
     @channels = {
-      :deprecation  => ::STDERR,
-      :warning      => ::STDERR
+      deprecation: ::STDERR,
+      warning: ::STDERR
     }
 
     @channels[:debug] = ::STDERR if ENV["DEBUG"]

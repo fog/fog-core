@@ -28,7 +28,7 @@ module Fog
       end
 
       def run(commands, &_blk)
-        self.class.data[@address] << { :commands => commands, :username => @username, :options => @options }
+        self.class.data[@address] << { commands: commands, username: @username, options: @options }
       end
     end
 
@@ -117,7 +117,7 @@ module Fog
 
         # net-ssh has deprecated :paranoid in favor of :verify_host_key
         # https://github.com/net-ssh/net-ssh/pull/524
-        opts = { :paranoid => false, :verify_host_key => :never }.merge(options)
+        opts = { paranoid: false, verify_host_key: :never }.merge(options)
         if Net::SSH::VALID_OPTIONS.include? :verify_host_key
           opts.delete(:paranoid)
         end

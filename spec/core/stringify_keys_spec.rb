@@ -4,7 +4,7 @@ describe "Fog::StringifyKeys" do
   describe ".stringify" do
     describe "when key is a Symbol" do
       it "replaces key with String" do
-        input = { :key => "value" }
+        input = { key: "value" }
         output = Fog::StringifyKeys.stringify(input)
         assert(output.key?("key"))
       end
@@ -26,11 +26,11 @@ describe "Fog::StringifyKeys" do
 
     describe "when keys are deeply nested" do
       it "updates only top level key" do
-        input = { :key1 => { :key2 => { :key3 => nil }}}
+        input = { key1: { key2: { key3: nil }}}
 
         output = Fog::StringifyKeys.stringify(input)
 
-        expected = { "key1" => { :key2 => { :key3 => nil }}}
+        expected = { "key1" => { key2: { key3: nil }}}
         assert_equal(expected, output)
       end
     end

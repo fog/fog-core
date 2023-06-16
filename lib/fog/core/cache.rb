@@ -134,7 +134,7 @@ module Fog
         # Set the collection and service so they can be reloaded/connection is set properly.
         # See https://github.com/fog/fog-aws/issues/354#issuecomment-286789702
         m.instance_variable_set(:@service, service)
-        m.collection = collection_klass.new(cache[:collection_attrs].merge(:service => service)) if collection_klass
+        m.collection = collection_klass.new(cache[:collection_attrs].merge(service: service)) if collection_klass
 
         m
       end.compact
@@ -292,11 +292,11 @@ module Fog
       end
 
       data = {
-        :identity => model.identity,
-        :model_klass => model.class.to_s,
-        :collection_klass => model.collection && model.collection.class.to_s,
-        :collection_attrs => model.collection && model.collection.attributes,
-        :model_attrs => model.attributes
+        identity: model.identity,
+        model_klass: model.class.to_s,
+        collection_klass: model.collection && model.collection.class.to_s,
+        collection_attrs: model.collection && model.collection.attributes,
+        model_attrs: model.attributes
       }
 
       File.open(dump_to, "w") { |f| f.write(YAML.dump(data)) }

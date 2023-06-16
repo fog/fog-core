@@ -60,16 +60,16 @@ describe "Fog mocking" do
     end
 
     it "supports explicit request for v4" do
-      assert IPAddr.new(Fog::Mock.random_ip(:version => :v4)).ipv4?
+      assert IPAddr.new(Fog::Mock.random_ip(version: :v4)).ipv4?
     end
 
     it "supports explicit request for v6" do
-      assert IPAddr.new(Fog::Mock.random_ip(:version => :v6)).ipv6?
+      assert IPAddr.new(Fog::Mock.random_ip(version: :v6)).ipv6?
     end
 
     it "raises when supplied an illegal IP version" do
       assert_raises(ArgumentError) do
-        IPAddr.new(Fog::Mock.random_ip(:version => :v5)).ipv4?
+        IPAddr.new(Fog::Mock.random_ip(version: :v5)).ipv4?
       end
     end
   end

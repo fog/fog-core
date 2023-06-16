@@ -24,7 +24,7 @@ describe "Fog::Storage" do
     end
 
     it "instantiates an instance of Fog::<Provider>::Storage from the :provider keyword arg" do
-      compute = Fog::Storage.new(:provider => :therightway)
+      compute = Fog::Storage.new(provider: :therightway)
       assert_instance_of(Fog::TheRightWay::Storage, compute)
     end
 
@@ -42,7 +42,7 @@ describe "Fog::Storage" do
     end
 
     it "instantiates an instance of Fog::Storage::<Provider> from the :provider keyword arg" do
-      compute = Fog::Storage.new(:provider => :thewrongway)
+      compute = Fog::Storage.new(provider: :thewrongway)
       assert_instance_of(Fog::Storage::TheWrongWay, compute)
     end
 
@@ -75,19 +75,19 @@ describe "Fog::Storage" do
 
     describe "when both Fog::Storage::<Provider> and Fog::<Provider>::Storage exist" do
       it "prefers Fog::Storage::<Provider>" do
-        compute = Fog::Storage.new(:provider => :bothways)
+        compute = Fog::Storage.new(provider: :bothways)
         assert_instance_of(Fog::BothWays::Storage, compute)
       end
     end
 
     it "passes the supplied keyword args less :provider to Fog::Storage::<Provider>#new" do
-      compute = Fog::Storage.new(:provider => :bothways, :extra => :stuff)
-      assert_equal({ :extra => :stuff }, compute.args)
+      compute = Fog::Storage.new(provider: :bothways, extra: :stuff)
+      assert_equal({ extra: :stuff }, compute.args)
     end
 
     it "raises ArgumentError when given a :provider where a Fog::Storage::Provider that does not exist" do
       assert_raises(ArgumentError) do
-        Fog::Storage.new(:provider => :wat)
+        Fog::Storage.new(provider: :wat)
       end
     end
   end

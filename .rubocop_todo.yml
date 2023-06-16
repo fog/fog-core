@@ -88,20 +88,6 @@ Layout/ExtraSpacing:
     - 'spec/fog_attribute_spec.rb'
     - 'spec/service_spec.rb'
 
-# Offense count: 98
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowMultipleStyles, EnforcedHashRocketStyle, EnforcedColonStyle, EnforcedLastArgumentHashStyle.
-# SupportedHashRocketStyles: key, separator, table
-# SupportedColonStyles: key, separator, table
-# SupportedLastArgumentHashStyles: always_inspect, always_ignore, ignore_implicit, ignore_explicit
-Layout/HashAlignment:
-  Exclude:
-    - 'lib/fog/core/logger.rb'
-    - 'lib/fog/core/scp.rb'
-    - 'lib/fog/storage.rb'
-    - 'lib/fog/test_helpers/mock_helper.rb'
-    - 'lib/tasks/test_task.rb'
-
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
 Layout/HeredocIndentation:
@@ -598,14 +584,6 @@ Style/GuardClause:
 Style/HashConversion:
   Exclude:
     - 'lib/fog/core/whitelist_keys.rb'
-
-# Offense count: 456
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, EnforcedShorthandSyntax, UseHashRocketsWithSymbolValues, PreferHashRocketsForNonAlnumEndingSymbols.
-# SupportedStyles: ruby19, hash_rockets, no_mixed_keys, ruby19_no_mixed_keys
-# SupportedShorthandSyntax: always, never, either, consistent
-Style/HashSyntax:
-  Enabled: false
 
 # Offense count: 18
 # This cop supports safe autocorrection (--autocorrect).

@@ -32,7 +32,7 @@ describe Fog::Model do
 
     it "is equal if it has the same non-nil identity and the same class" do
       id = SecureRandom.hex
-      assert_equal FogTestModel.new(:id => id), FogTestModel.new(:id => id)
+      assert_equal FogTestModel.new(id: id), FogTestModel.new(id: id)
     end
 
     it "is not equal if both have nil identity, but are different objects" do
@@ -40,8 +40,8 @@ describe Fog::Model do
     end
 
     it "is not equal if it has a different identity" do
-      refute_equal FogTestModel.new(:id => SecureRandom.hex),
-                   FogTestModel.new(:id => SecureRandom.hex)
+      refute_equal FogTestModel.new(id: SecureRandom.hex),
+                   FogTestModel.new(id: SecureRandom.hex)
     end
   end
 

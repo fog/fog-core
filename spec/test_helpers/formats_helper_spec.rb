@@ -14,8 +14,8 @@ describe "formats_helper" do
   let(:shindo) { Shindo::Tests.new }
 
   it "comparing welcome data against schema" do
-    data = { :welcome => "Hello" }
-    assert shindo.data_matches_schema(:welcome => String) { data }
+    data = { welcome: "Hello" }
+    assert shindo.data_matches_schema(welcome: String) { data }
   end
 
   describe "#data_matches_schema" do
@@ -28,7 +28,7 @@ describe "formats_helper" do
     end
 
     it "when nested values match schema expectation" do
-      assert shindo.data_matches_schema("key" => { :nested_key => String }) { { "key" => { :nested_key => "Value" } } }
+      assert shindo.data_matches_schema("key" => { nested_key: String }) { { "key" => { nested_key: "Value" } } }
     end
 
     it "when collection of values all match schema expectation" do
@@ -36,11 +36,11 @@ describe "formats_helper" do
     end
 
     it "when collection is empty although schema covers optional members" do
-      assert shindo.data_matches_schema([{ "key" => String }], :allow_optional_rules => true) { [] }
+      assert shindo.data_matches_schema([{ "key" => String }], allow_optional_rules: true) { [] }
     end
 
     it "when additional keys are passed and not strict" do
-      assert shindo.data_matches_schema({ "key" => String }, { :allow_extra_keys => true }) { { "key" => "Value", :extra => "Bonus" } }
+      assert shindo.data_matches_schema({ "key" => String }, { allow_extra_keys: true }) { { "key" => "Value", :extra => "Bonus" } }
     end
 
     it "when value is nil and schema expects NilClass" do
@@ -60,11 +60,11 @@ describe "formats_helper" do
     end
 
     it "when key is missing but value should be NilClass (#1477)" do
-      assert shindo.data_matches_schema({ "key" => NilClass }, { :allow_optional_rules => true }) { {} }
+      assert shindo.data_matches_schema({ "key" => NilClass }, { allow_optional_rules: true }) { {} }
     end
 
     it "when key is missing but value is nullable (#1477)" do
-      assert shindo.data_matches_schema({ "key" => Fog::Nullable::String }, { :allow_optional_rules => true }) { {} }
+      assert shindo.data_matches_schema({ "key" => Fog::Nullable::String }, { allow_optional_rules: true }) { {} }
     end
   end
 
@@ -79,7 +79,7 @@ describe "formats_helper" do
     end
 
     it "when nested values match schema expectation" do
-      assert shindo.formats("key" => { :nested_key => String }) { { "key" => { :nested_key => "Value" } } }
+      assert shindo.formats("key" => { nested_key: String }) { { "key" => { nested_key: "Value" } } }
     end
 
     it "when collection of values all match schema expectation" do

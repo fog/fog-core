@@ -24,7 +24,7 @@ describe "Fog::Identity" do
     end
 
     it "instantiates an instance of Fog::Identity::<Provider> from the :provider keyword arg" do
-      identity = Fog::Identity.new(:provider => :therightway)
+      identity = Fog::Identity.new(provider: :therightway)
       assert_instance_of(Fog::TheRightWay::Identity, identity)
     end
 
@@ -44,7 +44,7 @@ describe "Fog::Identity" do
     end
 
     it "instantiates an instance of Fog::<Provider>::Identity from the :provider keyword arg" do
-      identity = Fog::Identity.new(:provider => :thewrongway)
+      identity = Fog::Identity.new(provider: :thewrongway)
       assert_instance_of(Fog::Identity::TheWrongWay, identity)
     end
 
@@ -76,19 +76,19 @@ describe "Fog::Identity" do
 
     describe "when both Fog::Identity::<Provider> and Fog::<Provider>::Identity exist" do
       it "prefers Fog::Identity::<Provider>" do
-        identity = Fog::Identity.new(:provider => :bothways)
+        identity = Fog::Identity.new(provider: :bothways)
         assert_instance_of(Fog::BothWays::Identity, identity)
       end
     end
 
     it "passes the supplied keyword args less :provider to Fog::Identity::<Provider>#new" do
-      identity = Fog::Identity.new(:provider => :bothways, :extra => :stuff)
-      assert_equal({ :extra => :stuff }, identity.args)
+      identity = Fog::Identity.new(provider: :bothways, extra: :stuff)
+      assert_equal({ extra: :stuff }, identity.args)
     end
 
     it "raises ArgumentError when given a :provider where a Fog::Identity::Provider that does not exist" do
       assert_raises(ArgumentError) do
-        Fog::Identity.new(:provider => :wat)
+        Fog::Identity.new(provider: :wat)
       end
     end
   end

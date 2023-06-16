@@ -12,6 +12,6 @@ module Fog
       sleep(interval.respond_to?(:call) ? interval.call(retries += 1).to_f : interval.to_f)
       duration = Time.now - start
     end
-    { :duration => duration }
+    { duration: duration }
   end
 end

@@ -14,7 +14,7 @@ module Fog
     EOS
 
     def [](provider)
-      new(:provider => provider)
+      new(provider: provider)
     end
 
     def new(attributes)
