@@ -272,11 +272,10 @@ module Fog
 
       raise CacheDir.new("Must set an explicit identifier/name for this cache. Example: 'serviceX-regionY'") unless namespace_prefix
 
-      ns = File.join(SANDBOX, namespace_prefix, service.class.to_s, model_klass.to_s)
-      ns = safe_path(ns)
+      File.join(SANDBOX, namespace_prefix, safe_class_path(service.class), safe_class_path(model_klass))
     end
 
-    def self.safe_path(klass)
+    def self.safe_class_path(klass)
       klass.to_s.gsub("::", "_").downcase
     end
 
