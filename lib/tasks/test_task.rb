@@ -27,8 +27,8 @@ module Fog
         Fog.providers.each do |key, value|
           threads << Thread.new do
             Thread.main[:results] << {
-              :provider => value,
-              :success  => sh("export FOG_MOCK=#{mocked} && bundle exec shindont +#{key}")
+              provider: value,
+              success: sh("export FOG_MOCK=#{mocked} && bundle exec shindont +#{key}")
             }
           end
         end

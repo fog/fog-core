@@ -67,7 +67,7 @@ describe Fog::Cache do
     # nothing exists, nothing comes back
     assert_equal Fog::Cache.metadata, {}
     # write/read
-    Fog::Cache.write_metadata({:last_dumped => "Tuesday, November 8, 2016"})
+    Fog::Cache.write_metadata({last_dumped: "Tuesday, November 8, 2016"})
     assert_equal Fog::Cache.metadata[:last_dumped], "Tuesday, November 8, 2016"
 
     # diff namespace, diff metadata
@@ -75,10 +75,10 @@ describe Fog::Cache do
     assert_nil Fog::Cache.metadata[:last_dumped]
     # still accessible per namespace
     Fog::Cache.namespace_prefix = "for-service-user-region-foo"
-    assert_equal Fog::Cache.metadata[:last_dumped],  "Tuesday, November 8, 2016"
+    assert_equal Fog::Cache.metadata[:last_dumped], "Tuesday, November 8, 2016"
     # can overwrite
-    Fog::Cache.write_metadata({:last_dumped => "Diff date"})
-    assert_equal Fog::Cache.metadata[:last_dumped],  "Diff date"
+    Fog::Cache.write_metadata({last_dumped: "Diff date"})
+    assert_equal Fog::Cache.metadata[:last_dumped], "Diff date"
 
     # can't write a non-hash/data entry.
     assert_raises Fog::Cache::CacheDir do
@@ -88,7 +88,7 @@ describe Fog::Cache do
     # namespace must be set as well.
     assert_raises Fog::Cache::CacheDir do
       Fog::Cache.namespace_prefix = nil
-      Fog::Cache.write_metadata({:a => "b"})
+      Fog::Cache.write_metadata({a: "b"})
     end
   end
 
@@ -138,7 +138,7 @@ describe Fog::Cache do
   it "Fog cache ignores bad cache data - empty file, from disk" do
     Fog::Cache.expire_cache!(Fog::SubFogTestModel, @service)
     id = SecureRandom.hex
-    a = Fog::SubFogTestModel.new(:id => id, :service => @service)
+    a = Fog::SubFogTestModel.new(id: id, service: @service)
     a.cache.dump
 
     # input bad data
@@ -157,7 +157,7 @@ describe Fog::Cache do
     Fog::Cache.expire_cache!(Fog::SubFogTestModel, @service)
 
     id = SecureRandom.hex
-    a = Fog::SubFogTestModel.new(:id => id, :service => @service)
+    a = Fog::SubFogTestModel.new(id: id, service: @service)
 
     assert_equal File.exist?(Fog::Cache.namespace(Fog::SubFogTestModel, @service)), false
     a.cache.dump
@@ -176,8 +176,8 @@ describe Fog::Cache do
 
     # security groups on aws for eg can have the same identity group name 'default'.
     # there are no restrictions on `identity` fog attributes to be uniq.
-    a = Fog::SubFogTestModel.new(:id => id, :service => @service, :bar => "bar")
-    b = Fog::SubFogTestModel.new(:id => id, :service => @service, :foo => "foo")
+    a = Fog::SubFogTestModel.new(id: id, service: @service, bar: "bar")
+    b = Fog::SubFogTestModel.new(id: id, service: @service, foo: "foo")
 
     a.cache.dump
     b.cache.dump
@@ -194,8 +194,8 @@ describe Fog::Cache do
 
     # security groups on aws for eg can have the same identity group name 'default'.
     # there are no restrictions on `identity` fog attributes to be uniq.
-    a = Fog::SubFogTestModel.new(:id => id, :service => @service, :bar => "bar")
-    b = Fog::SubFogTestModel.new(:id => id, :service => @service, :foo => "foo")
+    a = Fog::SubFogTestModel.new(id: id, service: @service, bar: "bar")
+    b = Fog::SubFogTestModel.new(id: id, service: @service, foo: "foo")
 
     a.cache.dump
     b.cache.dump
@@ -213,10 +213,10 @@ describe Fog::Cache do
   it "dumps model with collection attributes and reloads them" do
     Fog::Cache.expire_cache!(Fog::SubFogTestModel, @service)
 
-    c = Fog::SubFogTestCollection.new(:service => @service, :spec_attribute => 42)
+    c = Fog::SubFogTestCollection.new(service: @service, spec_attribute: 42)
 
     id = SecureRandom.hex
-    a = Fog::SubFogTestModel.new(:id => id, :service => @service, :collection => c)
+    a = Fog::SubFogTestModel.new(id: id, service: @service, collection: c)
 
     a.cache.dump
 

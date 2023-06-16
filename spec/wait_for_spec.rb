@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe "Fog#wait_for" do
   it "returns a Hash indicating the wait duration if successful" do
-    assert_equal({ :duration => 0 }, Fog.wait_for(1) { true })
+    assert_equal({ duration: 0 }, Fog.wait_for(1) { true })
   end
 
   it "raises if the wait timeout is exceeded" do

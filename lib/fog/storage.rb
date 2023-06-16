@@ -55,10 +55,10 @@ module Fog
 
     def self.parse_data(data)
       {
-        :body     => data,
-        :headers  => {
-          "Content-Length"  => get_body_size(data),
-          "Content-Type"    => get_content_type(data)
+        body: data,
+        headers: {
+          "Content-Length" => get_body_size(data),
+          "Content-Type" => get_content_type(data)
           # "Content-MD5" => Base64.encode64(Digest::MD5.digest(metadata[:body])).strip
         }
       }

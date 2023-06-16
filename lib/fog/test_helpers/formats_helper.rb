@@ -60,9 +60,9 @@ module Shindo
     def formats(format, strict = true)
       test("has proper format") do
         if strict
-          options = { :allow_extra_keys => false, :allow_optional_rules => true }
+          options = { allow_extra_keys: false, allow_optional_rules: true }
         else
-          options = { :allow_extra_keys => true, :allow_optional_rules => true }
+          options = { allow_extra_keys: true, allow_optional_rules: true }
         end
         validator = Fog::Schema::DataValidator.new
         valid = validator.validate(yield, format, options)

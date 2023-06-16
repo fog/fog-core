@@ -59,7 +59,7 @@ module Fog
 
       def ssh_options
         @ssh_options ||= {}
-        ssh_options = @ssh_options.merge(:port => ssh_port)
+        ssh_options = @ssh_options.merge(port: ssh_port)
         if private_key
           ssh_options[:key_data] = [private_key]
           ssh_options[:auth_methods] = %w(publickey)

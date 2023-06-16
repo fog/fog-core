@@ -26,8 +26,8 @@ describe Fog::Formatador do
         end
       end
 
-      @collection = @collection_class.new(:attr_one => "String", :attr_two => 5)
-      @collection << @member_class.new(:name => "Member name")
+      @collection = @collection_class.new(attr_one: "String", attr_two: 5)
+      @collection << @member_class.new(name: "Member name")
       @expected = <<-EOS.gsub(/^ {6}/, "").chomp!
         <InspectionGadget
           attr_one=\"String\",
@@ -78,7 +78,7 @@ describe Fog::Formatador do
           self
         end
       end
-      @collection = @collection_class.new(:name => "Name")
+      @collection = @collection_class.new(name: "Name")
       @collection << "this"
     end
 
@@ -89,7 +89,7 @@ describe Fog::Formatador do
         >
       EOS
 
-      opts = { :include_nested => false }
+      opts = { include_nested: false }
       Fog::Formatador.format(@collection, opts).must_equal @expected
     end
   end

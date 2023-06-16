@@ -3,7 +3,7 @@ require "excon"
 ENV["FOG_RC"]         = ENV["FOG_RC"] || File.expand_path(".fog", __dir__)
 ENV["FOG_CREDENTIAL"] = ENV["FOG_CREDENTIAL"] || "default"
 
-Excon.defaults.merge!(:debug_request => true, :debug_response => true)
+Excon.defaults.merge!(debug_request: true, debug_response: true)
 
 LOREM = <<HERE
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor

@@ -15,7 +15,7 @@ describe "SchemaValidator" do
     end
 
     it "returns true when nested values match schema expectation" do
-      assert validator.validate({ "key" => { :nested_key => "Value" } }, { "key" => { :nested_key => String } })
+      assert validator.validate({ "key" => { nested_key: "Value" } }, { "key" => { nested_key: String } })
     end
 
     it "returns true when collection of values all match schema expectation" do
@@ -27,7 +27,7 @@ describe "SchemaValidator" do
     end
 
     it "returns true when additional keys are passed and not strict" do
-      assert validator.validate({ "key" => "Value", :extra => "Bonus" }, { "key" => String }, { :allow_extra_keys => true })
+      assert validator.validate({ "key" => "Value", :extra => "Bonus" }, { "key" => String }, { allow_extra_keys: true })
     end
 
     it "returns true when value is nil and schema expects NilClass" do
@@ -47,11 +47,11 @@ describe "SchemaValidator" do
     end
 
     it "returns true when key is missing but value should be NilClass (#1477)" do
-      assert validator.validate({}, { "key" => NilClass }, { :allow_optional_rules => true })
+      assert validator.validate({}, { "key" => NilClass }, { allow_optional_rules: true })
     end
 
     it "returns true when key is missing but value is nullable (#1477)" do
-      assert validator.validate({}, { "key" => Fog::Nullable::String }, { :allow_optional_rules => true })
+      assert validator.validate({}, { "key" => Fog::Nullable::String }, { allow_optional_rules: true })
     end
 
     it "returns false when value does not match schema expectation" do
@@ -59,7 +59,7 @@ describe "SchemaValidator" do
     end
 
     it "returns false when key formats do not match" do
-      refute validator.validate({ "key" => "Value" }, { :key => String })
+      refute validator.validate({ "key" => "Value" }, { key: String })
     end
 
     it "returns false when additional keys are passed and strict" do
@@ -87,15 +87,15 @@ describe "SchemaValidator" do
     end
 
     it "returns false when a hash is expected but another data type is found" do
-      refute validator.validate({ "key" => { :nested_key => [] } }, { "key" => { :nested_key => {} } })
+      refute validator.validate({ "key" => { nested_key: [] } }, { "key" => { nested_key: {} } })
     end
 
     it "returns false when key is missing but value should be NilClass (#1477)" do
-      refute validator.validate({}, { "key" => NilClass }, { :allow_optional_rules => false })
+      refute validator.validate({}, { "key" => NilClass }, { allow_optional_rules: false })
     end
 
     it "returns false when key is missing but value is nullable (#1477)" do
-      refute validator.validate({}, { "key" => Fog::Nullable::String }, { :allow_optional_rules => false })
+      refute validator.validate({}, { "key" => Fog::Nullable::String }, { allow_optional_rules: false })
     end
   end
 end

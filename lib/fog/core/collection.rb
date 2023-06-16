@@ -53,7 +53,7 @@ module Fog
     end
 
     def destroy(identity)
-      new(:identity => identity).destroy
+      new(identity: identity).destroy
     end
 
     # Creates a new Fog::Collection based around the passed service
@@ -89,8 +89,8 @@ module Fog
 
       model.new(
         {
-          :collection => self,
-          :service => service
+          collection: self,
+          service: service
         }.merge(attributes)
       )
     end

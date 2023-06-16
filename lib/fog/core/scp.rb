@@ -22,19 +22,23 @@ module Fog
       end
 
       def upload(local_path, remote_path, upload_options = {})
-        self.class.data[@address] << { :username       => @username,
-                                       :options        => @options,
-                                       :local_path     => local_path,
-                                       :remote_path    => remote_path,
-                                       :upload_options => upload_options }
+        self.class.data[@address] << {
+          username: @username,
+          options: @options,
+          local_path: local_path,
+          remote_path: remote_path,
+          upload_options: upload_options
+        }
       end
 
       def download(remote_path, local_path, download_options = {})
-        self.class.data[@address] << { :username         => @username,
-                                       :options          => @options,
-                                       :remote_path      => remote_path,
-                                       :local_path       => local_path,
-                                       :download_options => download_options }
+        self.class.data[@address] << {
+          username: @username,
+          options: @options,
+          remote_path: remote_path,
+          local_path: local_path,
+          download_options: download_options
+        }
       end
     end
 
@@ -64,7 +68,7 @@ module Fog
 
         @address  = address
         @username = username
-        @options  = { :paranoid => false, :verify_host_key => :never }.merge(options)
+        @options  = { paranoid: false, verify_host_key: :never }.merge(options)
         @options.delete(:paranoid) if Net::SSH::VALID_OPTIONS.include? :verify_host_key
         @options[:verify_host_key] = false unless Net::SSH::Verifiers.const_defined?(:Never)
       end

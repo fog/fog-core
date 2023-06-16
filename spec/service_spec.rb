@@ -32,10 +32,10 @@ describe Fog::Service do
       "User-Agent" => "Generic Fog Client"
     }
     params = {
-      :generic_user => "bob",
-      :generic_api_key => "1234",
-      :connection_options => {
-        :headers => user_agent_hash
+      generic_user: "bob",
+      generic_api_key: "1234",
+      connection_options: {
+        headers: user_agent_hash
       }
     }
     service = TestService.new(params)
@@ -54,27 +54,27 @@ describe Fog::Service do
     end
 
     it "removes keys with `nil` values" do
-      service = TestService.new :generic_api_key => "abc", :generic_user => nil
+      service = TestService.new generic_api_key: "abc", generic_user: nil
       refute_includes service.options.keys, :generic_user
     end
 
     it "converts number String values with to_i" do
-      service = TestService.new :generic_api_key => "3421"
+      service = TestService.new generic_api_key: "3421"
       assert_equal 3421, service.options[:generic_api_key]
     end
 
     it "converts 'true' String values to TrueClass" do
-      service = TestService.new :generic_api_key => "true"
+      service = TestService.new generic_api_key: "true"
       assert_equal true, service.options[:generic_api_key]
     end
 
     it "converts 'false' String values to FalseClass" do
-      service = TestService.new :generic_api_key => "false"
+      service = TestService.new generic_api_key: "false"
       assert_equal false, service.options[:generic_api_key]
     end
 
     it "warns for unrecognised options" do
-      bad_options = { :generic_api_key => "abc", :bad_option => "bad value" }
+      bad_options = { generic_api_key: "abc", bad_option: "bad value" }
       logger = Minitest::Mock.new
       logger.expect :warning, nil, ["Unrecognized arguments: bad_option"]
       Fog.stub_const :Logger, logger do
@@ -87,14 +87,14 @@ describe Fog::Service do
   describe "when creating and mocking is disabled" do
     it "returns the real service" do
       Fog.stub :mocking?, false do
-        service = TestService.new(:generic_api_key => "abc")
+        service = TestService.new(generic_api_key: "abc")
         service.must_be_instance_of TestService::Real
       end
     end
 
     it "TestService::Real has TestService::Collections mixed into the mocked service" do
       Fog.stub :mocking?, false do
-        service = TestService.new(:generic_api_key => "abc")
+        service = TestService.new(generic_api_key: "abc")
         assert_includes(service.class.ancestors, TestService::Collections)
         assert_includes(service.class.ancestors, Fog::Service::Collections)
         refute_includes(service.class.ancestors, ChildOfTestService::Collections)
@@ -114,14 +114,14 @@ describe Fog::Service do
   describe "when creating and mocking is enabled" do
     it "returns mocked service" do
       Fog.stub :mocking?, true do
-        service = TestService.new(:generic_api_key => "abc")
+        service = TestService.new(generic_api_key: "abc")
         service.must_be_instance_of TestService::Mock
       end
     end
 
     it "TestService::Mock has TestService::Collections mixed into the mocked service" do
       Fog.stub :mocking?, true do
-        service = TestService.new(:generic_api_key => "abc")
+        service = TestService.new(generic_api_key: "abc")
         assert_includes(service.class.ancestors, Fog::Service::Collections)
         assert_includes(service.class.ancestors, TestService::Collections)
         refute_includes(service.class.ancestors, ChildOfTestService::Collections)
@@ -141,8 +141,8 @@ describe Fog::Service do
   describe "when no credentials are provided" do
     it "uses the global values" do
       @global_credentials = {
-        :generic_user => "fog",
-        :generic_api_key => "fog"
+        generic_user: "fog",
+        generic_api_key: "fog"
       }
 
       Fog.stub :credentials, @global_credentials do
@@ -155,11 +155,11 @@ describe Fog::Service do
   describe "when credentials are provided as settings" do
     it "merges the global values into settings" do
       @settings = {
-        :generic_user => "fog"
+        generic_user: "fog"
       }
       @global_credentials = {
-        :generic_user => "bob",
-        :generic_api_key => "fog"
+        generic_user: "bob",
+        generic_api_key: "fog"
       }
 
       Fog.stub :credentials, @global_credentials do

@@ -9,7 +9,7 @@ module Fog
       Thread.current[:formatador] ||= ::Formatador.new
     end
 
-    def self.format(object, opts = { :include_nested => true })
+    def self.format(object, opts = { include_nested: true })
       string = init_string(object)
       indent { string << object_string(object, opts) }
       string << "#{indentation}>"
