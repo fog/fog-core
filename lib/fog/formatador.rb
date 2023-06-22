@@ -32,7 +32,7 @@ module Fog
     end
 
     def self.redisplay_progressbar(current, total, options = {})
-      ::Formatador.redisplay_progressbar(current, total, options = {})
+      ::Formatador.redisplay_progressbar(current, total, options)
     end
 
     private

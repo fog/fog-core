@@ -217,25 +217,12 @@ Lint/SuppressedException:
     - 'lib/fog/dns.rb'
     - 'lib/fog/storage.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods, IgnoreNotImplementedMethods.
-Lint/UnusedMethodArgument:
-  Exclude:
-    - 'lib/fog/formatador.rb'
-
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: ContextCreatingMethods, MethodCreatingMethods.
 Lint/UselessAccessModifier:
   Exclude:
     - 'lib/fog/core/stringify_keys.rb'
-    - 'lib/fog/formatador.rb'
-
-# Offense count: 2
-Lint/UselessAssignment:
-  Exclude:
-    - 'lib/fog/core/cache.rb'
     - 'lib/fog/formatador.rb'
 
 # Offense count: 2
