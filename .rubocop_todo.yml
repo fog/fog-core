@@ -8,14 +8,6 @@
 
 # Offense count: 4
 # This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: leading, trailing
-Layout/DotPosition:
-  Exclude:
-    - 'lib/fog/core/provider.rb'
-
-# Offense count: 4
-# This cop supports safe autocorrection (--autocorrect).
 Layout/ElseAlignment:
   Exclude:
     - 'lib/fog/core/cache.rb'
