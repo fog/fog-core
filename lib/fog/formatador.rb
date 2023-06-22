@@ -35,8 +35,6 @@ module Fog
       ::Formatador.redisplay_progressbar(current, total, options)
     end
 
-    private
-
     def self.indent(&block)
       formatador.indent(&block)
     end
