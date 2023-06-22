@@ -251,7 +251,7 @@ module Fog
               end
 
       mdir = File.join(SANDBOX, namespace_prefix)
-      FileUtils.mkdir_p(mdir) if !File.exist?(mdir)
+      FileUtils.mkdir_p(mdir)
 
       File.open(mpath, "w") { |f| f.write(to_write) }
     end
