@@ -186,12 +186,6 @@ Lint/MissingSuper:
     - 'lib/fog/core/service.rb'
     - 'lib/tasks/test_task.rb'
 
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Lint/NonAtomicFileOperation:
-  Exclude:
-    - 'lib/fog/core/cache.rb'
-
 # Offense count: 2
 Lint/RescueException:
   Exclude:
