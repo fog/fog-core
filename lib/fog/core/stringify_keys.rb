@@ -7,8 +7,6 @@ module Fog
       end
     end
 
-    private
-
     # http://devblog.avdi.org/2009/11/20/hash-transforms-in-ruby/
     def self.transform_hash(original, &block)
       original.reduce({}) do |result, (key, value)|
