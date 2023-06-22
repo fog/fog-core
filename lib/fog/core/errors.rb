@@ -120,7 +120,7 @@ An alternate file may be used by placing its path in the FOG_RC environment vari
 # End of Fog Credentials File
 #######################################################
 
-    YML
+      YML
       raise Fog::Errors::LoadError, missing_credentials_message
     end
   end
