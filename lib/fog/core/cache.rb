@@ -245,10 +245,10 @@ module Fog
 
       mpath = File.join(SANDBOX, namespace_prefix, "metadata.yml")
       to_write = if File.exist?(mpath)
-                YAML.dump(yaml_load(File.read(mpath)).merge!(h))
-              else
-                YAML.dump(h)
-              end
+                   YAML.dump(yaml_load(File.read(mpath)).merge!(h))
+                 else
+                   YAML.dump(h)
+                 end
 
       mdir = File.join(SANDBOX, namespace_prefix)
       FileUtils.mkdir_p(mdir)

@@ -28,14 +28,14 @@ module Fog
       end
 
       size = if body.respond_to?(:bytesize)
-        body.bytesize
-      elsif body.respond_to?(:size)
-        body.size
-      elsif body.respond_to?(:stat)
-        body.stat.size
-      else
-        0
-      end
+               body.bytesize
+             elsif body.respond_to?(:size)
+               body.size
+             elsif body.respond_to?(:stat)
+               body.stat.size
+             else
+               0
+             end
 
       if body.respond_to?(:encoding)
         body.force_encoding(original_encoding)
