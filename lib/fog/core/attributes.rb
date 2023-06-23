@@ -206,7 +206,7 @@ module Fog
       def missing_attributes(args)
         missing = []
         ([:service] | args).each do |arg|
-          missing << arg unless send("#{arg}") || attributes.key?(arg)
+          missing << arg unless send(arg.to_s) || attributes.key?(arg)
         end
         missing
       end
