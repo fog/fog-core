@@ -5,7 +5,7 @@ ENV["FOG_CREDENTIAL"] = ENV["FOG_CREDENTIAL"] || "default"
 
 Excon.defaults.merge!(debug_request: true, debug_response: true)
 
-LOREM = <<HERE
+LOREM = <<HERE.freeze
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
 incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
 nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
