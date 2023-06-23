@@ -655,12 +655,6 @@ Style/RedundantSelf:
     - 'lib/fog/core/cache.rb'
     - 'lib/fog/core/model.rb'
 
-# Offense count: 6
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantStringEscape:
-  Exclude:
-    - 'spec/formatador_spec.rb'
-
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle, AllowInnerSlashes.
