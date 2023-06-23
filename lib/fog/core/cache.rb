@@ -94,7 +94,7 @@ module Fog
     SANDBOX = ENV["HOME"] ? File.expand_path("~/.fog-cache") : File.expand_path(".fog-cache")
 
     # required attributes to load model from cache
-    REQUIRED_ATTRIBUTES = [:identity, :collection_klass, :collection_attrs, :model_klass, :model_attrs]
+    REQUIRED_ATTRIBUTES = [:identity, :collection_klass, :collection_attrs, :model_klass, :model_attrs].freeze
 
     # when a resource is used such as `server.cache.dump` the model klass is passed in
     # so that it can be identified from a different session.

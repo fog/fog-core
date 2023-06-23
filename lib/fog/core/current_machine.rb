@@ -4,7 +4,7 @@ module Fog
   class CurrentMachine
     @lock = Mutex.new
 
-    AMAZON_AWS_CHECK_IP = "http://checkip.amazonaws.com"
+    AMAZON_AWS_CHECK_IP = "http://checkip.amazonaws.com".freeze
 
     def self.ip_address=(ip_address)
       @lock.synchronize do

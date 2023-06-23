@@ -2,8 +2,8 @@ require "time"
 
 module Fog
   class Time < ::Time
-    DAYS = %w(Sun Mon Tue Wed Thu Fri Sat)
-    MONTHS = %w(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)
+    DAYS = %w(Sun Mon Tue Wed Thu Fri Sat).freeze
+    MONTHS = %w(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec).freeze
 
     def self.now
       at(::Time.now - offset)

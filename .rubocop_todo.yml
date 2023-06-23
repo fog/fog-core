@@ -563,19 +563,6 @@ Style/Lambda:
     - 'spec/service_spec.rb'
     - 'spec/wait_for_spec.rb'
 
-# Offense count: 7
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: literals, strict
-Style/MutableConstant:
-  Exclude:
-    - 'lib/fog/core/cache.rb'
-    - 'lib/fog/core/current_machine.rb'
-    - 'lib/fog/core/time.rb'
-    - 'lib/fog/core/version.rb'
-    - 'lib/fog/test_helpers/helper.rb'
-    - 'spec/connection_spec.rb'
-
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle.
