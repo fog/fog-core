@@ -647,13 +647,6 @@ Style/RedundantInitialize:
     - 'spec/identity_spec.rb'
     - 'spec/storage_spec.rb'
 
-# Offense count: 3
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/RedundantInterpolation:
-  Exclude:
-    - 'lib/fog/core/attributes.rb'
-    - 'lib/fog/formatador.rb'
-
 # Offense count: 5
 # This cop supports safe autocorrection (--autocorrect).
 Style/RedundantSelf:

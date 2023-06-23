@@ -48,8 +48,8 @@ module Fog
     end
 
     def self.object_string(object, opts)
-      string = "#{attribute_string(object)}"
-      string << "#{nested_objects_string(object)}" if opts[:include_nested]
+      string = attribute_string(object).to_s
+      string << nested_objects_string(object).to_s if opts[:include_nested]
       string
     end
 
