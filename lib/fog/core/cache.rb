@@ -260,10 +260,9 @@ module Fog
     def self.metadata
       mpath = File.join(SANDBOX, namespace_prefix, "metadata.yml")
       if File.exist?(mpath)
-        metadata = yaml_load(File.read(mpath))
-        return metadata
+        yaml_load(File.read(mpath))
       else
-        return {}
+        {}
       end
     end
 
