@@ -14,7 +14,7 @@ describe "Fog#wait_for" do
   it "does not raise if successful when the wait timeout is exceeded" do
     timeout = 2
     i = 0
-    ret = Fog.wait_for(timeout) { i = i + 1; i > 2 }
+    ret = Fog.wait_for(timeout) { i += 1; i > 2 }
     assert_operator(ret[:duration], :>, timeout)
   end
 

@@ -703,12 +703,6 @@ Style/RescueStandardError:
 
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
-Style/SelfAssignment:
-  Exclude:
-    - 'spec/wait_for_spec.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AllowAsExpressionSeparator.
 Style/Semicolon:
   Exclude:
