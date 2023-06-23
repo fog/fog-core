@@ -545,12 +545,6 @@ Style/IfUnlessModifier:
     - 'lib/fog/test_helpers/collection_helper.rb'
     - 'lib/fog/test_helpers/compute/flavors_helper.rb'
 
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: InverseMethods, InverseBlocks.
-Style/InverseMethods:
-  Exclude:
-    - 'lib/fog/core/service.rb'
 
 # Offense count: 11
 # This cop supports safe autocorrection (--autocorrect).
