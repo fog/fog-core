@@ -30,11 +30,11 @@ describe Fog::Formatador do
       @collection << @member_class.new(name: "Member name")
       @expected = <<-EOS.gsub(/^ {6}/, "").chomp!
         <InspectionGadget
-          attr_one=\"String\",
+          attr_one="String",
           attr_two=5
           [
                         <MemberGadget
-              name=\"Member name\"
+              name="Member name"
             >    
           ]
         >
@@ -85,7 +85,7 @@ describe Fog::Formatador do
     it "returns formatted representation" do
       @expected = <<-EOS.gsub(/^ {6}/, "").chomp!
         <
-          name=\"Name\"
+          name="Name"
         >
       EOS
 
