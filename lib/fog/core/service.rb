@@ -119,7 +119,7 @@ module Fog
       # @deprecated
       def fetch_credentials(_options)
         # attempt to load credentials from config file
-        Fog.credentials.reject { |key, _value| !(recognized | requirements).include?(key) }
+        Fog.credentials.select { |key, _value| (recognized | requirements).include?(key) }
       rescue ::Fog::Errors::LoadError
         # if there are no configured credentials, do nothing
         {}
