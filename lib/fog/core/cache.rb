@@ -142,7 +142,7 @@ module Fog
       # uniqe-ify based on the total of attributes. duplicate cache can exist due to
       # `model#identity` not being unique. but if all attributes match, they are unique
       # and shouldn't be loaded again.
-      uniq_loaded = uniq_w_block(loaded) { |i| i.attributes }
+      uniq_loaded = loaded.uniq { |i| i.attributes }
       if uniq_loaded.size != loaded.size
         Fog::Logger.warning("Found duplicate items in the cache. Expire all & refresh cache soon.")
       end
@@ -151,19 +151,6 @@ module Fog
       @memoized = nil
 
       uniq_loaded
-    end
-
-    # :nodoc: compatability for 1.8.7 1.9.3
-    def self.uniq_w_block(arr)
-      ret, keys = [], []
-      arr.each do |x|
-        key = block_given? ? yield(x) : x
-        unless keys.include? key
-          ret << x
-          keys << key
-        end
-      end
-      ret
     end
 
     # method to determine if a path can be loaded and is valid fog cache format.
