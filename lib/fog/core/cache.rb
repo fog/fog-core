@@ -116,8 +116,8 @@ module Fog
       # choose a valid cache record from the dump to use as a sample to deterine
       # which collection/model to instantiate.
       sample_path = cache_files.detect { |path| valid_for_load?(path) }
-      model_klass = const_get_compat(load_cache(sample_path)[:model_klass])
-      collection_klass = const_get_compat(load_cache(sample_path)[:collection_klass]) if load_cache(sample_path)[:collection_klass]
+      model_klass = Object.const_get(load_cache(sample_path)[:model_klass])
+      collection_klass = Object.const_get(load_cache(sample_path)[:collection_klass]) if load_cache(sample_path)[:collection_klass]
 
       # Load the cache data into actual ruby instances
       loaded = cache_files.map do |path|
@@ -151,14 +151,6 @@ module Fog
       @memoized = nil
 
       uniq_loaded
-    end
-
-    # :nodoc: compatability for 1.8.7 1.9.3
-    def self.const_get_compat(strklass)
-      # https://stackoverflow.com/questions/3163641/get-a-class-by-name-in-ruby
-      strklass.split("::").inject(Object) do |mod, class_name|
-        mod.const_get(class_name)
-      end
     end
 
     # :nodoc: compatability for 1.8.7 1.9.3
