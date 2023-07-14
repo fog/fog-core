@@ -407,14 +407,6 @@ Style/DocumentDynamicEvalDefinition:
 Style/Documentation:
   Enabled: false
 
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: allowed_in_returns, forbidden
-Style/DoubleNegation:
-  Exclude:
-    - 'lib/fog/compute/models/server.rb'
-
 # Offense count: 4
 # This cop supports safe autocorrection (--autocorrect).
 Style/EachWithObject:

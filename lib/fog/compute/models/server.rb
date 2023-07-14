@@ -90,9 +90,12 @@ module Fog
       end
 
       def sshable?(options = {})
-        result = ready? && !ssh_ip_address.nil? && !!Timeout.timeout(sshable_timeout) { ssh("pwd", options) }
+        return false unless ready? && ssh_ip_address
+
+        Timeout.timeout(sshable_timeout) { ssh("pwd", options) }
         @sshable_timeout = nil
-        result
+
+        true
       rescue SystemCallError
         false
       rescue Net::SSH::AuthenticationFailed, Net::SSH::Disconnect
