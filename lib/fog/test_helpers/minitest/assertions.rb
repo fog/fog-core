@@ -1,6 +1,6 @@
 require "fog/schema/data_validator"
 
-module MiniTest::Assertions
+module Minitest::Assertions
   # Compares a hash's structure against a reference schema hash and returns true
   # when they match. Fog::Schema::Datavalidator is used for the validation.
   def assert_match_schema(actual, schema, message = nil, options = {})
