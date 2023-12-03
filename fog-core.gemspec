@@ -28,7 +28,6 @@ Gem::Specification.new do |spec|
   # https://github.com/fog/fog-core/issues/206
   # spec.add_dependency("xmlrpc") if RUBY_VERSION.to_s >= "2.4"
 
-  spec.add_development_dependency("coveralls")
   spec.add_development_dependency("minitest")
   spec.add_development_dependency("minitest-stub-const")
   spec.add_development_dependency("pry")
