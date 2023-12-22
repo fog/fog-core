@@ -19,6 +19,7 @@ module Fog
           end
           super
         end
+        ruby2_keywords(method) if respond_to?(:ruby2_keywords, true)
       EOS
     end
 
@@ -31,6 +32,7 @@ module Fog
           data = super
           self.clone.clear.concat(data)
         end
+        ruby2_keywords(method) if respond_to?(:ruby2_keywords, true)
       EOS
     end
 
