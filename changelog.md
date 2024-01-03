@@ -1,3 +1,17 @@
+2.4.0 01/03/2024
+==========================================================
+
+- fixes for caching/restoring collection attributes
+- add explicit CRUD methods to models, make returns more consistent
+- add filter_attributes method
+- allow cache loading with aliases
+- update rubocop config and apply styles/fixes
+- fix minitest compatibility
+- remove coveralls
+- fixes for method delegation for ruby 3.x
+- update ruby versions in test matrix
+
+
 2.3.0 03/08/2022
 ==========================================================
 
