@@ -3,6 +3,7 @@
 Shared classes and tests for fog providers and services.
 
 [![Build Status](https://github.com/fog/fog-core/actions/workflows/ruby.yml/badge.svg)](https://github.com/fog/fog-core/actions/workflows/ruby.yml)
+[![Gem Version](https://badge.fury.io/rb/fog-core.svg)](https://rubygems.org/gems/fog-core)
 
 ## Ruby version
 
