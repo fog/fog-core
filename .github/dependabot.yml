@@ -4,8 +4,6 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    allow:
-      - dependency-type: "all" # update both gemspec and lock
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
