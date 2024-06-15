@@ -2,7 +2,7 @@ require "spec_helper"
 require "securerandom"
 
 class FogTestModelForCollection < Fog::Model
-  identity  :id
+  identity :id
 end
 
 class FogTestCollection < Fog::Collection

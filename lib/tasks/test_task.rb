@@ -22,10 +22,9 @@ module Fog
       def tests(mocked)
         Fog::Formatador.display_line
         start = Time.now.to_i
-        threads = []
         Thread.main[:results] = []
-        Fog.providers.each do |key, value|
-          threads << Thread.new do
+        threads = Fog.providers.map do |key, value|
+          Thread.new do
             Thread.main[:results] << {
               provider: value,
               success: sh("export FOG_MOCK=#{mocked} && bundle exec shindont +#{key}")
