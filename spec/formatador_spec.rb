@@ -42,7 +42,7 @@ describe Fog::Formatador do
     end
 
     it "returns formatted representation" do
-      Fog::Formatador.format(@collection).must_equal @expected
+      _(Fog::Formatador.format(@collection)).must_equal @expected
     end
   end
 
@@ -65,7 +65,7 @@ describe Fog::Formatador do
     end
 
     it "returns formatted representation" do
-      Fog::Formatador.format(@collection).must_equal @expected
+      _(Fog::Formatador.format(@collection)).must_equal @expected
     end
   end
 
@@ -90,7 +90,7 @@ describe Fog::Formatador do
       EOS
 
       opts = { include_nested: false }
-      Fog::Formatador.format(@collection, opts).must_equal @expected
+      _(Fog::Formatador.format(@collection, opts)).must_equal @expected
     end
   end
 
@@ -105,7 +105,7 @@ describe Fog::Formatador do
     end
 
     it "returns formatted representation" do
-      Fog::Formatador.format(@subject).must_equal @expected
+      _(Fog::Formatador.format(@subject)).must_equal @expected
     end
   end
 
@@ -148,7 +148,7 @@ describe Fog::Formatador do
     end
 
     it "returns formatted representation" do
-      Fog::Formatador.format(@collection).must_equal @expected
+      _(Fog::Formatador.format(@collection)).must_equal @expected
     end
   end
 end
