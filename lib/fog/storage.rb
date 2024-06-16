@@ -59,7 +59,6 @@ module Fog
         headers: {
           "Content-Length" => get_body_size(data),
           "Content-Type" => get_content_type(data)
-          # "Content-MD5" => Base64.encode64(Digest::MD5.digest(metadata[:body])).strip
         }
       }
     end
