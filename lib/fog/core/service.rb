@@ -212,7 +212,7 @@ module Fog
           @secrets ||= []
         else
           args.reduce(secrets) do |secrets, secret|
-            secrets << "@#{secret}".to_sym
+            secrets << :"@#{secret}"
           end
         end
       end

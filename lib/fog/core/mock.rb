@@ -81,7 +81,7 @@ module Fog
     end
 
     def self.random_selection(characters, length)
-      selection = ""
+      selection = +""
       length.times do
         position = rand(characters.length)
         selection << characters[position..position]

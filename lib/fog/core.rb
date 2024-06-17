@@ -1,5 +1,4 @@
 # external core dependencies
-require "base64"
 require "cgi"
 require "uri"
 require "excon"

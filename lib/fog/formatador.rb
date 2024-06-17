@@ -10,7 +10,7 @@ module Fog
     end
 
     def self.format(object, opts = { include_nested: true })
-      string = init_string(object)
+      string = +init_string(object)
       indent { string << object_string(object, opts) }
       string << "#{indentation}>"
     end
@@ -48,7 +48,7 @@ module Fog
     end
 
     def self.object_string(object, opts)
-      string = attribute_string(object).to_s
+      string = +attribute_string(object).to_s
       string << nested_objects_string(object).to_s if opts[:include_nested]
       string
     end
@@ -68,7 +68,7 @@ module Fog
       return nested if object.respond_to?(:empty) and object.empty?
       return nested unless object.is_a?(Enumerable)
 
-      nested = "#{indentation}[\n"
+      nested = +"#{indentation}[\n"
       indent { nested << indentation + inspect_object(object) }
       nested << "#{indentation}\n#{indentation}]\n"
     end
