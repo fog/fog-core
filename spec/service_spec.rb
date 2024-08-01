@@ -88,7 +88,7 @@ describe Fog::Service do
     it "returns the real service" do
       Fog.stub :mocking?, false do
         service = TestService.new(generic_api_key: "abc")
-        service.must_be_instance_of TestService::Real
+        _(service).must_be_instance_of TestService::Real
       end
     end
 
@@ -115,7 +115,7 @@ describe Fog::Service do
     it "returns mocked service" do
       Fog.stub :mocking?, true do
         service = TestService.new(generic_api_key: "abc")
-        service.must_be_instance_of TestService::Mock
+        _(service).must_be_instance_of TestService::Mock
       end
     end
 

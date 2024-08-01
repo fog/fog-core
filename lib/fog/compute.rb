@@ -29,7 +29,7 @@ module Fog
           Fog::Compute::DigitalOcean.new(attributes)
         end
       else
-        super(orig_attributes)
+        super
       end
     end
 
