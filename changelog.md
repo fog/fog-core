@@ -1,3 +1,15 @@
+2.5.0 08/02/2024
+==========================================================
+
+- drop spec files from gem package
+- fix 3.4+ ruby issues (string literals and base64)
+- bump rubocop target
+- remove stale actions
+- fixes to ci
+- add security policy
+- add gem version badge
+- add funding info
+
 2.4.0 01/03/2024
 ==========================================================
 
