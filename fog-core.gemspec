@@ -39,5 +39,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency("tins")
   spec.add_development_dependency("yard")
 
+  spec.metadata["changelog_uri"] = spec.homepage + "/blob/master/changelog.md"
   spec.metadata["rubygems_mfa_required"] = "true"
 end
