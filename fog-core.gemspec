@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 2.0"
 
   spec.add_dependency("builder")
-  spec.add_dependency("excon", "~> 0.71")
+  spec.add_dependency("excon", "~> 1.0")
   spec.add_dependency("formatador", ">= 0.2", "< 2.0")
   spec.add_dependency("mime-types")
 
