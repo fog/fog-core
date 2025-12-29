@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   # spec.add_dependency("xmlrpc") if RUBY_VERSION.to_s >= "2.4"
 
   spec.add_development_dependency("minitest")
+  spec.add_development_dependency("minitest-mock")
   spec.add_development_dependency("minitest-stub-const")
   spec.add_development_dependency("pry")
   spec.add_development_dependency("rake")

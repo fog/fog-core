@@ -3,6 +3,7 @@ require "tmpdir"
 ENV["HOME"] = Dir.mktmpdir("foghome")
 
 require "minitest/autorun"
+require "minitest/mock"
 require "minitest/spec"
 require "minitest/stub_const"
 
